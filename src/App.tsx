@@ -1028,7 +1028,7 @@ Each variation MUST feel meaningfully different from the others — not just inv
   // ── Exploration: mutate a single chord slot ────────────────────────────────
   const fetchMutations = async (slotIdx) => {
     if (!result || loadingMutations) return;
-    setMutatingSlot(slotIdx);.
+    setMutatingSlot(slotIdx);
     setLoadingMutations(true);
     setMutations([]);
     try {
