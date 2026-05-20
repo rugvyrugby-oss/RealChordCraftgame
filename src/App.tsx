@@ -955,7 +955,7 @@ export default function ChordApp() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-5",
           max_tokens: 1000,
           system: SYSTEM_PROMPT,
           messages: [{ role: "user", content: prompt }],
@@ -995,7 +995,7 @@ Each variation MUST feel meaningfully different from the others — not just inv
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-5",
           max_tokens: 2500,
           system: variationSystem,
           messages: [{ role: "user", content: promptForAI }],
@@ -1046,7 +1046,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-5",
           max_tokens: 800,
           system: mutationSystem,
           messages: [{ role: "user", content: `Replace the [?] chord.` }],
