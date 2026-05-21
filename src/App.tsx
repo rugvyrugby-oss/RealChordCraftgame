@@ -1074,7 +1074,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
   // ── Playback ──────────────────────────────────────────────────────────────
   const runProgression = async (loop) => {
     await ensureAudio();
-    const beatDur = 60 / bpm;
+    const beatDur = (60 / bpm) * 2;
     stopLoopRef.current = false;
 
     // Pick the groove pattern based on the AI-returned style
