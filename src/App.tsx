@@ -863,10 +863,10 @@ export default function ChordApp() {
         else hitNotes = voicing.all;
         const isRoll = hit.notes === "roll";
         const noteDur = chordDurSec * hit.len * sustainMul;
-
+        const chordHum = (Math.random() - 0.5) * hum * 1000;
         hitNotes.forEach((n, i) => {
           const rollSpread = isRoll ? i * (18 + Math.random() * 14) : 0;
-          const humanDrift = (Math.random() - 0.5) * hum * 1000;
+         const humanDrift = isRoll ? (Math.random() - 0.5) * hum * 1000 : (chordHum || 0);
           const delay = Math.max(0, baseDelayMs + rollSpread + humanDrift);
           const vel = Math.min(
             1,
