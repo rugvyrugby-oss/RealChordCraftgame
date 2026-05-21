@@ -66,7 +66,7 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 const GROOVE_PATTERNS = {
   lofi: {
     swing: 0.12,
-    humanize: 0.018,
+    humanize: 0.022,
     hits: [
       { t: 0.0, notes: "low", vel: 0.62, len: 1.0 },
       { t: 0.5, notes: "roll", vel: 0.5, len: 0.55 },
@@ -75,7 +75,7 @@ const GROOVE_PATTERNS = {
   },
   soul: {
     swing: 0.08,
-    humanize: 0.015,
+    humanize: 0.020,
     hits: [
       { t: 0.0, notes: "roll", vel: 0.68, len: 0.5 },
       { t: 0.375, notes: "high", vel: 0.45, len: 0.3 },
@@ -85,7 +85,7 @@ const GROOVE_PATTERNS = {
   },
   rnb: {
     swing: 0.1,
-    humanize: 0.016,
+    humanize: 0.020,
     hits: [
       { t: 0.0, notes: "roll", vel: 0.66, len: 0.7 },
       { t: 0.5, notes: "high", vel: 0.44, len: 0.4 },
@@ -94,7 +94,7 @@ const GROOVE_PATTERNS = {
   },
   jazz: {
     swing: 0.16,
-    humanize: 0.022,
+    humanize: 0.026,
     hits: [
       { t: 0.0, notes: "roll", vel: 0.6, len: 0.6 },
       { t: 0.66, notes: "high", vel: 0.42, len: 0.45 },
