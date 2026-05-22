@@ -1364,7 +1364,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
       ts: result.timeSignature,
       g: result.genre,
       v: result.vibe,
-      th: result.,
+      th: result.theory,
       c: result.chords.map((c) => ({
         n: c.name,
         d: c.duration,
