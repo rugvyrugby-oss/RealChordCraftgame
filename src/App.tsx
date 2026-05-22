@@ -2155,7 +2155,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                 <span style={{ fontSize: 14 }}> </span>
                 <span>
                   This is an{" "}
-                  <strong style={{ color: theme.accent2 }}>example</strong> —
+                  <strong style={{ color: theme.accent2 }}>example</strong>. 
                   hit{" "}
                   <strong style={{ color: theme.textBright }}>▶ Play</strong> to
                   hear it, or describe your own vibe above.
@@ -2551,7 +2551,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                     color: theme.accent2,
                   }}
                 >
-                  ✦ Explore — find unexpected directions
+                   Explore  find unexpected directions
                 </div>
                 <button
                   onClick={fetchVariations}
