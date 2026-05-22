@@ -1671,7 +1671,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             <div style={S.pricingGrid} className="pricing-grid-responsive">
               {PRICING_PLANS.map((plan) => (
                 <div
-                  key={plan.id} lofi 80 bpm c minor
+                  key={plan.id} style={{
                     ...S.priceCard,
                     border: plan.highlighted
                       ? "2px solid #a78bfa"
