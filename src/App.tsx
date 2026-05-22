@@ -178,11 +178,11 @@ const BLACK_POSITIONS = {
 };
 
 const SUGGESTIONS = [
-  "sad 80 bpm minor chords for a rainy day",
-  "euphoric festival drop, 128 bpm",
-  "nostalgic 90s R&B slow jam",
-  "dark cinematic tension builder",
-  "happy lo-fi study beat, 75 bpm",
+  "lofi 80 bpm c minor",
+  "big room edm drop 128",
+  "90s rnb slow jam",
+  " dark cinematic g minor",
+  "chill study beat 75 bpm",
 ];
 
 const FLOAT_NOTES = [
@@ -1669,8 +1669,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             <div style={S.pricingGrid} className="pricing-grid-responsive">
               {PRICING_PLANS.map((plan) => (
                 <div
-                  key={plan.id}
-                  style={{
+                  key={plan.id}sad 80 bpm minor chords for a rainy day
                     ...S.priceCard,
                     border: plan.highlighted
                       ? "2px solid #a78bfa"
@@ -2054,7 +2053,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
           </button>
         </div>
 
-        <div style={S.engLabel}>◆ Chord Generator Engine ◆</div>
+        <div style={S.engLabel}> ChordCraft </div>
         <h1 style={S.h1}>
           Describe a vibe.
           <br />
@@ -2063,7 +2062,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
           </span>
         </h1>
         <p style={S.subtitle}>
-          Type any mood, vibe, or genre. get a full progression that you can actually use.
+        type a vibe. get chords you can drop into your beat..
           
         </p>
         {sampleStatus && (
@@ -2400,7 +2399,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             {/* Vibe Controls */}
             <div style={S.vibeControls}>
               <div style={S.vcLabel}>
-                🎛 Vibe Controls — tweak before playing
+                🎛 Adjust before playing.
               </div>
               <SliderRow
                 label="TEMPO"
