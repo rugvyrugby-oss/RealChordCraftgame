@@ -1539,7 +1539,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             <div style={{ textAlign: "center", marginBottom: 24 }}>
               <div style={{ fontSize: 48, marginBottom: 12 }}>🎹</div>
               <div style={S.kicker}>Welcome to</div>
-              <h2 style={S.modalTitle}>The Ultimate Chord Engine</h2>
+              <h2 style={S.modalTitle}></h2>
               <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6 }}>
                 Describe any feeling — get a real piano progression instantly.
                 Free forever.
