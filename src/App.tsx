@@ -2059,7 +2059,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
         <h1 style={S.h1}>
           Describe a vibe.
           <br />
-          <span style={{ color: "#818cf8", fontStyle: "italic" }}>
+          <span style={{ color: "#818cf8", fontStyle: "Monosphere" }}>
             Hear the chords.
           </span>
         </h1>
