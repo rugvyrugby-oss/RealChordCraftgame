@@ -2,3 +2,19 @@
   font-family: sans-serif;
   text-align: center;
 }
+body, html, #root, *,
+h1, h2, h3, h4, h5, h6,
+button, input, textarea, select {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-style: normal !important;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.chord-name, [class*="chord"], code, .mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace !important;
+  font-weight: 600;
+}
