@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
 // ============================================================================
-// The Ultimate Chord Generator Engine — React version
+// — React version
 //
 // External libraries — add these to your index.html <head>:
 //   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" crossorigin="anonymous"></script>
@@ -34,7 +34,7 @@ const PRICING_PLANS = [
     price: 79,
     period: "/yr",
     cta: "Start Annual",
-    note: "Save 45% — 2 months free",
+    note: "Save 45% and 2 months free",
     highlighted: true, // shows the "Best value" badge
     checkoutUrl: null, // e.g. "https://buy.stripe.com/your-annual-link"
   },
@@ -59,9 +59,9 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - Put the root or 5th low (C2-G2 range) for warmth, stack color tones higher.
 - Use inversions and voice-leading so adjacent chords share notes / move smoothly.
 - Match BPM to mood (lofi 70-90, soul 75-100, cinematic 60-80, house 120-128, trap 130-150).
-- Always 4 chords. Make them genuinely interesting — the kind a real producer would use, not a beginner.`;
+- Always 4 chords. Make them genuinely interesting, the kind a real producer would use, not a beginner.`;
 
-// Groove engine — how each style performs its chords. Patterns are beat-fractions.
+// Groove engine. how each style performs its chords. Patterns are beat-fractions.
 // Each "hit" = { t: time offset within the chord (0-1 of its duration), notes: 'all'|'low'|'high'|'roll', vel: 0-1, len: sustain mult }
 const GROOVE_PATTERNS = {
   lofi: {
@@ -393,7 +393,7 @@ const getUsage = () => {
 };
 
 // ════════════════════════════════════════════════════════════════════════════
-// EXAMPLE PROGRESSION — shown on first load so the app looks alive to newcomers.
+// EXAMPLE PROGRESSION  shown on first load so the app looks alive to newcomers.
 // To REMOVE this feature entirely:
 //   1. Delete this EXAMPLE_PROGRESSION constant
 //   2. Change `useState(EXAMPLE_PROGRESSION)` back to `useState(null)` for `result`
@@ -1565,7 +1565,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
               }}
             >
               <div style={{ ...S.featureLabel, color: "#a78bfa" }}>
-                ✨ PRO — from $12/mo or $100 lifetime
+                 PRO — from $12/mo or $100 lifetime
               </div>
               <div style={S.featureList}>
                 ✦ 8 & 16-bar progressions
@@ -1816,7 +1816,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                   );
                 }}
               >
-                ✨ Get notified about Pro
+                 Get notified about Pro
               </button>
             </div>
           </div>
@@ -2050,21 +2050,21 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
               )
             }
           >
-            ✨ Pro
+             Pro
           </button>
         </div>
 
-        <div style={S.engLabel}>◆ The Ultimate Chord Generator Engine ◆</div>
+        <div style={S.engLabel}>◆ Chord Generator Engine ◆</div>
         <h1 style={S.h1}>
-          Describe a feeling.
+          Describe a vibe.
           <br />
           <span style={{ color: "#818cf8", fontStyle: "italic" }}>
             Hear the chords.
           </span>
         </h1>
         <p style={S.subtitle}>
-          Type any mood, tempo, or genre — get a full progression with real
-          piano playback.
+          Type any mood, vibe, or genre. get a full progression that you can actually use.
+          
         </p>
         {sampleStatus && (
           <div
@@ -2152,7 +2152,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             {/* Example banner — shown until the user generates their own */}
             {isExample && (
               <div style={S.exampleBanner}>
-                <span style={{ fontSize: 14 }}>✨</span>
+                <span style={{ fontSize: 14 }}> </span>
                 <span>
                   This is an{" "}
                   <strong style={{ color: theme.accent2 }}>example</strong> —
