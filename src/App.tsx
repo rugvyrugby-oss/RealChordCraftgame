@@ -2974,7 +2974,7 @@ const S = {
     padding: "18px 110px 18px 20px",
     color: "#f1f5f9",
     fontSize: 16,
-    fontFamily: 'Space Grotesk',sans-serif",
+    fontFamily: "'Space Grotesk',sans-serif",
     resize: "none",
     outline: "none",
     lineHeight: 1.5,
