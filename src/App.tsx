@@ -2910,7 +2910,7 @@ const S = {
     fontSize: 15,
     fontWeight: 600,
     cursor: "pointer",
-    fontFamily: 'Space Grotesk',sans-serif",
+    fontFamily: "'Space Grotesk',sans-serif",
     boxShadow: "0 2px 12px rgba(167,139,250,0.2)",
   },
   settingsBtn: {
