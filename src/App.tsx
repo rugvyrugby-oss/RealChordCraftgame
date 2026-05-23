@@ -3182,7 +3182,7 @@ const S = {
     padding: "5px 10px",
     fontSize: 11,
     cursor: "pointer",
-    fontFamily: "Georgia,serif",
+    fontFamily: "'Space Grotesk',sans-serif",
     flex: 1,
   },
   tinyCloseBtn: {
@@ -3278,7 +3278,7 @@ const S = {
     padding: 12,
     fontSize: 14,
     cursor: "pointer",
-    fontFamily: "Georgia,serif",
+    fontFamily: "'Space Grotesk',sans-serif",
   },
   primaryBtn: {
     background: "rgba(99,102,241,0.9)",
@@ -3288,7 +3288,7 @@ const S = {
     padding: 14,
     fontSize: 14,
     cursor: "pointer",
-    fontFamily: "Georgia,serif",
+    fontFamily: "'Space Grotesk',sans-serif",
   },
   platformBtn: {
     background: "rgba(255,255,255,0.05)",
@@ -3298,7 +3298,7 @@ const S = {
     padding: 10,
     fontSize: 13,
     cursor: "pointer",
-    fontFamily: "Georgia,serif",
+    fontFamily: "'Space Grotesk',sans-serif",
   },
   urlBox: {
     background: "rgba(255,255,255,0.04)",
@@ -3321,7 +3321,7 @@ const S = {
     padding: "12px 14px",
     color: "#f1f5f9",
     fontSize: 14,
-    fontFamily: "Georgia,serif",
+    fontFamily: "'Space Grotesk',sans-serif",
     outline: "none",
   },
   emailBtn: {
@@ -3331,7 +3331,7 @@ const S = {
     padding: "12px 18px",
     fontSize: 13,
     cursor: "pointer",
-    fontFamily: "Georgia,serif",
+    fontFamily: "'Space Grotesk',sans-serif",
     whiteSpace: "nowrap",
   },
   pricingGrid: {
@@ -3391,7 +3391,7 @@ const S = {
     padding: "10px 8px",
     fontSize: 13,
     cursor: "pointer",
-    fontFamily: "Georgia,serif",
+    fontFamily: "'Space Grotesk',sans-serif",
     transition: "filter .15s",
   },
 };
