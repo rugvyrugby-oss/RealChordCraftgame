@@ -2910,7 +2910,7 @@ const S = {
     fontSize: 15,
     fontWeight: 600,
     cursor: "pointer",
-    fontFamily: 'Space Grotesk',sans-serif
+    fontFamily: 'Space Grotesk',sans-serif",
     boxShadow: "0 2px 12px rgba(167,139,250,0.2)",
   },
   settingsBtn: {
@@ -2974,7 +2974,7 @@ const S = {
     padding: "18px 110px 18px 20px",
     color: "#f1f5f9",
     fontSize: 16,
-    fontFamily: 'Space Grotesk',sans-serif
+    fontFamily: 'Space Grotesk',sans-serif",
     resize: "none",
     outline: "none",
     lineHeight: 1.5,
