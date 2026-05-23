@@ -2864,7 +2864,7 @@ const S = {
   body: {
     minHeight: "100vh",
     background: "#000",
-    fontFamily: "'Space Grotesk',sans-serif
+    fontFamily: "'Space Grotesk',sans-serif",
     color: "#e2e8f0",
     overflowX: "hidden",
     position: "relative",
