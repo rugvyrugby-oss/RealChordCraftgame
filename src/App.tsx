@@ -11,7 +11,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 // (Or npm install tone midi-writer-js and import them directly.)
 // ============================================================================
 
-const DAILY_LIMIT = 10;
+const DAILY_LIMIT = 5;
 
 // ════════════════════════════════════════════════════════════════════════════
 // PRICING PLANS
