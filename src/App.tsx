@@ -313,7 +313,7 @@ const THEMES = {
     textDim: "#64748b",
     panel: "rgba(255,255,255,0.03)",
     panelBorder: "rgba(255,255,255,0.08)",
-    note: "#818cf8",
+    note: "71717a",
   },
   velvet: {
     name: "Velvet",
