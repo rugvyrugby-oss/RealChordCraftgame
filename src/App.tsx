@@ -144,7 +144,7 @@ const DEFAULT_GROOVE = GROOVE_PATTERNS.pop;
 
 const functionColors = {
   tonic: { hex: "#7dd3c0", rgb: "125,211,192" },
-  subdominant: { hex: "#a78bfa", rgb: "167,139,250" },
+  subdominant: { hex: "1DB954", rgb: "167,139,250" },
   dominant: { hex: "#f59e0b", rgb: "245,158,11" },
   other: { hex: "#94a3b8", rgb: "148,163,184" },
 };
@@ -306,7 +306,7 @@ const THEMES = {
     ambient:
       "radial-gradient(ellipse 60% 40% at 15% 10%, rgba(50,15,100,0.04) 0%, transparent 50%), radial-gradient(ellipse 45% 35% at 85% 85%, rgba(8,50,75,0.035) 0%, transparent 50%)",
     accent: "#6366f1",
-    accent2: "#a78bfa",
+    accent2: "1DB954",
     accentSoft: "rgba(99,102,241,0.15)",
     text: "#e2e8f0",
     textBright: "#f1f5f9",
@@ -1566,7 +1566,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                 borderColor: "rgba(99,102,241,0.3)",
               }}
             >
-              <div style={{ ...S.featureLabel, color: "#a78bfa" }}>
+              <div style={{ ...S.featureLabel, color: "1DB954" }}>
                  PRO — from $12/mo or $100 lifetime
               </div>
               <div style={S.featureList}>
@@ -1612,7 +1612,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             </button>
             <div style={{ textAlign: "center", marginBottom: 20 }}>
               <div style={{ fontSize: 40, marginBottom: 8 }}>✨</div>
-              <div style={{ ...S.kicker, color: "#a78bfa" }}>
+              <div style={{ ...S.kicker, color: "1DB954" }}>
                 Upgrade to Pro
               </div>
               <h3 style={S.modalTitle}>{proHeadline}</h3>
@@ -1633,7 +1633,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
               <div
                 style={{
                   ...S.featureLabel,
-                  color: "#a78bfa",
+                  color: "1DB954",
                   marginBottom: 10,
                 }}
               >
@@ -1661,7 +1661,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             <div
               style={{
                 ...S.featureLabel,
-                color: "#a78bfa",
+                color: "1DB954",
                 marginBottom: 12,
                 textAlign: "center",
               }}
@@ -1674,7 +1674,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                   key={plan.id} style={{
                     ...S.priceCard,
                     border: plan.highlighted
-                      ? "2px solid #a78bfa"
+                      ? "2px solid 1DB954"
                       : "1px solid rgba(255,255,255,0.08)",
                     background: plan.highlighted
                       ? "linear-gradient(180deg, rgba(167,139,250,0.12) 0%, rgba(99,102,241,0.06) 100%)"
@@ -1726,7 +1726,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                     style={{
                       ...S.priceCta,
                       background: plan.highlighted
-                        ? "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)"
+                        ? "linear-gradient(135deg, #6366f1 0%, 1DB954 100%)"
                         : "rgba(99,102,241,0.85)",
                     }}
                     onClick={() => {
@@ -1762,7 +1762,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
 
             <EmailCapture
               source="pro_modal"
-              accent="linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)"
+              accent="linear-gradient(135deg, #6366f1 0%, 1DB954 100%)"
             />
           </div>
         </div>
@@ -1807,7 +1807,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                   ...S.primaryBtn,
                   width: "100%",
                   background:
-                    "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)",
+                    "linear-gradient(135deg, #6366f1 0%, 1DB954 100%)",
                 }}
                 onClick={() => {
                   setShowLimit(false);
@@ -3038,7 +3038,7 @@ const S = {
   },
   grooveBadge: {
     fontSize: 11,
-    color: "#a78bfa",
+    color: "1DB954",
     fontFamily: "monospace",
     letterSpacing: 1,
     background: "rgba(167,139,250,0.12)",
@@ -3351,7 +3351,7 @@ const S = {
     top: -10,
     left: "50%",
     transform: "translateX(-50%)",
-    background: "#a78bfa",
+    background: "1DB954",
     color: "#0a0a0f",
     fontSize: 9,
     fontWeight: 700,
@@ -3378,7 +3378,7 @@ const S = {
   },
   priceNote: {
     fontSize: 11,
-    color: "#a78bfa",
+    color: "1DB954",
     marginBottom: 14,
     lineHeight: 1.4,
     minHeight: 28,
@@ -3415,7 +3415,7 @@ const CSS = `
   .sound-btn.active { background:rgba(99,102,241,.3); border-color:#6366f1; color:#c7d2fe; }
   .sound-btn:hover { background:rgba(99,102,241,.15); color:#c7d2fe; }
   .sound-btn.pro-locked { opacity:0.55; }
-  .sound-btn.pro-locked:hover { background:rgba(167,139,250,0.12); color:#a78bfa; opacity:0.9; }
+  .sound-btn.pro-locked:hover { background:rgba(167,139,250,0.12); color:1DB954; opacity:0.9; }
   .btn { border:none; border-radius:8px; font-size:14px; cursor:pointer; font-family:Georgia,serif; transition:all .2s; padding:12px 20px; }
   .btn-primary { background:rgba(99,102,241,.9); color:#fff; }
   .btn-primary:hover { background:#6366f1; }
