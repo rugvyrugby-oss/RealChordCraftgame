@@ -2552,7 +2552,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                     color: theme.accent2,
                   }}
                 >
-                   Explore  find unexpected directions
+                   Variations...
                 </div>
                 <button
                   onClick={fetchVariations}
