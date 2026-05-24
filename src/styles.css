@@ -23,3 +23,15 @@ html, body, #root {
 .App, .app, main, [class*="background"], [class*="gradient"] {
   background: transparent !important;
 }
+/* Kill all inline gradient backgrounds */
+[style*="linear-gradient"] {
+  background: #141414 !important;
+  background-image: none !important;
+}
+
+/* Force main page background to flat dark with subtle warm glow */
+body, html, #root, .App, .app, main {
+  background: #0a0a0a !important;
+  background-image: radial-gradient(ellipse 100% 70% at 50% 0%, rgba(255, 107, 53, 0.25), transparent 70%) !important;
+  background-attachment: fixed !important;
+}
