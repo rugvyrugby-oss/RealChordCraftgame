@@ -14,7 +14,7 @@ h1, h2, h3, h4 {
 /* Background — flat dark with subtle warm glow */
 html, body, #root {
   background: #0a0a0a !important;
-  background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 107, 53, 0.20), transparent 70%) !important;
+  background-image: radial-gradient(ellipse 100% 70% at 50% 0%, rgba(255, 107, 53, 0.20), transparent 70%) !important;
   background-attachment: fixed !important;
   min-height: 100vh !important;
 }
