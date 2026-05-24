@@ -22,7 +22,7 @@ const PRICING_PLANS = [
   {
     id: "monthly",
     label: "Monthly",
-    price: 12,
+    price: 10,
     period: "/mo",
     cta: "Start Monthly",
     note: null,
