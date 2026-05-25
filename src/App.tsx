@@ -1644,10 +1644,10 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                 <br /> 
                 ✦ Save & revisit your projects
                 <br />
-                ✦ Export individual stems (chords, bass, melody)
+                ✦ Export individual stems (chords, bass, melody) (coming soon)
                 <br />
                
-                <br />✦ 24-bit studio WAV exports
+                <br />✦ 24-bit studio WAV exports (coming soon)
               </div>
             </div>
 
