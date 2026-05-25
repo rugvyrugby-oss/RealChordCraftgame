@@ -1644,15 +1644,13 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                 <br />
                 ✦ 8-bar & 16-bar progressions
                 <br />
-                ✦ Unlimited daily generations
-                <br />
-                ✦ Bass + melody layers
-                <br />
+                ✦ 100 daily generations
+                <br /> 
                 ✦ Save & revisit your projects
                 <br />
                 ✦ Export individual stems (chords, bass, melody)
                 <br />
-                ✦ Exclusive monthly MIDI packs
+               
                 <br />✦ 24-bit studio WAV exports
               </div>
             </div>
