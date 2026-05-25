@@ -1576,14 +1576,10 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                 <br />
                 ✦ Unlimited generations
                 <br />
-                ✦ Bass line + melody layer
-                <br />
                 ✦ Save & revisit your projects
                 <br />
-                ✦ Export individual stems (chords, bass, melody)
-                <br />
-                ✦ Exclusive monthly MIDI packs
-                <br />✦ Studio-quality WAV (24-bit, no watermark)
+                ✦ Export individual stems (chords, bass, melody) (this feature will be releasing soon)
+                <br />✦ Studio-quality WAV (24-bit, no watermark) ( feature will be releasing soon
               </div>
             </div>
             <EmailCapture source="welcome" accent="#6366f1" />
