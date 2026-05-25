@@ -11,7 +11,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 // (Or npm install tone midi-writer-js and import them directly.)
 // ============================================================================
 
-const DAILY_LIMIT = 5;
+const FREE_DAILY_LIMIT = 5;
+const PRO_DAILY_LIMIT = 100;
 
 // ════════════════════════════════════════════════════════════════════════════
 // PRICING PLANS
@@ -926,12 +927,14 @@ export default function ChordApp() {
 
   // ── Generate progression ──────────────────────────────────────────────────
   const checkUsage = () => {
+ const checkUsage = () => {
     const used = getUsage();
-    if (used >= DAILY_LIMIT) return false;
+    const limit = isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT;
+    if (used >= limit) return false;
     try {
       localStorage.setItem(todayKey(), used + 1);
     } catch {}
-    setUsageLeft(DAILY_LIMIT - (used + 1));
+    setUsageLeft(limit - (used + 1));
     return true;
   };
 
