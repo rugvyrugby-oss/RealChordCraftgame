@@ -3433,3 +3433,7 @@ const CSS = `
     .pricing-grid-responsive { grid-template-columns:1fr !important; }
   }
 `;
+const styleTag = document.createElement("style");
+styleTag.textContent = CSS;
+document.head.appendChild(styleTag);
+export default App;
