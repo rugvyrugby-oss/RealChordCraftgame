@@ -3395,7 +3395,7 @@ const S = {
 };
 
 // ── Global CSS (animations + class-based hover states) ───────────────────────
- `const CSS = \``
+  const CSS = `
   @keyframes floatNote1 { 0%{transform:translateY(0) rotate(-10deg);opacity:0} 25%{opacity:0.32} 50%{transform:translateY(-15px) rotate(0deg);opacity:0.45} 75%{opacity:0.32} 100%{transform:translateY(-30px) rotate(8deg);opacity:0} }
   @keyframes floatNote2 { 0%{transform:translateY(0) rotate(15deg);opacity:0} 30%{opacity:0.28} 50%{transform:translateY(-10px) rotate(5deg);opacity:0.4} 70%{opacity:0.28} 100%{transform:translateY(-20px) rotate(-5deg);opacity:0} }
   @keyframes floatNote3 { 0%{transform:translateY(0) rotate(-5deg);opacity:0} 35%{opacity:0.34} 50%{transform:translateY(-12px) rotate(3deg);opacity:0.5} 65%{opacity:0.34} 100%{transform:translateY(-25px) rotate(12deg);opacity:0} }
