@@ -3432,9 +3432,4 @@ const CSS = `
     .info-grid-responsive { grid-template-columns:1fr !important; }
     .pricing-grid-responsive { grid-template-columns:1fr !important; }
   }
-`;
-if (typeof document !== 'undefined') {
-  const styleTag = document.createElement('style');
-  styleTag.textContent = CSS;
-  document.head.appendChild(styleTag);
-}
+`; 
