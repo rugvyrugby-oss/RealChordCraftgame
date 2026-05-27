@@ -3438,5 +3438,3 @@ if (typeof document !== 'undefined') {
   styleTag.textContent = CSS;
   document.head.appendChild(styleTag);
 }
-
-export default App;
