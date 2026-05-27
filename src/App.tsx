@@ -3433,4 +3433,4 @@ const S = {
     .info-grid-responsive { grid-template-columns:1fr !important; }
     .pricing-grid-responsive { grid-template-columns:1fr !important; }
   }
-';
+`;
