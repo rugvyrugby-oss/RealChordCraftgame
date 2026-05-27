@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useState, useRef, useEffect, useCallback } from "react";
-
+import { Routes, Route, Link } from "react-router-dom";
+import Terms from "./Terms";
 // ============================================================================
 // — React version
 //
