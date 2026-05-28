@@ -407,7 +407,8 @@ export default function ChordApp() {
     "Pro launches soon. Be the first to know."
   );
   const [shareUrl, setShareUrl] = useState("");
-  const [usageLeft, setUsageLeft] = useState(DAILY_LIMIT - getUsage());
+  const [isPro, setIsPro] = useState(false);
+  const [usageLeft, setUsageLeft] = useState(FREE_DAILY_LIMIT - getUsage());
 
   // Settings (persisted to localStorage)
   const [themeId, setThemeId] = useState(() => {
@@ -850,7 +851,6 @@ export default function ChordApp() {
 
   // ── Generate progression ──────────────────────────────────────────────────
   const checkUsage = () => {
- const checkUsage = () => {
     const used = getUsage();
     const limit = isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT;
     if (used >= limit) return false;
@@ -1960,7 +1960,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
               color: usageLeft <= 3 ? "#f59e0b" : "#64748b",
             }}
           >
-            {usageLeft}/{DAILY_LIMIT} LEFT TODAY
+            {usageLeft}/{FREE_DAILY_LIMIT} LEFT TODAY
           </div>
           <button
             style={S.proBtn}
