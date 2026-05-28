@@ -850,7 +850,6 @@ export default function ChordApp() {
 
   // ── Generate progression ──────────────────────────────────────────────────
   const checkUsage = () => {
- const checkUsage = () => {
     const used = getUsage();
     const limit = isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT;
     if (used >= limit) return false;
@@ -3356,3 +3355,8 @@ const S = {
     .pricing-grid-responsive { grid-template-columns:1fr !important; }
   }
 `;
+if (typeof document !== 'undefined') {
+  const styleTag = document.createElement('style');
+  styleTag.textContent = CSS;
+  document.head.appendChild(styleTag);
+}
