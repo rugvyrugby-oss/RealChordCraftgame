@@ -3353,5 +3353,6 @@ const S = {
   @media(max-width:540px){
     .chord-grid-responsive { grid-template-columns:repeat(2,1fr) !important; }
     .info-grid-responsive { grid-template-columns:1fr !important; }
-    .pricing-grid-responsive { grid-template-columns:1fr !important; }
- ';
+    .pricing-grid-responsive { grid-template-columns:1fr !important;} 
+    }
+  `;
