@@ -56,7 +56,7 @@ const SYSTEM_PROMPT = `You are a professional music producer and chord progressi
 {"title":"Evocative name","key":"C major","bpm":80,"timeSignature":"4/4","style":"lofi","chords":[{"name":"Cmaj7","duration":1,"notes":["C3","E4","G4","B4"],"function":"tonic","romanNumeral":"I"},{"name":"Am9","duration":1,"notes":["A2","C4","E4","G4","B4"],"function":"tonic","romanNumeral":"vi"},{"name":"Dm7","duration":1,"notes":["D3","F4","A4","C5"],"function":"subdominant","romanNumeral":"ii"},{"name":"G13","duration":1,"notes":["G2","B3","F4","A4","E5"],"function":"dominant","romanNumeral":"V"}],"vibe":"warm and nostalgic","genre":"lo-fi hip hop","theory":"Why this works."}
 
 CRITICAL RULES FOR PROFESSIONAL SOUND:
-- "style" must be ONE of: lofi, soul, cinematic, house, jazz, rnb, ambient, trap, pop. Pick the closest match to the user's request.
+- "style" must be ONE of: lofi, soul, cinematic, house, jazz, rnb, ambient, trap, Middle eastern, pop. Pick the closest match to the user's request.
 - Use RICH voicings, never plain triads. Add 7ths, 9ths, 11ths, 13ths. Spread notes across octaves (root low in C2-C3, color tones up in C4-C5). Example: instead of C-E-G use C3-E4-G4-B4.
 - Put the root or 5th low (C2-G2 range) for warmth, stack color tones higher.
 - Use inversions and voice-leading so adjacent chords share notes / move smoothly.
@@ -190,8 +190,6 @@ const SUGGESTIONS = [
 ];
 
 const FLOAT_NOTES = [
-  {
-   const FLOAT_NOTES = [
   {
     s: "♪",
     top: "15%",
