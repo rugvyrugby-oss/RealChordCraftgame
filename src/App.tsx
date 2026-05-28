@@ -191,12 +191,7 @@ const SUGGESTIONS = [
 
 const FLOAT_NOTES = [
   {
-    s: "♩",
-    top: "8%",
-    left: "5%",
-    sz: 48,
-    a: "floatNote1 9s ease-in-out infinite",
-  },
+   const FLOAT_NOTES = [
   {
     s: "♪",
     top: "15%",
@@ -206,13 +201,6 @@ const FLOAT_NOTES = [
   },
   {
     s: "♫",
-    top: "35%",
-    left: "93%",
-    sz: 52,
-    a: "floatNote3 13s ease-in-out infinite 2.5s",
-  },
-  {
-    s: "♬",
     top: "60%",
     left: "3%",
     sz: 44,
@@ -226,77 +214,13 @@ const FLOAT_NOTES = [
     a: "floatNote2 10s ease-in-out infinite 1.8s",
   },
   {
-    s: "♪",
-    top: "85%",
-    left: "8%",
-    sz: 40,
-    a: "floatNote3 11.5s ease-in-out infinite 4.2s",
-  },
-  {
-    s: "♫",
-    top: "50%",
-    left: "96%",
-    sz: 28,
-    a: "floatNote1 14s ease-in-out infinite .7s",
-  },
-  {
     s: "♬",
     top: "25%",
-    left: "2%",
-    sz: 56,
-    a: "floatNote2 9.5s ease-in-out infinite 2.8s",
-  },
-  {
-    s: "♩",
-    top: "92%",
-    left: "50%",
-    sz: 34,
-    a: "floatNote3 12.5s ease-in-out infinite 1.5s",
-  },
-  {
-    s: "♪",
-    top: "5%",
-    left: "50%",
-    sz: 30,
-    a: "floatNote1 10.5s ease-in-out infinite 3.8s",
-  },
-  {
-    s: "♬",
-    top: "45%",
-    left: "15%",
-    sz: 38,
-    a: "floatNote2 13.5s ease-in-out infinite 2.2s",
-  },
-  {
-    s: "♫",
-    top: "68%",
-    left: "78%",
-    sz: 42,
-    a: "floatNote3 10.8s ease-in-out infinite 5.1s",
-  },
-  {
-    s: "♩",
-    top: "20%",
-    left: "70%",
-    sz: 30,
-    a: "floatNote1 11.8s ease-in-out infinite 0.4s",
-  },
-  {
-    s: "♪",
-    top: "55%",
-    left: "40%",
-    sz: 26,
-    a: "floatNote2 12.8s ease-in-out infinite 6s",
-  },
-  {
-    s: "♬",
-    top: "38%",
-    left: "55%",
-    sz: 34,
-    a: "floatNote3 14.5s ease-in-out infinite 3.1s",
+    left: "5%",
+    sz: 40,
+    a: "floatNote3 13s ease-in-out infinite 2.8s",
   },
 ];
-
 // ── Themes ──────────────────────────────────────────────────────────────────
 // Each theme defines the core palette. The app reads `theme` and threads these
 // colors into the dynamic styles.
