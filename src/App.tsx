@@ -2628,6 +2628,25 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             </div>
           </div>
         )}
+        {/* ── WHAT YOU GET ── */}
+        <div style={S.wyg}>
+          <div style={{ ...S.wygHeading, color: theme.textBright }}>
+            What You Get
+          </div>
+          <div style={S.wygGrid} className="info-grid-responsive wyg-grid-responsive">
+            {[
+              { icon: "🎚️", title: "Emotion-Based Chords", body: "Describe a vibe and get chords that match the mood." },
+              { icon: "▶", title: "Real Playback", body: "Hear the progression instantly before using it." },
+              { icon: "📤", title: "Export Ready", body: "Export MIDI/audio so you can drop it into your beat." },
+            ].map((card) => (
+              <div key={card.title} style={{ ...S.wygCard, borderColor: theme.panelBorder }}>
+                <div style={{ ...S.wygIcon, color: theme.accent }}>{card.icon}</div>
+                <div style={{ ...S.wygCardTitle, color: theme.textBright }}>{card.title}</div>
+                <div style={S.wygCardBody}>{card.body}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -3021,6 +3040,55 @@ const S = {
     border: "1px solid rgba(255,255,255,.06)",
     borderRadius: 10,
     padding: "18px 20px",
+  },
+  wyg: {
+    marginTop: 88,
+    paddingTop: 32,
+    borderTop: "1px solid rgba(255,255,255,.07)",
+  },
+  wygKicker: {
+    fontSize: 11,
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    fontFamily: "monospace",
+    marginBottom: 10,
+  },
+  wygHeading: {
+    fontSize: 34,
+    fontWeight: 600,
+    letterSpacing: -0.5,
+    marginBottom: 36,
+    fontFamily: "Georgia,serif",
+    maxWidth: 420,
+    lineHeight: 1.15,
+  },
+  wygGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3,1fr)",
+    gap: 40,
+  },
+  wygItem: {
+    paddingTop: 18,
+    borderTop: "1px solid rgba(255,255,255,.1)",
+  },
+  wygNum: {
+    fontSize: 13,
+    fontFamily: "monospace",
+    letterSpacing: 1,
+    marginBottom: 16,
+    opacity: 0.9,
+  },
+  wygCardTitle: {
+    fontSize: 18,
+    fontWeight: 600,
+    marginBottom: 8,
+    letterSpacing: -0.2,
+  },
+  wygCardBody: {
+    fontSize: 14,
+    color: "#8b97ab",
+    lineHeight: 1.65,
+    maxWidth: 240,
   },
   chordActionBtn: {
     position: "absolute",
