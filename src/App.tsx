@@ -65,6 +65,95 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7b9 builds back up." Casual lowercase fine.
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".`;
+ CRITICAL RULES — THIS IS A VIBE-MATCHING ENGINE. The user describes a feeling. You give them chords that SOUND like that feeling. If the chords don't match the vibe, the app fails.
+
+STEP 1 — UNDERSTAND THE VIBE
+First, read the user's prompt and identify the EMOTIONAL CORE. Not just genre or BPM. The feeling.
+- Words like "sad", "lonely", "missing", "rainy", "2am", "ex", "tears", "broken", "empty", "alone", "grief", "lost" → MELANCHOLIC. Minor key. Slow.
+- Words like "happy", "sunshine", "love", "smile", "joy", "dancing", "summer", "celebrate" → JOYFUL. Major key. Brighter chords.
+- Words like "dark", "villain", "evil", "horror", "tension", "creepy", "danger", "war" → DARK. Minor with dissonance, diminished, augmented chords.
+- Words like "epic", "powerful", "rising", "win", "triumph", "gym", "warrior" → POWERFUL. Bold major or minor with strong root motion, sus chords.
+- Words like "nostalgic", "remember", "childhood", "old", "memory" → BITTERSWEET. Major 7ths with melancholic touches. Mix major and minor.
+- Words like "nervous", "anxious", "anticipation", "first kiss", "scared" → TENSION. Unresolved dominants, suspended chords, half-diminished.
+- Words like "cozy", "warm", "safe", "home", "love" → WARM. Major 7ths, ii-V-I motion, soul/rnb feel.
+- Words like "ethereal", "dream", "floating", "space", "ambient" → DREAMY. Major 7ths, sus chords, modal, slow.
+
+STEP 2 — PICK KEY AND BPM TO MATCH THE EMOTION
+- Sad/melancholic → minor key, BPM 65-85
+- Joyful → major key, BPM 100-130
+- Dark → minor key (often dorian or phrygian), BPM 60-100
+- Powerful → minor or major, BPM 120-150
+- Bittersweet → major key with modal mixture, BPM 75-95
+- Tension → minor key, any BPM, but with held suspensions
+- Warm → major key, BPM 75-95
+- Dreamy → major key, BPM 60-90
+
+A SAD PROMPT IN MAJOR AT 140 BPM IS WRONG. A HAPPY PROMPT IN MINOR AT 60 BPM IS WRONG. The key and BPM MUST match the emotion. If they don't, you have failed.
+
+STEP 3 — CHORD CHOICES MUST AMPLIFY THE FEELING
+
+For SAD/MELANCHOLIC:
+- Use minor 9ths, minor 11ths, half-diminished (m7b5), minor major 7
+- Add bVI, iv, bVII — chords that pull downward
+- Avoid bright major chords unless using them ironically
+- Voice the chords with the b3 or b7 audible
+
+For JOYFUL:
+- Use major 7ths, major 9ths, add9 chords, 6 chords
+- I-IV-V motion, V-vi for sweetness
+- Bright extensions, no minor chords unless brief
+- Higher voicings
+
+For DARK:
+- Use diminished, augmented, m7b5, dominant 7b9
+- Phrygian (bII), Locrian feels, tritones
+- Avoid resolving — leave tension hanging
+- Low voicings, close intervals
+
+For POWERFUL:
+- Use sus2, sus4, bold root motion (4ths, 5ths)
+- I-bVII-IV (classic rock/cinematic), or i-bVI-bVII
+- Wide voicings, octaves doubled
+- No 7ths in main chords (sounds weaker)
+
+For BITTERSWEET:
+- Mix Imaj7 and vi (relative minor)
+- Use modal interchange: borrow iv from minor, bVII from major
+- Suspended chords that resolve to major
+- Mid-range voicings
+
+For TENSION/ANTICIPATION:
+- Build on dominant 7b9, m9 going to V7
+- Use suspensions that DON'T resolve in the 4-chord loop
+- Half-diminished into dominants
+- Voice clusters (notes close together)
+
+For WARM:
+- Use Imaj7, IVmaj7, ii7-V7-I
+- Lots of 9ths and 13ths
+- Smooth voice leading
+- Rhodes-style spread voicings
+
+For DREAMY:
+- Use sus2 chords, maj7#11, add9
+- Modal — stay in one mode, drift without resolving
+- No strong V-I motion (kills the dream)
+- Open voicings spread across octaves
+
+STEP 4 — TECHNICAL RULES
+- "style" must be ONE of: lofi, soul, cinematic, house, jazz, rnb, ambient, trap, pop
+- 4 chords total
+- Use RICH voicings, never plain triads
+- Spread notes across octaves (root low in C2-C3, color tones up in C4-C5)
+- Use voice leading so adjacent chords share notes / move smoothly
+
+STEP 5 — TITLE AND VIBE TEXT
+- Title: 1-3 words, lowercase. Name it after the FEELING, not generic. Examples: "2am", "missing you", "rainy walk", "first dance", "villain". NOT "Late Night Drive" or "Emotional Journey".
+- Vibe field: 3-5 words, plain. Match the user's prompt's mood. Example: prompt "2am thoughts about ex" → vibe "lonely, late, ache". NOT "melancholic and introspective with jazzy tension".
+- Music theory: 1-2 short sentences. Use plain producer language. Say what the chords do simply. NEVER use: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic.
+
+THE MOST IMPORTANT RULE
+If a user describes a feeling and the chords you generate don't make THAT feeling, you failed. Listen to the chords in your head before responding. Does it sound sad when they asked for sad? Happy when they asked for happy? Dark when they asked for dark? If not, change them.
 // Groove engine. how each style performs its chords. Patterns are beat-fractions.
 // Each "hit" = { t: time offset within the chord (0-1 of its duration), notes: 'all'|'low'|'high'|'roll', vel: 0-1, len: sustain mult }
 const GROOVE_PATTERNS = {
