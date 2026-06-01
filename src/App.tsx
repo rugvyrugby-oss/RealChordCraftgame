@@ -218,7 +218,7 @@ const FLOAT_NOTES = [
   },
 ];
 // ── Themes ──────────────────────────────────────────────────────────────────
-// Each theme defines the core palette. The app reads `theme` and threads these
+// Each theme defines the core palette. //The app reads `theme`...). and threads these
 // colors into the dynamic styles.
 const THEMES = {
   midnight: {
