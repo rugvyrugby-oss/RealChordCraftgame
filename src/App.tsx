@@ -1420,7 +1420,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
 
   return (
     <div style={themedBody}>
-      <style>{CSS}</style>
+    <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       {/* Ambient + floating notes */}
       <div style={themedAmbient} />
