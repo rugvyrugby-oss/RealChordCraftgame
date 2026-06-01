@@ -64,7 +64,7 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7b9 builds back up." Casual lowercase fine.
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".`;
-- "rainy tokyo" / "tokyo night" / "city rain" / "neon streets" → MELANCHOLIC + DREAMY. Minor key with major 7th color, BPM 70-85, lofi or ambient style. Use minor 9ths, major 7ths, sus chords. Spacious, wet, reflective. Think city lights through rain.
+- "rainy tokyo" / "tokyo night" / "city rain" / "neon streets" => MELANCHOLIC + DREAMY. Minor key with major 7th color, BPM 70-85, lofi or ambient style. Use minor 9ths, major 7ths, sus chords. Spacious, wet, reflective. Think city lights through rain.
 const GROOVE_PATTERNS = {
   lofi: {
     swing: 0.12,
