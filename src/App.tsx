@@ -883,6 +883,7 @@ export default function ChordApp() {
         body: JSON.stringify({
           model: "claude-sonnet-4-5",
           max_tokens: 1000,
+          temperature: 1,
           system: SYSTEM_PROMPT,
           messages: [{ role: "user", content: prompt }],
         }),
@@ -903,7 +904,7 @@ export default function ChordApp() {
 
   // ── Exploration: fetch 4 alternate progressions for the same vibe ─────────
   const fetchVariations = async () => {
-    if (!result || loadingVariations) return;
+    if (!result || loadingVariations) return
     setLoadingVariations(true);
     try {
       const promptForAI =
@@ -923,6 +924,7 @@ Each variation MUST feel meaningfully different from the others — not just inv
         body: JSON.stringify({
           model: "claude-sonnet-4-5",
           max_tokens: 2500,
+          temperature: 1,
           system: variationSystem,
           messages: [{ role: "user", content: promptForAI }],
         }),
@@ -974,6 +976,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
         body: JSON.stringify({
           model: "claude-sonnet-4-5",
           max_tokens: 800,
+          temperature: 1,
           system: mutationSystem,
           messages: [{ role: "user", content: `Replace the [?] chord.` }],
         }),
