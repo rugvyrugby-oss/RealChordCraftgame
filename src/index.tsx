@@ -20,6 +20,7 @@ root.render(
         >
           Terms of Service
         </Link>
+        <a href="/Privacy.html" style={{ color: "#475569", fontSize: 12, fontFamily: "Georgia,serif", textDecoration: "underline", marginLeft: 16 }}>Privacy Policy</a>
       </footer>
     </BrowserRouter>
   </React.StrictMode>
