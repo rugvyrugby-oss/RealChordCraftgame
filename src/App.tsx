@@ -2649,6 +2649,28 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             ))}
           </div>
         </div>
+        {/* ── WHY CHORDCRAFT ── */}
+        <div style={{ marginTop: 80, paddingTop: 32, borderTop: "1px solid rgba(255,255,255,.07)" }}>
+          <div style={{ fontSize: 11, letterSpacing: 3, textTransform: "uppercase", fontFamily: "monospace", color: theme.accent, marginBottom: 10 }}>
+            Why ChordCraft
+          </div>
+          <div style={{ fontSize: 34, fontWeight: 600, letterSpacing: -0.5, marginBottom: 48, fontFamily: "Georgia,serif", color: theme.textBright, maxWidth: 420, lineHeight: 1.15 }}>
+            Built for how producers actually work.
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 40 }} className="wyg-grid-responsive">
+            {[
+              { num: "01", title: "No login. Just open it and go.", body: "No account, no install, no \"start your free trial.\" You get 5 progressions a day for free, no strings." },
+              { num: "02", title: "You describe the feeling. It finds the chords.", body: "Most tools make you know the theory first. Type \"dark 90s RnB\" and ChordCraft works out the rest." },
+              { num: "03", title: "You actually learn why it works.", body: "Every progression comes with a music theory note explaining what's happening — so you're not just copying chords, you're understanding them." },
+            ].map((card) => (
+              <div key={card.num} style={{ paddingTop: 18, borderTop: "1px solid rgba(255,255,255,.1)" }}>
+                <div style={{ fontSize: 13, fontFamily: "monospace", letterSpacing: 1, marginBottom: 16, color: theme.accent }}>{card.num}</div>
+                <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 8, letterSpacing: -0.2, color: theme.textBright }}>{card.title}</div>
+                <div style={{ fontSize: 14, color: "#8b97ab", lineHeight: 1.65, maxWidth: 240 }}>{card.body}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
