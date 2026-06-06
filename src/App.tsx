@@ -2661,7 +2661,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             {[
               { num: "01", title: "No login. Just open it and go.", body: "No account, no install, no \"start your free trial.\" You get 5 progressions a day for free, no strings." },
               { num: "02", title: "You describe the feeling. It finds the chords.", body: "Most tools make you know the theory first. Type \"dark 90s RnB\" and ChordCraft works out the rest." },
-              { num: "03", title: "You actually learn why it works.", body: "Every progression comes with a music theory note explaining what's happening — so you're not just copying chords, you're understanding them." },
+              { num: "03", title: "You actually learn why it works.", body: "Every progression comes with a music theory note explaining what's happening so you're not just copying chords, you're understanding them." },
             ].map((card) => (
               <div key={card.num} style={{ paddingTop: 18, borderTop: "1px solid rgba(255,255,255,.1)" }}>
                 <div style={{ fontSize: 13, fontFamily: "monospace", letterSpacing: 1, marginBottom: 16, color: theme.accent }}>{card.num}</div>
