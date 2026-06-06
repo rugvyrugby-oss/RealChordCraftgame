@@ -3,7 +3,7 @@ export default function Terms() {
     <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
       <h1>Terms of Service</h1>
 
-      <p>Last updated: August 2026</p>
+      <p>Last updated: June 2026</p>
 
       <h2>1. Acceptance of Terms</h2>
       <p>
