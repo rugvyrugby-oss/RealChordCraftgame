@@ -60,7 +60,7 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - Put the root or 5th low (C2-G2 range) for warmth, stack color tones higher.
 - Use inversions and voice-leading so adjacent chords share notes / move smoothly.
 - Match BPM to mood (lofi 70-90, soul 75-100, cinematic 60-80, house 120-128, trap 130-150).
-- Always 4 chords. Make them genuinely interesting, the kind a real producer would use, not a beginner.
+- Always 4 chords. Make them genuinely interesting, the kind a real producer would use, not a beginner. NEVER use I-vi-IV-V or I-V-vi-IV — these are overused and boring. Use unexpected chord relationships, modal interchange, secondary dominants, or borrowed chords.
 - For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7b9 builds back up." Casual lowercase fine.
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".
