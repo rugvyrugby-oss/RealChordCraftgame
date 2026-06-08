@@ -450,7 +450,7 @@ export default function ChordApp() {
 
     const reverbNode = new Tone.Reverb({
       decay: 2.5,
-      wet: 1,
+      wet: 0.25,
       preDelay: 0.01,
     }).toDestination();
     reverbRef.current = reverbNode;
