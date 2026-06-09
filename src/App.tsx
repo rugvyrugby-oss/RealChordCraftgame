@@ -2445,6 +2445,9 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
               <button className="btn btn-share" onClick={openShare}>
                 🔗 Share
               </button>
+              <button className="btn btn-save" onClick={saveProject}>
+                💾 Save
+              </button>
               <button className="btn btn-record" onClick={exportAudio}>
                 ⏺ Export Audio
               </button>
