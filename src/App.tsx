@@ -2376,12 +2376,20 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
                   ].map((t) => (
                     <button
                       key={t.id}
-                      className="sound-btn pro-locked"
+                      className={
+                        activeTone === t.id
+                          ? "sound-btn active"
+                          : isPro
+                          ? "sound-btn"
+                          : "sound-btn pro-locked"
+                      }
                       onClick={() =>
-                        openProModal(
-                          "Unlock the full sound palette",
-                          "Rhodes, Pad, and Pluck tones are coming with Pro."
-                        )
+                        isPro
+                          ? setActiveTone(t.id)
+                          : openProModal(
+                              "Unlock the full sound palette",
+                              "Rhodes, Pad, and Pluck tones are coming with Pro."
+                            )
                       }
                     >
                       {t.label} <span style={{ opacity: 0.6 }}>🔒</span>
