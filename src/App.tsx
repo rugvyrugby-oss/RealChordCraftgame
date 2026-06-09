@@ -370,6 +370,7 @@ export default function ChordApp() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(EXAMPLE_PROGRESSION);
+  const [savedProjects, setSavedProjects] = useState([]);
   const [isExample, setIsExample] = useState(true);
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -850,6 +851,30 @@ export default function ChordApp() {
   );
 
   // ── Generate progression ──────────────────────────────────────────────────
+  const SAVE_KEY = "chordcraft_saved";
+  const getSaved = () => {
+    try { return JSON.parse(localStorage.getItem(SAVE_KEY) || "[]"); }
+    catch { return []; }
+  };
+  const saveProject = () => {
+    if (!result) return;
+    const saved = getSaved();
+    const limit = isPro ? Infinity : 3;
+    if (saved.length >= limit) {
+      openProModal("Save more projects", "Free users can save 3. Go Pro for unlimited saves.");
+      return;
+    }
+    const project = { id: Date.now(), name: result.title || "untitled", data: result };
+    const updated = [project, ...saved];
+    localStorage.setItem(SAVE_KEY, JSON.stringify(updated));
+    setSavedProjects(updated);
+  };
+  const loadProject = (p) => { setResult(p.data); };
+  const deleteProject = (id) => {
+    const updated = getSaved().filter((p) => p.id !== id);
+    localStorage.setItem(SAVE_KEY, JSON.stringify(updated));
+    setSavedProjects(updated);
+  };
   const checkUsage = () => {
     const used = getUsage();
     const limit = isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT;
