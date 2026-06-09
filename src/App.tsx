@@ -2714,7 +2714,7 @@ Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you'
             Why I made this
           </div>
           <div style={{ fontSize: 18, lineHeight: 1.7, color: theme.textBright, maxWidth: 600, fontFamily: "Georgia,serif" }}>
-            More people are making music than ever, but a lot of them don't know music theory, and get stuck on what to actually play. I wanted to fix that. ChordCraft is here to make writing music easier: describe a vibe, get chords that fit, and keep moving. No theory required.
+            More people are making music than ever, but a lot of them don't know music theory, and get stuck on what to actually play. I wanted to fix that, so ChordCraft is here to make writing music easier: describe a vibe, get chords that fit. No theory required.
           </div>
         </div>
       </div>
