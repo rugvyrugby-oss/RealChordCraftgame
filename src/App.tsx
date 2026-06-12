@@ -13,7 +13,7 @@ import Terms from "./Terms";
 // ============================================================================
 
 const FREE_DAILY_LIMIT = 5;
-const PRO_DAILY_LIMIT = 100;
+const PRO_DAILY_LIMIT = 120;
 
 // ════════════════════════════════════════════════════════════════════════════
 // PRICING PLANS
