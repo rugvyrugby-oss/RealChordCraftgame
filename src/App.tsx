@@ -920,7 +920,12 @@ export default function ChordApp() {
           max_tokens: 1000,
           temperature: 1,
           system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content: prompt }],
+          messages: [{
+  role: "user",
+  content: `${prompt}
+
+Random variation seed: ${Date.now()}`
+}],
         }),
       });
       const data = await res.json();
