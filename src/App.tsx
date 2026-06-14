@@ -65,6 +65,14 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".
 - SOUND QUALITY: every voicing must sound full and intentional, like a real producer played it. STRICT VOICING RULES: (1) Root note ONLY in C2-G2 range — this is your bass note, nothing else goes this low. (2) Leave a gap — no notes in C3-B3 range. (3) Stack the color tones (3rd, 7th, 9th, 11th) in C4-C5 range only. (4) Max 5 notes per chord. (5) ONLY use notes that actually belong to the chord — no wrong notes ever. Example Am9: A2 [gap] C4 E4 G4 B4. Example Dm9: D2 [gap] F4 A4 C5 E5. Example G13: G2 [gap] B3 F4 A4 E5. If you can't fit the voicing cleanly, simplify the chord — a clean Am7 beats a muddy Am11.
+- VARIETY RULES:
+- Never reuse the example progression shown in this prompt.
+- If the same user prompt is entered multiple times, generate a noticeably different progression each time.
+- Avoid repeating the same root motion patterns.
+- Avoid generating the same progression structure repeatedly.
+- For lo-fi, rotate between jazzy, neo-soul, modal interchange, borrowed chord, descending bass, suspended, and chromatic approaches.
+- Prioritize variety while preserving the requested mood.
+- Every generation should feel like a different songwriter wrote it.
 - "rainy tokyo" / "tokyo night" / "city rain" / "neon streets" => MELANCHOLIC + DREAMY. Minor key with major 7th color, BPM 70-85, lofi or ambient style. Use minor 9ths, major 7ths, sus chords. Spacious, wet, reflective. Think city lights through rain. `;
 const GROOVE_PATTERNS = {
   lofi: {
