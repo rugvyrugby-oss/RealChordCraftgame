@@ -73,6 +73,9 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - For lo-fi, rotate between jazzy, neo-soul, modal interchange, borrowed chord, descending bass, suspended, and chromatic approaches.
 - Prioritize variety while preserving the requested mood.
 - Every generation should feel like a different songwriter wrote it.
+- Musicality is more important than complexity.
+- Do not add #11, b9, #9, b13 or altered tensions unless they clearly improve the requested style.
+- A simple B9 is often better than a forced Bmaj7#11.
 - "rainy tokyo" / "tokyo night" / "city rain" / "neon streets" => MELANCHOLIC + DREAMY. Minor key with major 7th color, BPM 70-85, lofi or ambient style. Use minor 9ths, major 7ths, sus chords. Spacious, wet, reflective. Think city lights through rain. `;
 const GROOVE_PATTERNS = {
   lofi: {
