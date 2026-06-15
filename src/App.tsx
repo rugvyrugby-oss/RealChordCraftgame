@@ -74,6 +74,10 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - Prioritize variety while preserving the requested mood.
 - Every generation should feel like a different songwriter wrote it.
 - Musicality is more important than complexity.
+- NEVER use Fmaj9-Bbmaj7-C9 or any rotation of these chords together.
+- Vary the KEY every generation. Do not default to F major or C major. Use keys like Db, Eb, Ab, Gb, B, E, A — the less obvious keys sound fresher.
+- For lofi specifically: try minor keys (Cm, Dm, Bm, F#m), not just major. Minor lofi hits harder emotionally.
+- A "chill lofi" prompt should NOT produce I-IV-V in any key. Use ii-V, bVII, bVI, or modal approaches instead.
 - Do not add #11, b9, #9, b13 or altered tensions unless they clearly improve the requested style.
 - A simple B9 is often better than a forced Bmaj7#11.
 - "rainy tokyo" / "tokyo night" / "city rain" / "neon streets" => MELANCHOLIC + DREAMY. Minor key with major 7th color, BPM 70-85, lofi or ambient style. Use minor 9ths, major 7ths, sus chords. Spacious, wet, reflective. Think city lights through rain. `;
