@@ -66,13 +66,17 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".
 - SOUND QUALITY: every voicing must sound full and intentional, like a real producer played it. STRICT VOICING RULES: (1) Root note ONLY in C2-G2 range — this is your bass note, nothing else goes this low. (2) Leave a gap — no notes in C3-B3 range. (3) Stack the color tones (3rd, 7th, 9th, 11th) in C4-C5 range only. (4) Max 5 notes per chord. (5) ONLY use notes that actually belong to the chord — no wrong notes ever. Example Am9: A2 [gap] C4 E4 G4 B4. Example Dm9: D2 [gap] F4 A4 C5 E5. Example G13: G2 [gap] F4 A4 B4 E5. If you can't fit the voicing cleanly, simplify the chord — a clean Am7 beats a muddy Am11.
 - VARIETY RULES:
-- Never reuse the example progression shown in this prompt.
-- If the same user prompt is entered multiple times, generate a noticeably different progression each time.
-- Avoid repeating the same root motion patterns.
-- Avoid generating the same progression structure repeatedly.
-- For lo-fi, rotate between jazzy, neo-soul, modal interchange, borrowed chord, descending bass, suspended, and chromatic approaches.
-- Prioritize variety while preserving the requested mood.
-- Every generation should feel like a different songwriter wrote it.
+Each generation MUST pick one of these approaches and commit to it fully:
+  APPROACH 1 — DESCENDING BASS: root moves down stepwise across all 4 chords
+  APPROACH 2 — MODAL: stay in one mode, avoid V chord (Dorian, Phrygian, Lydian, Mixolydian)
+  APPROACH 3 — BORROWED CHORD: at least one chord from parallel minor/major (bVII, bVI, iv)
+  APPROACH 4 — SECONDARY DOMINANT: use V7/ii, V7/IV, or V7/vi
+  APPROACH 5 — PEDAL TONE: one note held constant in bass across all 4 chords
+  APPROACH 6 — CYCLE OF 4THS: root motion moves in 4ths (Dm-Gm-C-F)
+  APPROACH 7 — DECEPTIVE RESOLUTION: V resolves to vi, bVII, or IV instead of I
+  APPROACH 8 — CHROMATIC APPROACH: at least one chord moves by half step
+- Pick a DIFFERENT approach every time. Never use the same one twice in a row.
+- Every generation should feel like a completely different songwriter wrote it.
 - Musicality is more important than complexity.
 - NEVER use Fmaj9-Bbmaj7-C9 or any rotation of these chords together.
 - Vary the KEY every generation. Do not default to F major or C major. Use keys like Db, Eb, Ab, Gb, B, E, A — the less obvious keys sound fresher.
