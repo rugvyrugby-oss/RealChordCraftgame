@@ -76,6 +76,7 @@ Each generation MUST pick one of these approaches and commit to it fully:
   APPROACH 7 — DECEPTIVE RESOLUTION: V resolves to vi, bVII, or IV instead of I
   APPROACH 8 — CHROMATIC APPROACH: at least one chord moves by half step
 - Pick a DIFFERENT approach every time. Never use the same one twice in a row.
+- LOOPABILITY: since this progression will loop repeatedly, the 4th chord must create pull back toward chord 1 — either by resolving down a 5th/up a 4th into the tonic, or by sharing a common tone with chord 1. Avoid ending on ii or iii with no dominant motion, as it kills the loop.
 - Every generation should feel like a completely different songwriter wrote it.
 - Musicality is more important than complexity.
 - NEVER use Fmaj9-Bbmaj7-C9 or any rotation of these chords together.
