@@ -89,7 +89,7 @@ Each generation MUST pick one of these approaches and commit to it fully:
 const GROOVE_PATTERNS = {
   lofi: {
     swing: 0.12,
-    humanize: 0.022,
+    humanize: 0.023,
     hits: [
       { t: 0.0, notes: "low", vel: 0.62, len: 1.0 },
       { t: 0.5, notes: "roll", vel: 0.5, len: 0.55 },
