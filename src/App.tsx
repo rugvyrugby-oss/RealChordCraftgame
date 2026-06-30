@@ -201,7 +201,7 @@ const BLACK_POSITIONS = {
 };
 
 const SUGGESTIONS = [
-  "lofi 80 bpm c minor",
+  "lofi 80 bpm c minor chord progession",
   "big room edm drop 128",
   "90s rnb slow jam",
   " dark cinematic g minor",
