@@ -520,19 +520,20 @@ export default function ChordApp() {
       },
     }).toDestination();
 
-    const rhodes = new Tone.PolySynth(Tone.FMSynth, {
-      harmonicity: 1,
-      modulationIndex: 3.5,
-      envelope: { attack: 0.01, decay: 0.3, sustain: 0.4, release: 1.5 },
+const rhodes = new Tone.PolySynth(Tone.FMSynth, {
+      harmonicity: 3,
+      modulationIndex: 12,
+      oscillator: { type: "sine" },
+      envelope: { attack: 0.002, decay: 1.2, sustain: 0.15, release: 1.8 },
       modulation: { type: "sine" },
       modulationEnvelope: {
-        attack: 0.02,
-        decay: 0.2,
-        sustain: 0.3,
-        release: 1,
+        attack: 0.001,
+        decay: 0.4,
+        sustain: 0.05,
+        release: 0.6,
       },
     }).toDestination();
-    rhodes.volume.value = -8;
+    rhodes.volume.value = -9;
 
     const pad = new Tone.PolySynth(Tone.Synth, {
       oscillator: { type: "sine" },
