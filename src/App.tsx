@@ -65,6 +65,16 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".
 - SOUND QUALITY: every voicing must sound full and intentional, like a real producer played it. STRICT VOICING RULES: (1) Root note ONLY in C2-G2 range — this is your bass note, nothing else goes this low. (2) Leave a gap — no notes in C3-B3 range. (3) Stack the color tones (3rd, 7th, 9th, 11th) in C4-C5 range only. (4) Max 5 notes per chord. (5) ONLY use notes that actually belong to the chord — no wrong notes ever. Example Am9: A2 [gap] C4 E4 G4 B4. Example Dm9: D2 [gap] F4 A4 C5 E5. Example G13: G2 [gap] F4 A4 B4 E5. If you can't fit the voicing cleanly, simplify the chord — a clean Am7 beats a muddy Am11.
+- HARMONIC ARC (mandatory chord order — this is not optional):
+  Chord 1 = HOME. A tonic-family chord that establishes the key. Allowed: I / Imaj7 / i / im7 / vi (as relative minor tonic) / im9. function MUST be "tonic". If the piece is in a minor key, chord 1 is i / im7 / im9. If major, chord 1 is I / Imaj7 / Imaj9. Never open on ii, iii, IV, V, or vii°.
+  Chord 2 = MOVE. Leaves home but stays in the key. Good choices: IV/iv, ii, iii, vi, bVI, bVII, or a colored variant of any of these. Do not repeat chord 1's root.
+  Chord 3 = BUILD. Creates pull. Good choices: pre-dominant (ii, IV, iv, bVI), a secondary dominant (V7/x), or a modal cadence chord (bVII, bII). function should be "subdominant" or "dominant".
+  Chord 4 = RETURN. Its job is to lead back to chord 1 when the loop repeats. Pick one of these landings and commit:
+    (a) DOMINANT: V, V7, V9, V13, or a tritone sub (bII7) — resolves down a 5th into chord 1.
+    (b) PLAGAL / MODAL: IV, iv, bVII, bVI → chord 1 by step or common-tone.
+    (c) DECEPTIVE-RETURN: chord 4 shares ≥ 2 pitch classes with chord 1 so the loop feels seamless rather than cadential.
+  Before finalizing, mentally play chord 4 → chord 1 twice. If it doesn't land, revoice or reselect chord 4. Do NOT hand back a progression whose loop point sounds like a dead stop.
+- VOICE LEADING ON THE LOOP: the smooth-top-voice rule applies between chord 4 and chord 1 as well. Chord 4's top notes must connect to chord 1's top notes by common tone or step, same as any other adjacent pair. This is the difference between a progression that loops forever and one that jars every 4 bars.
 - VARIETY RULES:
 Each generation MUST pick one of these approaches and commit to it fully:
   APPROACH 1 — DESCENDING BASS: root moves down stepwise across all 4 chords
@@ -76,11 +86,11 @@ Each generation MUST pick one of these approaches and commit to it fully:
   APPROACH 7 — DECEPTIVE RESOLUTION: V resolves to vi, bVII, or IV instead of I
   APPROACH 8 — CHROMATIC APPROACH: at least one chord moves by half step
 - Pick a DIFFERENT approach every time. Never use the same one twice in a row.
-- LOOPABILITY: since this progression will loop repeatedly, the 4th chord must create pull back toward chord 1 — either by resolving down a 5th/up a 4th into the tonic, or by sharing a common tone with chord 1. Avoid ending on ii or iii with no dominant motion, as it kills the loop.
+- LOOPABILITY: reinforced by HARMONIC ARC chord 4 rules above. In addition: never end on ii, iii, or a bare V(sus) that hangs — those kill the loop.
 - Every generation should feel like a completely different songwriter wrote it.
 - Musicality is more important than complexity.
 - NEVER use Fmaj9-Bbmaj7-C9 or any rotation of these chords together.
-- Vary the KEY and STARTING CHORD every generation. Never start two progressions on the same chord or in the same key back to back. Rotate keys widely: Db, Eb, F#m, Bm, Am, E, A, Gm, C#m, Ab. Do not always start on the vi chord — start on different scale degrees. BPM is fixed by the user request, do not vary it.
+- Vary the KEY every generation. Never repeat the same key back to back. Rotate keys widely: Db, Eb, F#m, Bm, Am, E, A, Gm, C#m, Ab. BPM is fixed by the user request, do not vary it. Chord 1 is NOT free to be anything — per HARMONIC ARC above, it must be a tonic-family anchor.
 - For lofi specifically: try minor keys (Cm, Dm, Bm, F#m), not just major. Minor lofi hits harder emotionally.
 - A "chill lofi" prompt should NOT produce I-IV-V in any key. Use ii-V, bVII, bVI, or modal approaches instead.
 - Do not add #11, b9, #9, b13 or altered tensions unless they clearly improve the requested style.
@@ -1065,7 +1075,29 @@ Random variation seed: ${Date.now()}`
         : "";
       const variationSystem = `You generate 4 ALTERNATIVE chord progressions for the same vibe. Return ONLY a JSON ARRAY of 4 objects, each in the same shape as before:
 [{"title":"...","key":"...","bpm":...,"timeSignature":"4/4","style":"...","chords":[{"name":"...","duration":1,"notes":["..."],"function":"...","romanNumeral":"..."},...4 chords each...],"vibe":"...","genre":"...","theory":"..."}, ... ×4]
-Each variation MUST feel meaningfully different from the others — not just inversions. Vary modes, borrowed chords, substitutions, tritone subs, modal interchange. Every variation MUST honour the tempo target below — same rules for voicing density, duration, and style. The user's current progression was: ${currentChords}. Make these new ones genuinely fresh alternatives. ${rejectedNote} Use voicings that fit the tempo band described below.`;
+
+HARD REQUIREMENTS (a variation that breaks any of these is unusable — do not return it):
+
+1. KEY LOCK. Every variation stays in ${result.key}. Same tonal center, same "key" field value. The relative minor/major of ${result.key} is allowed if it clearly serves the reharm, but no arbitrary key jumps. Do NOT drift into a random new key just to sound different.
+
+2. HARMONIC ARC — every variation follows the same 4-chord order:
+   Chord 1 = HOME (tonic-family: I / Imaj7 / Imaj9 in major, or i / im7 / im9 in minor). function="tonic". Never open on ii, iii, IV, V, or vii°.
+   Chord 2 = MOVE (leaves home, stays diatonic-ish: IV, ii, iii, vi, bVII, bVI, or colored variants).
+   Chord 3 = BUILD (creates pull: pre-dominant ii/IV, secondary dominant V7/x, or bVII/bII).
+   Chord 4 = RETURN — must lead back to chord 1 when the loop repeats. Choose one of: (a) V/V7/V9/V13 or tritone sub bII7 resolving down a 5th, (b) plagal/modal IV, iv, bVII, bVI landing on chord 1 by step or common tone, (c) chord sharing ≥ 2 pitch classes with chord 1. Mentally play chord 4 → chord 1 twice — if it doesn't land, revoice or reselect.
+
+3. VOICE LEADING inside AND across the loop. Adjacent chords' upper voices must connect by common tone or single step. Chord 4's upper voices must connect back to chord 1's upper voices the same way. Top voice across all 4 chords should be a smooth line, not leaps.
+
+4. DISTINCT REHARM TECHNIQUES — the 4 variations must NOT converge. Each variation must use a DIFFERENT primary reharm technique from this list, in this order:
+   Variation 1: MODAL INTERCHANGE — borrow at least one chord from parallel minor/major (bVII, bVI, iv, or bIII in major; IV or V in minor).
+   Variation 2: SECONDARY DOMINANT — include at least one V7/x (V7/ii, V7/IV, V7/vi).
+   Variation 3: DESCENDING BASS or PEDAL — root moves down stepwise across the 4 chords, OR one bass note is held constant.
+   Variation 4: CHROMATIC / TRITONE SUB — at least one chord moves by half step, or a V is replaced by its tritone sub (bII7).
+   Each variation must actually SOUND different from the others, not just have different labels.
+
+5. TEMPO. All variations honour the tempo target block below — same voicing density, chord duration, and style rules for the current BPM.
+
+The user's current progression (do NOT reproduce it — these are alternatives): ${currentChords}. ${rejectedNote}`;
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1123,8 +1155,18 @@ Each variation MUST feel meaningfully different from the others — not just inv
         ? `Avoid: ${rejected.join(", ")}.`
         : "";
       const mutGuide = bpmDirective(bpm);
+      const slotRole = slotIdx === 0
+        ? "HOME (tonic-family: I/Imaj7/Imaj9 in major, i/im7/im9 in minor). function=\"tonic\". Do NOT return a ii, iii, IV, V, or vii° — that would break the progression's opening."
+        : slotIdx === result.chords.length - 1
+        ? `RETURN — chord 1 of the loop is ${result.chords[0].name}, so your replacement must lead cleanly back into it: either V/V7 resolving down a 5th, a plagal/modal chord (IV, iv, bVII, bVI) landing on it by step or common tone, or a chord sharing ≥ 2 pitch classes with it. Its function should be "dominant" or "subdominant". Never a hanging ii or iii.`
+        : slotIdx === 1
+        ? "MOVE (leaves home but stays in key: IV, ii, iii, vi, bVII, bVI). Do not duplicate chord 1's root."
+        : "BUILD (pre-dominant or dominant tension pulling into chord 4: ii, IV, iv, V7/x, bVII).";
       const mutationSystem = `You generate 3 ALTERNATIVE single chords for one slot in a progression. Return ONLY a JSON ARRAY of 3 chord objects: [{"name":"...","duration":1,"notes":["..."],"function":"...","romanNumeral":"..."}, ×3]
-Key: ${result.key}. Tempo: ${bpm} BPM (${mutGuide.band}). Surrounding chords: ${context} — the [?] slot is what you're replacing. Original chord there was ${chord.name}. Give 3 genuinely different musical choices — try modal interchange, secondary dominants, tritone subs, chromatic neighbors. Voicing for this tempo: ${mutGuide.voicing} Duration: ${mutGuide.duration.includes("2 bars") ? "2" : mutGuide.duration.includes("0.5") ? "match surrounding chords" : "1"}. ${rejectedNote}`;
+Key: ${result.key} (stay in this key — no modulations). Tempo: ${bpm} BPM (${mutGuide.band}). Surrounding chords: ${context} — the [?] slot is what you're replacing. Original chord there was ${chord.name}.
+SLOT ROLE (mandatory): this slot's job in the progression is ${slotRole}
+VOICE LEADING: the replacement must connect to its neighbors by common tone or single step in the upper voices — no leaps. Check both ${slotIdx > 0 ? `chord ${slotIdx} → your chord` : "wraparound: chord 4 → your chord (loop point)"} and ${slotIdx < result.chords.length - 1 ? `your chord → chord ${slotIdx + 2}` : `your chord → chord 1 (loop point: ${result.chords[0].name})`}.
+Give 3 genuinely different musical choices — try modal interchange, secondary dominants, tritone subs, chromatic neighbors, but each must still satisfy the slot role and voice leading above. Voicing for this tempo: ${mutGuide.voicing} Duration: ${mutGuide.duration.includes("2 bars") ? "2" : mutGuide.duration.includes("0.5") ? "match surrounding chords" : "1"}. ${rejectedNote}`;
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
