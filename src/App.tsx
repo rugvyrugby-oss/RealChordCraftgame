@@ -915,10 +915,11 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
         const noteDur = chordDurSec * hit.len * sustainMul;
         const chordHum = (Math.random() - 0.5) * hum * 1000;
         hitNotes.forEach((n, i) => {
-          const rollSpread = isRoll ? i * (18 + Math.random() * 14) : 0;
-          const humanDrift = isRoll ? (Math.random() - 0.5) * hum * 1000 : (chordHum || 0);
-         const noteStagger = isRoll ? 0 : i * (6 + Math.random() * 8);
-          const delay = Math.max(0, baseDelayMs + rollSpread + humanDrift + noteStagger);
+          // All notes in a chord strike on the same tick — the ARPEGGIATE slider
+          // is the dedicated control for spreading them over time. Keep a single
+          // chord-level humanization drift so successive chords aren't robotic,
+          // but every note within one chord fires simultaneously.
+          const delay = Math.max(0, baseDelayMs + (chordHum || 0));
           const vel = Math.min(
             1,
             Math.max(0.1, hit.vel * (0.85 + Math.random() * 0.3))
@@ -959,15 +960,15 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
           sampler.connect(reverbRef.current);
         } catch {}
       }
-      notes.forEach((n, i) => {
+      // Tap-preview: strike all notes on the same tick so it matches how the
+      // loop / play button renders block chords.
+      notes.forEach((n) => {
         const vel = Math.min(1, 0.6 * (0.85 + Math.random() * 0.3));
-        setTimeout(() => {
-          try {
-            sampler.triggerAttackRelease(n, durationSec, undefined, vel);
-          } catch (e) {
-            console.warn("Note failed:", n, e);
-          }
-        }, i * 16 + (Math.random() - 0.5) * 12);
+        try {
+          sampler.triggerAttackRelease(n, durationSec, undefined, vel);
+        } catch (e) {
+          console.warn("Note failed:", n, e);
+        }
       });
     },
     [reverb, getSampler]
@@ -1399,14 +1400,13 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               if (hit.notes === "low") hitNotes = voicing.low;
               else if (hit.notes === "high") hitNotes = voicing.high;
               else hitNotes = voicing.all;
-              const isRoll = hit.notes === "roll";
               const noteDur = chordDurSec * hit.len * sustainMul;
-              hitNotes.forEach((n, ni) => {
-                const rollSpread = isRoll
-                  ? ni * (0.018 + Math.random() * 0.014)
-                  : 0;
-                const humanDrift =
-                  (Math.random() - 0.5) * (groove.humanize || 0.012);
+              // Match performChord: all notes in the chord strike on the same
+              // tick. One chord-level humanization drift keeps successive
+              // chords from feeling robotic without spreading notes apart.
+              const chordDrift =
+                (Math.random() - 0.5) * (groove.humanize || 0.012);
+              hitNotes.forEach((n) => {
                 const vel = Math.min(
                   1,
                   Math.max(0.1, hit.vel * (0.85 + Math.random() * 0.3))
@@ -1414,7 +1414,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 instr.triggerAttackRelease(
                   n,
                   noteDur,
-                  Math.max(t, baseTime + rollSpread + humanDrift),
+                  Math.max(t, baseTime + chordDrift),
                   vel
                 );
               });
