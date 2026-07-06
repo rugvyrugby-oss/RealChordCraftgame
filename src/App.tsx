@@ -59,7 +59,7 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - Use RICH voicings, never plain triads. Add 7ths, 9ths, 11ths, 13ths. Spread notes across octaves (root low in C2-C3, color tones up in C4-C5). Example: instead of C-E-G use C3-E4-G4-B4.
 - Put the root or 5th low (C2-G2 range) for warmth, stack color tones higher.
 - VOICE LEADING IS CRITICAL: each chord's upper notes (the color tones above the bass) must connect smoothly to the next chord's upper notes. Keep common tones in the SAME octave/position between adjacent chords, and move other voices by the smallest possible step. The top notes across all 4 chords should form a smooth melodic line, not jump around. Before finalizing, check: does the top voice move mostly by step or common tone? If it leaps around, revoice it.
-- Match BPM to mood (lofi 70-90, soul 75-100, cinematic 60-80, house 120-128, trap 130-150).
+- The exact target BPM is dictated by the user for every request via the "Tempo target" block in the user message. Set "bpm" to that exact number, and use the accompanying tempo guidance to shape voicing density, chord duration, style choice, and top-voice motion. Do NOT invent a BPM from the style — style follows tempo here, not the other way round.
 - Always 4 chords. Make them genuinely interesting, the kind a real producer would use, not a beginner. NEVER use I-vi-IV-V or I-V-vi-IV — these are overused and boring. Use unexpected chord relationships, modal interchange, secondary dominants, or borrowed chords.
 - For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7b9 builds back up." Casual lowercase fine.
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
@@ -80,7 +80,7 @@ Each generation MUST pick one of these approaches and commit to it fully:
 - Every generation should feel like a completely different songwriter wrote it.
 - Musicality is more important than complexity.
 - NEVER use Fmaj9-Bbmaj7-C9 or any rotation of these chords together.
-- Vary the KEY, BPM, and STARTING CHORD every generation. Never start two progressions on the same chord or in the same key back to back. Rotate keys widely: Db, Eb, F#m, Bm, Am, E, A, Gm, C#m, Ab. Vary BPM by at least 5-10 within the style's range. Do not always start on the vi chord — start on different scale degrees.
+- Vary the KEY and STARTING CHORD every generation. Never start two progressions on the same chord or in the same key back to back. Rotate keys widely: Db, Eb, F#m, Bm, Am, E, A, Gm, C#m, Ab. Do not always start on the vi chord — start on different scale degrees. BPM is fixed by the user request, do not vary it.
 - For lofi specifically: try minor keys (Cm, Dm, Bm, F#m), not just major. Minor lofi hits harder emotionally.
 - A "chill lofi" prompt should NOT produce I-IV-V in any key. Use ii-V, bVII, bVI, or modal approaches instead.
 - Do not add #11, b9, #9, b13 or altered tensions unless they clearly improve the requested style.
@@ -162,6 +162,98 @@ const GROOVE_PATTERNS = {
   },
 };
 const DEFAULT_GROOVE = GROOVE_PATTERNS.pop;
+
+// Translate the user's BPM slider into concrete, musically-actionable
+// instructions the model can act on. This is what makes changing the tempo
+// produce genuinely different progressions rather than the same voicings
+// played faster: at slow tempos the ear has time for 11ths and 13ths, at fast
+// tempos those same tones turn muddy and clash with the drum feel, so the
+// harmony has to thin out. Bands are picked from where real records actually
+// sit — not arbitrary cutoffs.
+const bpmDirective = (bpm) => {
+  if (bpm < 65) {
+    return {
+      band: "very slow / rubato-cinematic",
+      styles: "cinematic, ambient",
+      duration: "hold each chord for 2 bars (set duration: 2 on every chord)",
+      voicing: "wide orchestral spread. Root C2-G2, big hollow gap, cluster of color tones in C4-C6. Use maj7, add9, 11, sus2, m(add9). 4-5 notes.",
+      motion: "top voice is nearly static or moves by step. No leaps.",
+      approach: "prefer PEDAL TONE, MODAL, or DESCENDING BASS. Skip CYCLE OF 4THS — too many key centers for this pace.",
+    };
+  }
+  if (bpm < 78) {
+    return {
+      band: "slow (lofi ballad / slow soul / cinematic)",
+      styles: "lofi, cinematic, soul, ambient",
+      duration: "one chord per bar (duration: 1). Every chord breathes.",
+      voicing: "rich extended jazz voicings — m9, m11, maj7#5, 13. Root low (C2-G2), gap, upper cluster C4-C5. 4-5 notes.",
+      motion: "smooth stepwise top-voice line with held common tones.",
+      approach: "DESCENDING BASS, MODAL, or BORROWED CHORD. Skip CHROMATIC APPROACH — too busy at this pace.",
+    };
+  }
+  if (bpm < 95) {
+    return {
+      band: "chill-mid (lofi hip hop / soul / R&B / slow pop)",
+      styles: "lofi, soul, rnb, jazz",
+      duration: "one chord per bar (duration: 1).",
+      voicing: "colored 7ths and 9ths, occasional 11th. Root low, gap, cluster in C4-C5. 4-5 notes.",
+      motion: "clear singable top-voice melody, tight voice leading.",
+      approach: "any of the 8 approaches fits — pick one you didn't just use.",
+    };
+  }
+  if (bpm < 115) {
+    return {
+      band: "mid-groove (pop / neo-soul / boom-bap)",
+      styles: "pop, soul, rnb",
+      duration: "one chord per bar (duration: 1).",
+      voicing: "mostly 7ths and select 9ths. Drop the 11ths and 13ths — they get busy at this tempo. 4 notes is usually enough. Root low, gap, upper triad C4-C5.",
+      motion: "top voice can carry a real 2-3 note hook across the four chords.",
+      approach: "SECONDARY DOMINANT, DECEPTIVE RESOLUTION, or CYCLE OF 4THS give this tempo its lift.",
+    };
+  }
+  if (bpm < 135) {
+    return {
+      band: "upbeat (house / disco / dance-pop)",
+      styles: "house, pop",
+      duration: "mix rhythms: give 2 of the 4 chords duration 0.5 to create a stab-and-hold feel; leave the other 2 at duration 1.",
+      voicing: "clean and forward. Root in G2-G3 (deeper turns to mud on club systems), gap, tight upper cluster in C4-C5. 3-4 notes max. m7, maj7, 7sus4, add9 only — NO 11ths, NO 13ths, NO altered tensions.",
+      motion: "repeat one top note across chords as a driving anchor (classic house move).",
+      approach: "MODAL (Dorian, Mixolydian, Lydian) or PEDAL TONE. Skip DESCENDING BASS — it drags the bounce.",
+    };
+  }
+  if (bpm < 160) {
+    return {
+      band: "fast (trap / uptempo hip hop / techno)",
+      styles: "trap, house",
+      duration: "vary between duration 0.5 and 1 across the 4 chords for rhythmic bite.",
+      voicing: "sparse and hard-hitting. Root and 5th in G2-G3 (leave the sub range for the 808), gap, m3 + optional b7 up top. 2-3 notes per chord. Minor triads, m7, or bare power tones. NO 9ths, NO 11ths — they blur past this tempo.",
+      motion: "top voice is a rhythmic anchor, not a melody. Repeat notes across chords for tension.",
+      approach: "MODAL (Phrygian or natural minor), PEDAL TONE, or CHROMATIC APPROACH. Half-step drops love this tempo.",
+    };
+  }
+  return {
+    band: "very fast (dnb / hardcore / uptempo techno)",
+    styles: "trap, house, ambient (as a long pad only)",
+    duration: "hold each chord for 2 bars (duration: 2) — supplying atmosphere over a fast drum feel, not stabbing.",
+    voicing: "one dark minor triad plus optional b7. Root in G2-G3, gap, m3 + 5 + optional b7 in C4-C5. 3 notes max. Dark and spacious.",
+    motion: "static or gradual — this is a texture, not a melody.",
+    approach: "PEDAL TONE or MODAL (Phrygian, Aeolian). No secondary dominants, no cycle of 4ths.",
+  };
+};
+
+const bpmBlock = (bpm) => {
+  const g = bpmDirective(bpm);
+  return `
+
+Tempo target: ${bpm} BPM — ${g.band}.
+- Set "bpm": ${bpm} exactly. Do not shift it.
+- Style must be one of: ${g.styles}. Pick whichever best fits the user's vibe.
+- Chord duration: ${g.duration}
+- Voicing rules for this tempo: ${g.voicing}
+- Top-voice motion: ${g.motion}
+- Approach guidance for this tempo: ${g.approach}
+If the user's text vibe seems to clash with the tempo (e.g. "chill lofi" at 140 BPM, or "hard trap" at 60 BPM), the tempo wins — reinterpret the vibe through this tempo's lens rather than defaulting to the vibe's usual BPM.`;
+};
 
 const functionColors = {
   tonic: { hex: "#7dd3c0", rgb: "125,211,192" },
@@ -935,7 +1027,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
           system: SYSTEM_PROMPT,
           messages: [{
   role: "user",
-  content: `${prompt}
+  content: `${prompt}${bpmBlock(bpm)}
 
 Random variation seed: ${Date.now()}`
 }],
@@ -944,10 +1036,13 @@ Random variation seed: ${Date.now()}`
       const data = await res.json();
       const text = (data.content || []).map((b) => b.text || "").join("");
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+      // The user's slider is the source of truth for BPM — stamp it onto
+      // the parsed result so display, playback, export, and share all match
+      // what the user asked for, even if the model tried to shift it.
+      parsed.bpm = bpm;
       setResult(parsed);
       setIsExample(false);
       setLastPrompt(prompt);
-      if (parsed.bpm) setBpm(parsed.bpm);
       setHistory((h) => [{ prompt, result: parsed }, ...h].slice(0, 5));
     } catch (e) {
       setError("Couldn't parse that — try a different description.");
@@ -970,7 +1065,7 @@ Random variation seed: ${Date.now()}`
         : "";
       const variationSystem = `You generate 4 ALTERNATIVE chord progressions for the same vibe. Return ONLY a JSON ARRAY of 4 objects, each in the same shape as before:
 [{"title":"...","key":"...","bpm":...,"timeSignature":"4/4","style":"...","chords":[{"name":"...","duration":1,"notes":["..."],"function":"...","romanNumeral":"..."},...4 chords each...],"vibe":"...","genre":"...","theory":"..."}, ... ×4]
-Each variation MUST feel meaningfully different from the others — not just inversions. Vary modes, borrowed chords, substitutions, tritone subs, modal interchange. Keep the same vibe & tempo range. The user's current progression was: ${currentChords}. Make these new ones genuinely fresh alternatives. ${rejectedNote} Use rich voicings with 7ths/9ths/11ths, root low, color tones high.`;
+Each variation MUST feel meaningfully different from the others — not just inversions. Vary modes, borrowed chords, substitutions, tritone subs, modal interchange. Every variation MUST honour the tempo target below — same rules for voicing density, duration, and style. The user's current progression was: ${currentChords}. Make these new ones genuinely fresh alternatives. ${rejectedNote} Use voicings that fit the tempo band described below.`;
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -979,13 +1074,18 @@ Each variation MUST feel meaningfully different from the others — not just inv
           max_tokens: 2500,
           temperature: 1,
           system: variationSystem,
-          messages: [{ role: "user", content: promptForAI }],
+          messages: [{ role: "user", content: `${promptForAI}${bpmBlock(bpm)}` }],
         }),
       });
       const data = await res.json();
       const text = (data.content || []).map((b) => b.text || "").join("");
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-      if (Array.isArray(parsed)) setVariations(parsed);
+      if (Array.isArray(parsed)) {
+        // Force each variation onto the user's chosen tempo so the slider
+        // stays authoritative.
+        parsed.forEach((v) => { if (v) v.bpm = bpm; });
+        setVariations(parsed);
+      }
     } catch (e) {
       console.warn("Variation fetch failed:", e);
     }
@@ -993,8 +1093,9 @@ Each variation MUST feel meaningfully different from the others — not just inv
   };
 
   const applyVariation = (variation) => {
-    setResult(variation);
-    if (variation.bpm) setBpm(variation.bpm);
+    // Variations are already generated at the user's current BPM, and the
+    // slider is the source of truth — don't let a returned bpm overwrite it.
+    setResult({ ...variation, bpm });
     setVariations([]);
     setMutatingSlot(-1);
     setMutations([]);
@@ -1021,8 +1122,9 @@ Each variation MUST feel meaningfully different from the others — not just inv
       const rejectedNote = rejected.length
         ? `Avoid: ${rejected.join(", ")}.`
         : "";
+      const mutGuide = bpmDirective(bpm);
       const mutationSystem = `You generate 3 ALTERNATIVE single chords for one slot in a progression. Return ONLY a JSON ARRAY of 3 chord objects: [{"name":"...","duration":1,"notes":["..."],"function":"...","romanNumeral":"..."}, ×3]
-Key: ${result.key}. Surrounding chords: ${context} — the [?] slot is what you're replacing. Original chord there was ${chord.name}. Give 3 genuinely different musical choices — try modal interchange, secondary dominants, tritone subs, chromatic neighbors. Use rich voicings. ${rejectedNote}`;
+Key: ${result.key}. Tempo: ${bpm} BPM (${mutGuide.band}). Surrounding chords: ${context} — the [?] slot is what you're replacing. Original chord there was ${chord.name}. Give 3 genuinely different musical choices — try modal interchange, secondary dominants, tritone subs, chromatic neighbors. Voicing for this tempo: ${mutGuide.voicing} Duration: ${mutGuide.duration.includes("2 bars") ? "2" : mutGuide.duration.includes("0.5") ? "match surrounding chords" : "1"}. ${rejectedNote}`;
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
