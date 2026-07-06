@@ -2173,7 +2173,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
           </button>
         </div>
 
-        <div style={S.engLabel}> ChordCraft </div>
+        <div style={S.engLabel}> CreateyourCords </div>
         <h1 style={S.h1}>
           Describe a vibe.
           <br />
@@ -2856,7 +2856,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             ))}
           </div>
         </div>
-        {/* ── WHY CHORDCRAFT ── */}
+        {/* ── WHY CreateyourCords ── */}
         <div style={{ marginTop: 80, paddingTop: 32, borderTop: "1px solid rgba(255,255,255,.07)" }}>
           <div style={{ fontSize: 11, letterSpacing: 3, textTransform: "uppercase", fontFamily: "monospace", color: theme.accent, marginBottom: 10 }}>
             Why ChordCraft
