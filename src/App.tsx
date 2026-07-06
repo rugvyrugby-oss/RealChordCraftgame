@@ -251,6 +251,52 @@ const bpmDirective = (bpm) => {
   };
 };
 
+// Pools the client picks from to force real variety, since the model on its
+// own will settle into a single "safe" answer for a given prompt (e.g. "lofi
+// chords" → F#m always). We pick a key and an approach here and hand them to
+// the model as non-negotiable, excluding whatever was used in the last 2-3
+// generations from the history so consecutive results can't repeat.
+const KEY_POOL_MAJOR = [
+  "C major", "G major", "D major", "A major", "E major",
+  "F major", "Bb major", "Eb major", "Ab major", "Db major",
+];
+const KEY_POOL_MINOR = [
+  "A minor", "E minor", "D minor", "G minor", "C minor",
+  "B minor", "F# minor", "C# minor", "Bb minor", "F minor",
+];
+const APPROACH_POOL = [
+  "DESCENDING BASS — root moves down stepwise across all 4 chords",
+  "MODAL — stay in one mode (Dorian, Phrygian, Lydian, or Mixolydian), avoid the V chord",
+  "BORROWED CHORD — at least one chord from parallel minor/major (bVII, bVI, iv, bIII)",
+  "SECONDARY DOMINANT — use V7/ii, V7/IV, or V7/vi somewhere in the progression",
+  "PEDAL TONE — one note held constant in the bass across all 4 chords",
+  "CYCLE OF 4THS — root motion moves in fourths (e.g. Dm → Gm → C → F)",
+  "DECEPTIVE RESOLUTION — V resolves to vi, bVII, or IV instead of I",
+  "CHROMATIC APPROACH — at least one chord moves by half step from the previous",
+];
+
+// Prompts that suggest minor tonality vs major. Cheap keyword lookahead — if
+// the user's prompt says "dark", "sad", "melancholy" etc, we bias key selection
+// toward minor pool; "happy", "bright", "uplifting" toward major. Anything
+// else = 50/50.
+const MINOR_HINT_RE = /\b(sad|dark|melancholy|melancholic|moody|somber|dramatic|cinematic|lofi|trap|rainy|night|midnight|noir|broken)\b/i;
+const MAJOR_HINT_RE = /\b(happy|bright|uplifting|joyful|sunny|summer|pop|beach|celebrate|hopeful)\b/i;
+
+const pickForcedContext = (userPrompt, recentKeys) => {
+  const wantMinor = MINOR_HINT_RE.test(userPrompt);
+  const wantMajor = MAJOR_HINT_RE.test(userPrompt);
+  let pool = wantMinor && !wantMajor
+    ? KEY_POOL_MINOR
+    : wantMajor && !wantMinor
+    ? KEY_POOL_MAJOR
+    : Math.random() < 0.5 ? KEY_POOL_MAJOR : KEY_POOL_MINOR;
+  const avail = pool.filter((k) => !recentKeys.includes(k));
+  const keyList = avail.length ? avail : pool;
+  const key = keyList[Math.floor(Math.random() * keyList.length)];
+  const approach = APPROACH_POOL[Math.floor(Math.random() * APPROACH_POOL.length)];
+  return { key, approach };
+};
+
 const bpmBlock = (bpm) => {
   const g = bpmDirective(bpm);
   return `
@@ -1027,6 +1073,21 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
     setMutatingSlot(-1);
     setMutations([]);
 
+    // Force a fresh key + approach on every generation. The model on its own
+    // collapses to the same "safe" progression for a given prompt (e.g.
+    // "lofi chords" → F#m descending bass every time), so we pre-pick both
+    // client-side and hand them to the model as hard constraints. Recent
+    // keys from history are excluded so consecutive generations can't repeat.
+    const recentKeys = history.slice(0, 3).map((h) => h.result && h.result.key).filter(Boolean);
+    if (result && result.key) recentKeys.push(result.key);
+    const forced = pickForcedContext(prompt, recentKeys);
+    const recentChordNames = history.slice(0, 2)
+      .flatMap((h) => (h.result && h.result.chords) || [])
+      .map((c) => c.name);
+    const avoidChords = recentChordNames.length
+      ? `\nDO NOT REUSE any of these chord names from the last 1-2 generations: ${[...new Set(recentChordNames)].join(", ")}.`
+      : "";
+
     try {
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
@@ -1039,6 +1100,10 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
           messages: [{
   role: "user",
   content: `${prompt}${bpmBlock(bpm)}
+
+FORCED CONTEXT (non-negotiable — do not substitute):
+- key MUST be exactly "${forced.key}". Set the "key" field to this string. Do not transpose to a different key even if it feels more natural for the prompt.
+- Approach for this generation MUST be ${forced.approach}. Commit to it fully — every one of the 4 chords should visibly reflect this choice.${avoidChords}
 
 Random variation seed: ${Date.now()}`
 }],
