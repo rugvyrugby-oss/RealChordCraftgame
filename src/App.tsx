@@ -65,39 +65,16 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".
 - SOUND QUALITY: every voicing must sound full and intentional, like a real producer played it. STRICT VOICING RULES: (1) Root note ONLY in C2-G2 range — this is your bass note, nothing else goes this low. (2) Leave a gap — no notes in C3-B3 range. (3) Stack the color tones (3rd, 7th, 9th, 11th) in C4-C5 range only. (4) Max 5 notes per chord. (5) ONLY use notes that actually belong to the chord — no wrong notes ever. Example Am9: A2 [gap] C4 E4 G4 B4. Example Dm9: D2 [gap] F4 A4 C5 E5. Example G13: G2 [gap] F4 A4 B4 E5. If you can't fit the voicing cleanly, simplify the chord — a clean Am7 beats a muddy Am11.
-- HARMONIC ARC (mandatory chord order — this is not optional):
-  Chord 1 = HOME. A tonic-family chord that establishes the key. Allowed: I / Imaj7 / i / im7 / vi (as relative minor tonic) / im9. function MUST be "tonic". If the piece is in a minor key, chord 1 is i / im7 / im9. If major, chord 1 is I / Imaj7 / Imaj9. Never open on ii, iii, IV, V, or vii°.
-  Chord 2 = MOVE. Leaves home but stays in the key. Good choices: IV/iv, ii, iii, vi, bVI, bVII, or a colored variant of any of these. Do not repeat chord 1's root.
-  Chord 3 = BUILD. Its ONLY job is to create tension that leads into chord 4. Allowed choices, ranked:
-    (i) PRE-DOMINANT: ii, IV, iv, bVI — sets up chord 4 as the return.
-    (ii) SECONDARY DOMINANT: V7/ii, V7/IV, V7/vi, etc. — very effective build.
-    (iii) NEAPOLITAN: bII — dark, strong lift into chord 4.
-  Do NOT use bVII or V as chord 3 — those are RETURN chords and belong in the chord 4 slot. Do NOT use chord 1's tonic function. function MUST be "subdominant" or "dominant", NEVER "tonic". Root MUST differ from chord 1's root by at least a whole step.
-  Chord 4 = RETURN. Its ONLY job is to land STRONGLY on chord 1 when the loop repeats. Allowed choices, ranked by strength:
-    (a) STRONGEST — DOMINANT: V, V7, V9, V13, or bII7 (tritone sub). Resolves down a 5th into chord 1. Prefer this in major keys.
-    (b) STRONG — MODAL bVII: for minor / Mixolydian / Dorian pieces the bVII → i cadence is often more natural than V → i. Prefer this when the vibe is minor and modal.
-    (c) ACCEPTABLE — bVI → i: modal, dark. Works when the piece is Aeolian.
-    (d) WEAK — PLAGAL IV / iv: use ONLY if the vibe is a ballad or specifically calls for a soft "amen" cadence. Not the default choice.
-    (e) DECEPTIVE-RETURN: shares ≥ 2 pitch classes with chord 1 — subtle, only for ambient / cinematic vibes.
-  Before finalizing, mentally play chord 4 → chord 1 twice. If it feels weak or doesn't land, upgrade to a stronger option in the ranking above. Do NOT hand back a progression whose loop point sounds like a dead stop.
-- DISTINCT CHORDS: the 4 chord "name" values must all be different from each other. No two chords in the same progression may share a root — Bm and Bm7 count as the same chord, not two. If your candidate progression has any duplicate root, reselect one of the chords before returning.
+- STRUCTURE IS PROVIDED, NOT INVENTED: every user message contains a REQUIRED SKELETON block naming the key, the four roman numerals, and the exact bass root of each chord. Follow it exactly — the "romanNumeral" field must match the skeleton token (you may append the quality: V7, bVImaj7, iim7b5, etc.) and each chord's lowest note must be the given root. Structure is fixed; your creativity goes into chord qualities, extensions, voicings, register, and the text fields. If any other rule in this prompt seems to conflict with the skeleton, THE SKELETON WINS.
+- WHAT EACH SLOT MEANS (use this to shape voicing energy, not to change the chords):
+  Chord 1 = HOME: settled, roomy voicing. function "tonic".
+  Chord 2 = MOVE: leaves home, slightly brighter or darker. function per its numeral.
+  Chord 3 = BUILD: tension chord, tighter voicing. function "subdominant" or "dominant".
+  Chord 4 = RETURN: pulls back to chord 1 across the loop. function "dominant" (or "subdominant" for modal returns like bVII/bVI).
 - VOICE LEADING ON THE LOOP: the smooth-top-voice rule applies between chord 4 and chord 1 as well. Chord 4's top notes must connect to chord 1's top notes by common tone or step, same as any other adjacent pair. This is the difference between a progression that loops forever and one that jars every 4 bars.
-- VARIETY RULES:
-Each generation MUST pick one of these approaches and commit to it fully:
-  APPROACH 1 — DESCENDING BASS: root moves down stepwise across all 4 chords
-  APPROACH 2 — MODAL: stay in one mode, avoid V chord (Dorian, Phrygian, Lydian, Mixolydian)
-  APPROACH 3 — BORROWED CHORD: at least one chord from parallel minor/major (bVII, bVI, iv)
-  APPROACH 4 — SECONDARY DOMINANT: use V7/ii, V7/IV, or V7/vi
-  APPROACH 5 — PEDAL TONE: one note held constant in bass across all 4 chords
-  APPROACH 6 — CYCLE OF 4THS: root motion moves in 4ths (Dm-Gm-C-F)
-  APPROACH 7 — DECEPTIVE RESOLUTION: V resolves to vi, bVII, or IV instead of I
-  APPROACH 8 — CHROMATIC APPROACH: at least one chord moves by half step
-- Pick a DIFFERENT approach every time. Never use the same one twice in a row.
-- LOOPABILITY: reinforced by HARMONIC ARC chord 4 rules above. In addition: never end on ii, iii, or a bare V(sus) that hangs — those kill the loop.
-- Every generation should feel like a completely different songwriter wrote it.
+- Every generation should feel like a completely different songwriter wrote it: vary the qualities (m9 vs m11 vs m7), the register of the color tones, which voice is on top, and the rhythm feel — the same skeleton can sound like a hundred different songs.
 - Musicality is more important than complexity.
-- NEVER use Fmaj9-Bbmaj7-C9 or any rotation of these chords together.
-- Vary the KEY every generation. Never repeat the same key back to back. Rotate keys widely: Db, Eb, F#m, Bm, Am, E, A, Gm, C#m, Ab. BPM is fixed by the user request, do not vary it. Chord 1 is NOT free to be anything — per HARMONIC ARC above, it must be a tonic-family anchor.
+- BPM is fixed by the user request; the key is fixed by the REQUIRED SKELETON block. Do not vary either.
 - For lofi specifically: try minor keys (Cm, Dm, Bm, F#m), not just major. Minor lofi hits harder emotionally.
 - A "chill lofi" prompt should NOT produce I-IV-V in any key. Use ii-V, bVII, bVI, or modal approaches instead.
 - Do not add #11, b9, #9, b13 or altered tensions unless they clearly improve the requested style.
@@ -271,16 +248,99 @@ const KEY_POOL_MINOR = [
   "A minor", "E minor", "D minor", "G minor", "C minor",
   "B minor", "F# minor", "C# minor", "Bb minor", "F minor",
 ];
-const APPROACH_POOL = [
-  "DESCENDING BASS — root moves down stepwise across all 4 chords",
-  "MODAL — stay in one mode (Dorian, Phrygian, Lydian, or Mixolydian), avoid the V chord",
-  "BORROWED CHORD — at least one chord from parallel minor/major (bVII, bVI, iv, bIII)",
-  "SECONDARY DOMINANT — use V7/ii, V7/IV, or V7/vi somewhere in the progression",
-  "PEDAL TONE — one note held constant in the bass across all 4 chords",
-  "CYCLE OF 4THS — root motion moves in fourths (e.g. Dm → Gm → C → F)",
-  "DECEPTIVE RESOLUTION — V resolves to vi, bVII, or IV instead of I",
-  "CHROMATIC APPROACH — at least one chord moves by half step from the previous",
-];
+// Curated 4-chord skeletons. Every one already satisfies the arc
+// (home → move → build → return), has four distinct roots, and loops
+// cleanly back to chord 1. The client picks one and the model only fills
+// in qualities/extensions/voicings — it no longer designs the structure,
+// because letting it do that produced contradictory results (secondary
+// dominants at slot 3 dragging weak chords into slot 4, bVII placed
+// before iv, duplicate roots, etc).
+const PROGRESSION_SKELETONS = {
+  minor: [
+    ["i", "bVI", "iv", "V"],
+    ["i", "bVII", "bVI", "V"],
+    ["i", "iv", "bVI", "bVII"],
+    ["i", "bIII", "iv", "V"],
+    ["i", "iv", "ii", "V"],
+    ["i", "bII", "iv", "V"],
+    ["i", "IV", "bIII", "bVII"],
+    ["i", "iv", "bVI", "bII"],
+  ],
+  major: [
+    ["I", "IV", "ii", "V"],
+    ["I", "vi", "ii", "V"],
+    ["I", "bVII", "IV", "V"],
+    ["I", "iii", "IV", "V"],
+    ["I", "ii", "IV", "V"],
+    ["I", "IV", "ii", "bII"],
+    ["I", "bVI", "bVII", "V"],
+    ["I", "iii", "ii", "V"],
+  ],
+};
+
+// Typical chord qualities per roman numeral, passed to the model as
+// guidance (it may choose among them, tempo rules permitting).
+const RN_QUALITY = {
+  minor: {
+    i: "m7 / m9 / m11",
+    bII: "maj7, or a dominant 7 when used as the final tritone-sub return",
+    bIII: "maj7 / maj9",
+    iv: "m7 / m9 / m11",
+    IV: "7 or 9 (dorian color)",
+    v: "m7",
+    V: "7 / 7b9 / 13",
+    bVI: "maj7 / maj9",
+    bVII: "7 / 9",
+    ii: "m7b5 (half-diminished) or m7",
+  },
+  major: {
+    I: "maj7 / maj9 / 6-9",
+    ii: "m7 / m9",
+    iii: "m7",
+    IV: "maj7 / maj9",
+    V: "7 / 9 / 13",
+    vi: "m7 / m9",
+    bVI: "maj7 (borrowed)",
+    bVII: "7 / 9 (borrowed)",
+    bII: "7 (tritone sub)",
+  },
+};
+
+// Music math for computing the required bass root of each skeleton slot,
+// so we can hand the model concrete note names and verify its response.
+const PITCH_CLASS = { C: 0, "C#": 1, Db: 1, D: 2, "D#": 3, Eb: 3, E: 4, F: 5, "F#": 6, Gb: 6, G: 7, "G#": 8, Ab: 8, A: 9, "A#": 10, Bb: 10, B: 11 };
+const SHARP_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const FLAT_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
+const SHARP_KEYS = new Set(["G major", "D major", "A major", "E major", "E minor", "B minor", "F# minor", "C# minor"]);
+// Semitone offsets from the tonic for each roman numeral used in the skeletons.
+const RN_OFFSETS = { I: 0, i: 0, bII: 1, ii: 2, bIII: 3, iii: 4, IV: 5, iv: 5, V: 7, v: 7, bVI: 8, vi: 9, bVII: 10 };
+
+const skeletonRoots = (key, skeleton) => {
+  const tonic = PITCH_CLASS[key.split(" ")[0]];
+  const names = SHARP_KEYS.has(key) ? SHARP_NAMES : FLAT_NAMES;
+  return skeleton.map((tok) => names[(tonic + RN_OFFSETS[tok]) % 12]);
+};
+
+// Check the model's response against the skeleton: 4 chords, each with a
+// bass note whose pitch class matches the required root. Returns a list
+// of human-readable problems (empty = valid).
+const validateProgression = (p, skeleton, expectedRoots) => {
+  const problems = [];
+  if (!p || !Array.isArray(p.chords) || p.chords.length !== 4) {
+    problems.push("response must contain exactly 4 chords");
+    return problems;
+  }
+  p.chords.forEach((c, i) => {
+    const m = /^([A-G][b#]?)/.exec((c.notes && c.notes[0]) || "");
+    const got = m ? PITCH_CLASS[m[1]] : -1;
+    if (got !== PITCH_CLASS[expectedRoots[i]]) {
+      problems.push(
+        `chord ${i + 1} must be built on root ${expectedRoots[i]} (skeleton slot ${skeleton[i]}), but its bass note is ${m ? m[1] : "missing"}`
+      );
+    }
+  });
+  return problems;
+};
 
 // Prompts that suggest minor tonality vs major. Cheap keyword lookahead — if
 // the user's prompt says "dark", "sad", "melancholy" etc, we bias key selection
@@ -289,10 +349,11 @@ const APPROACH_POOL = [
 const MINOR_HINT_RE = /\b(sad|dark|melancholy|melancholic|moody|somber|dramatic|cinematic|lofi|trap|rainy|night|midnight|noir|broken)\b/i;
 const MAJOR_HINT_RE = /\b(happy|bright|uplifting|joyful|sunny|summer|pop|beach|celebrate|hopeful)\b/i;
 
+let lastSkeletonUsed = "";
 const pickForcedContext = (userPrompt, recentKeys) => {
   const wantMinor = MINOR_HINT_RE.test(userPrompt);
   const wantMajor = MAJOR_HINT_RE.test(userPrompt);
-  let pool = wantMinor && !wantMajor
+  const pool = wantMinor && !wantMajor
     ? KEY_POOL_MINOR
     : wantMajor && !wantMinor
     ? KEY_POOL_MAJOR
@@ -300,8 +361,12 @@ const pickForcedContext = (userPrompt, recentKeys) => {
   const avail = pool.filter((k) => !recentKeys.includes(k));
   const keyList = avail.length ? avail : pool;
   const key = keyList[Math.floor(Math.random() * keyList.length)];
-  const approach = APPROACH_POOL[Math.floor(Math.random() * APPROACH_POOL.length)];
-  return { key, approach };
+  const tonality = pool === KEY_POOL_MINOR ? "minor" : "major";
+  const skels = PROGRESSION_SKELETONS[tonality];
+  const freshSkels = skels.filter((s) => s.join("-") !== lastSkeletonUsed);
+  const skeleton = freshSkels[Math.floor(Math.random() * freshSkels.length)];
+  lastSkeletonUsed = skeleton.join("-");
+  return { key, tonality, skeleton };
 };
 
 const bpmBlock = (bpm) => {
@@ -314,7 +379,7 @@ Tempo target: ${bpm} BPM — ${g.band}.
 - Chord duration: ${g.duration}
 - Voicing rules for this tempo: ${g.voicing}
 - Top-voice motion: ${g.motion}
-- Approach guidance for this tempo: ${g.approach}
+- Texture flavor for this tempo (the REQUIRED SKELETON controls the actual chords): ${g.approach}
 If the user's text vibe seems to clash with the tempo (e.g. "chill lofi" at 140 BPM, or "hard trap" at 60 BPM), the tempo wins — reinterpret the vibe through this tempo's lens rather than defaulting to the vibe's usual BPM.`;
 };
 
@@ -1080,22 +1145,35 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
     setMutatingSlot(-1);
     setMutations([]);
 
-    // Force a fresh key + approach on every generation. The model on its own
-    // collapses to the same "safe" progression for a given prompt (e.g.
-    // "lofi chords" → F#m descending bass every time), so we pre-pick both
-    // client-side and hand them to the model as hard constraints. Recent
-    // keys from history are excluded so consecutive generations can't repeat.
+    // The client owns the structure: pick a fresh key and a vetted 4-chord
+    // skeleton (already arc-correct and loop-correct), compute the exact
+    // bass roots, and hand them to the model as hard constraints. The model
+    // only chooses qualities, extensions, and voicings. The response is then
+    // validated against those roots and retried once if it doesn't comply —
+    // prompt rules alone proved too easy for the model to break.
     const recentKeys = history.slice(0, 3).map((h) => h.result && h.result.key).filter(Boolean);
     if (result && result.key) recentKeys.push(result.key);
     const forced = pickForcedContext(prompt, recentKeys);
-    const recentChordNames = history.slice(0, 2)
-      .flatMap((h) => (h.result && h.result.chords) || [])
-      .map((c) => c.name);
-    const avoidChords = recentChordNames.length
-      ? `\nDO NOT REUSE any of these chord names from the last 1-2 generations: ${[...new Set(recentChordNames)].join(", ")}.`
-      : "";
+    const roots = skeletonRoots(forced.key, forced.skeleton);
+    const slotLines = forced.skeleton
+      .map(
+        (tok, i) =>
+          `  Chord ${i + 1}: romanNumeral "${tok}" — root MUST be ${roots[i]} (lowest note ${roots[i]}2). Typical quality: ${RN_QUALITY[forced.tonality][tok]}.`
+      )
+      .join("\n");
 
-    try {
+    const buildMessage = (feedback) => `${prompt}${bpmBlock(bpm)}
+
+REQUIRED SKELETON (non-negotiable — structure is fixed, do not substitute):
+- key MUST be exactly "${forced.key}". Set the "key" field to this string.
+- The progression is ${forced.skeleton.join(" → ")} in ${forced.key}, so the four bass roots are ${roots.join(", ")} in that exact order.
+${slotLines}
+- You choose the chord qualities/extensions (guided by the tempo block above) and the voicings. You do NOT choose the roots or their order.
+- This skeleton overrides any structural suggestion elsewhere, including the tempo block's texture flavor.${feedback}
+
+Random variation seed: ${Date.now()}`;
+
+    const callModel = async (content) => {
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1104,25 +1182,39 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
           max_tokens: 1000,
           temperature: 1,
           system: SYSTEM_PROMPT,
-          messages: [{
-  role: "user",
-  content: `${prompt}${bpmBlock(bpm)}
-
-FORCED CONTEXT (non-negotiable — do not substitute):
-- key MUST be exactly "${forced.key}". Set the "key" field to this string. Do not transpose to a different key even if it feels more natural for the prompt.
-- Approach for this generation MUST be ${forced.approach}. Commit to it fully — every one of the 4 chords should visibly reflect this choice.${avoidChords}
-
-Random variation seed: ${Date.now()}`
-}],
+          messages: [{ role: "user", content }],
         }),
       });
       const data = await res.json();
       const text = (data.content || []).map((b) => b.text || "").join("");
-      const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-      // The user's slider is the source of truth for BPM — stamp it onto
-      // the parsed result so display, playback, export, and share all match
-      // what the user asked for, even if the model tried to shift it.
+      return JSON.parse(text.replace(/```json|```/g, "").trim());
+    };
+
+    try {
+      let parsed = await callModel(buildMessage(""));
+      let problems = validateProgression(parsed, forced.skeleton, roots);
+      if (problems.length) {
+        // One corrective retry: tell the model exactly what it got wrong.
+        try {
+          const retry = await callModel(
+            buildMessage(
+              `\n\nYOUR PREVIOUS ATTEMPT WAS REJECTED for these violations: ${problems.join("; ")}. Regenerate and follow the skeleton EXACTLY this time.`
+            )
+          );
+          const retryProblems = validateProgression(retry, forced.skeleton, roots);
+          if (retryProblems.length < problems.length) {
+            parsed = retry;
+            problems = retryProblems;
+          }
+        } catch {
+          /* keep the first attempt if the retry itself fails */
+        }
+      }
+      // The user's slider is the source of truth for BPM, and the forced key
+      // is the source of truth for the key label — stamp both onto the result
+      // so display, playback, export, and share all match.
       parsed.bpm = bpm;
+      parsed.key = forced.key;
       setResult(parsed);
       setIsExample(false);
       setLastPrompt(prompt);
@@ -1146,31 +1238,38 @@ Random variation seed: ${Date.now()}`
       const rejectedNote = rejected.length
         ? `Avoid these chord names entirely: ${rejected.join(", ")}.`
         : "";
+      // Assign each variation its own vetted skeleton in the current key so
+      // the four alternatives are structurally distinct by construction.
+      const varTonality = /minor/i.test(result.key || "") ? "minor" : "major";
+      const varTonic = PITCH_CLASS[(result.key || "").split(" ")[0]];
+      const varSkels = [...PROGRESSION_SKELETONS[varTonality]]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 4);
+      const varRoots = varTonic === undefined
+        ? null
+        : varSkels.map((s) => skeletonRoots(result.key, s));
+      const skeletonLines = varSkels
+        .map(
+          (s, i) =>
+            `   Variation ${i + 1}: ${s.join(" → ")}${varRoots ? ` — bass roots MUST be ${varRoots[i].join(", ")} in that order` : ""}.`
+        )
+        .join("\n");
       const variationSystem = `You generate 4 ALTERNATIVE chord progressions for the same vibe. Return ONLY a JSON ARRAY of 4 objects, each in the same shape as before:
 [{"title":"...","key":"...","bpm":...,"timeSignature":"4/4","style":"...","chords":[{"name":"...","duration":1,"notes":["..."],"function":"...","romanNumeral":"..."},...4 chords each...],"vibe":"...","genre":"...","theory":"..."}, ... ×4]
 
 HARD REQUIREMENTS (a variation that breaks any of these is unusable — do not return it):
 
-1. KEY LOCK. Every variation stays in ${result.key}. Same tonal center, same "key" field value. The relative minor/major of ${result.key} is allowed if it clearly serves the reharm, but no arbitrary key jumps. Do NOT drift into a random new key just to sound different.
+1. KEY LOCK. Every variation stays in ${result.key}. Same tonal center, same "key" field value. Do NOT drift into a new key.
 
-2. HARMONIC ARC — every variation follows the same 4-chord order:
-   Chord 1 = HOME (tonic-family: I / Imaj7 / Imaj9 in major, or i / im7 / im9 in minor). function="tonic". Never open on ii, iii, IV, V, or vii°.
-   Chord 2 = MOVE (leaves home, stays diatonic-ish: IV, ii, iii, vi, bVII, bVI, or colored variants).
-   Chord 3 = BUILD (pre-dominant only: ii, IV, iv, bVI, secondary dominant V7/x, or Neapolitan bII). DO NOT put bVII or V here — those are return chords and belong at chord 4. function MUST be "subdominant" or "dominant", NEVER "tonic". Root MUST differ from chord 1's root.
-   Chord 4 = RETURN — strong landing on chord 1. Ranked: (a) DOMINANT V/V7/V9 or bII7 tritone sub — strongest, prefer in major. (b) bVII → i — the natural cadence for minor / Mixolydian / Dorian. (c) bVI → i — modal, for Aeolian vibes. (d) plagal IV/iv only for ballad/amen feels — avoid otherwise. (e) common-tone deceptive only for ambient/cinematic. Mentally play chord 4 → chord 1 twice — if it feels weak, upgrade in the ranking.
+2. REQUIRED SKELETONS — each variation uses its assigned structure exactly (romanNumeral fields must match these tokens; you may append qualities like 7/9/maj7):
+${skeletonLines}
+   You choose the chord qualities, extensions, and voicings. You do NOT choose the roots or their order.
 
-3. DISTINCT CHORDS in every variation. All 4 chord names within a variation must be different, and no two chords in the same variation may share a root (Bm and Bm7 count as the same). Reselect if you find a duplicate.
+3. VOICE LEADING inside AND across the loop. Adjacent chords' upper voices must connect by common tone or single step. Chord 4's upper voices must connect back to chord 1's upper voices the same way. Top voice across all 4 chords should be a smooth line, not leaps.
 
-4. VOICE LEADING inside AND across the loop. Adjacent chords' upper voices must connect by common tone or single step. Chord 4's upper voices must connect back to chord 1's upper voices the same way. Top voice across all 4 chords should be a smooth line, not leaps.
+4. TEXTURE VARIETY — beyond the different skeletons, make the four variations differ in feel: different extensions (m9 vs m11 vs plain m7), different top notes, different registers for the color tones.
 
-5. DISTINCT REHARM TECHNIQUES — the 4 variations must NOT converge. Each variation must use a DIFFERENT primary reharm technique from this list, in this order:
-   Variation 1: MODAL INTERCHANGE — borrow at least one chord from parallel minor/major (bVII, bVI, iv, or bIII in major; IV or V in minor).
-   Variation 2: SECONDARY DOMINANT — include at least one V7/x (V7/ii, V7/IV, V7/vi).
-   Variation 3: DESCENDING BASS or PEDAL — root moves down stepwise across the 4 chords, OR one bass note is held constant.
-   Variation 4: CHROMATIC / TRITONE SUB — at least one chord moves by half step, or a V is replaced by its tritone sub (bII7).
-   Each variation must actually SOUND different from the others, not just have different labels.
-
-6. TEMPO. All variations honour the tempo target block below — same voicing density, chord duration, and style rules for the current BPM.
+5. TEMPO. All variations honour the tempo target block below — same voicing density, chord duration, and style rules for the current BPM.
 
 The user's current progression (do NOT reproduce it — these are alternatives): ${currentChords}. ${rejectedNote}`;
       const res = await fetch("/.netlify/functions/generate", {
@@ -1191,7 +1290,17 @@ The user's current progression (do NOT reproduce it — these are alternatives):
         // Force each variation onto the user's chosen tempo so the slider
         // stays authoritative.
         parsed.forEach((v) => { if (v) v.bpm = bpm; });
-        setVariations(parsed);
+        // Drop variations that ignored their assigned skeleton; if the model
+        // botched all of them, show everything rather than nothing.
+        const valid = varRoots
+          ? parsed.filter(
+              (v, i) =>
+                v &&
+                varSkels[i] &&
+                validateProgression(v, varSkels[i], varRoots[i]).length === 0
+            )
+          : parsed;
+        setVariations(valid.length ? valid : parsed);
       }
     } catch (e) {
       console.warn("Variation fetch failed:", e);
