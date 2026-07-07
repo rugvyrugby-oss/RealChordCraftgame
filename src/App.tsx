@@ -1033,14 +1033,20 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
         const noteDur = chordDurSec * hit.len * sustainMul;
         const chordHum = (Math.random() - 0.5) * hum * 1000;
         hitNotes.forEach((n, i) => {
-          // All notes in a chord strike on the same tick — the ARPEGGIATE slider
-          // is the dedicated control for spreading them over time. Keep a single
-          // chord-level humanization drift so successive chords aren't robotic,
-          // but every note within one chord fires simultaneously.
-          const delay = Math.max(0, baseDelayMs + (chordHum || 0));
+          // Humanized block chord: the notes land together to the ear, but
+          // like a real hand — bass touches first, the rest fall inside a
+          // ~10ms window (too tight to hear as a strum, loose enough to feel
+          // played). The top note gets a little extra weight so the melody
+          // voice sings; inner voices sit slightly softer. The ARPEGGIATE
+          // slider remains the control for audible note spreading.
+          const isBass = i === 0;
+          const isTop = i === hitNotes.length - 1 && hitNotes.length > 1;
+          const handSpread = isBass ? 0 : 3 + Math.random() * 8;
+          const delay = Math.max(0, baseDelayMs + (chordHum || 0) + handSpread);
+          const voiceBalance = isTop ? 1.06 : isBass ? 1.0 : 0.92;
           const vel = Math.min(
             1,
-            Math.max(0.1, hit.vel * (0.85 + Math.random() * 0.3))
+            Math.max(0.1, hit.vel * voiceBalance * (0.9 + Math.random() * 0.18))
           );
           firedCount++;
           setTimeout(() => {
@@ -1078,15 +1084,21 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
           sampler.connect(reverbRef.current);
         } catch {}
       }
-      // Tap-preview: strike all notes on the same tick so it matches how the
-      // loop / play button renders block chords.
-      notes.forEach((n) => {
-        const vel = Math.min(1, 0.6 * (0.85 + Math.random() * 0.3));
-        try {
-          sampler.triggerAttackRelease(n, durationSec, undefined, vel);
-        } catch (e) {
-          console.warn("Note failed:", n, e);
-        }
+      // Tap-preview: same humanized block feel as full playback — bass lands
+      // first, others inside a ~10ms window, top note slightly louder.
+      notes.forEach((n, i) => {
+        const isBass = i === 0;
+        const isTop = i === notes.length - 1 && notes.length > 1;
+        const handSpread = isBass ? 0 : 3 + Math.random() * 8;
+        const voiceBalance = isTop ? 1.06 : isBass ? 1.0 : 0.92;
+        const vel = Math.min(1, 0.6 * voiceBalance * (0.9 + Math.random() * 0.18));
+        setTimeout(() => {
+          try {
+            sampler.triggerAttackRelease(n, durationSec, undefined, vel);
+          } catch (e) {
+            console.warn("Note failed:", n, e);
+          }
+        }, handSpread);
       });
     },
     [reverb, getSampler]
@@ -1584,20 +1596,23 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               else if (hit.notes === "high") hitNotes = voicing.high;
               else hitNotes = voicing.all;
               const noteDur = chordDurSec * hit.len * sustainMul;
-              // Match performChord: all notes in the chord strike on the same
-              // tick. One chord-level humanization drift keeps successive
-              // chords from feeling robotic without spreading notes apart.
+              // Match performChord's humanized block: chord-level drift plus
+              // a ~10ms hand spread (bass first) and voice-balanced velocity.
               const chordDrift =
                 (Math.random() - 0.5) * (groove.humanize || 0.012);
-              hitNotes.forEach((n) => {
+              hitNotes.forEach((n, ni) => {
+                const isBass = ni === 0;
+                const isTop = ni === hitNotes.length - 1 && hitNotes.length > 1;
+                const handSpread = isBass ? 0 : 0.003 + Math.random() * 0.008;
+                const voiceBalance = isTop ? 1.06 : isBass ? 1.0 : 0.92;
                 const vel = Math.min(
                   1,
-                  Math.max(0.1, hit.vel * (0.85 + Math.random() * 0.3))
+                  Math.max(0.1, hit.vel * voiceBalance * (0.9 + Math.random() * 0.18))
                 );
                 instr.triggerAttackRelease(
                   n,
                   noteDur,
-                  Math.max(t, baseTime + chordDrift),
+                  Math.max(t, baseTime + chordDrift + handSpread),
                   vel
                 );
               });
