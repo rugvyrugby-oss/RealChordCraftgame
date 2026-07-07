@@ -157,6 +157,22 @@ const GROOVE_PATTERNS = {
 };
 const DEFAULT_GROOVE = GROOVE_PATTERNS.pop;
 
+// Every chord is struck ONCE, in full, at the top of its slot and sustained
+// for its whole duration. The style grooves above split chords into
+// low/roll/high partial hits (lofi's downbeat played only the bass note,
+// with the full chord not arriving until halfway through the bar) — users
+// heard that as "the chords never play fully". The humanized micro-spread
+// in performChord supplies the played-by-a-hand feel; the ARPEGGIATE slider
+// supplies note spreading when wanted. Style still shapes swing/humanize.
+const blockGroove = (style) => {
+  const base = GROOVE_PATTERNS[style] || DEFAULT_GROOVE;
+  return {
+    swing: base.swing,
+    humanize: base.humanize,
+    hits: [{ t: 0.0, notes: "all", vel: 0.66, len: 0.95 }],
+  };
+};
+
 // Translate the user's BPM slider into concrete, musically-actionable
 // instructions the model can act on. This is what makes changing the tempo
 // produce genuinely different progressions rather than the same voicings
@@ -1399,9 +1415,9 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
     const beatDur = (60 / bpm) * 2;
     stopLoopRef.current = false;
 
-    // Pick the groove pattern based on the AI-returned style
+    // Full chord on every strike; style only shapes swing/humanize feel
     const style = (result.style || "").toLowerCase();
-    const groove = GROOVE_PATTERNS[style] || DEFAULT_GROOVE;
+    const groove = blockGroove(style);
 
     do {
       for (let i = 0; i < result.chords.length; i++) {
@@ -1564,9 +1580,9 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
         }
         await Tone.loaded();
 
-        // Use the same groove engine for export so the WAV matches playback
+        // Use the same block-chord engine for export so the WAV matches playback
         const style = (result.style || "").toLowerCase();
-        const groove = GROOVE_PATTERNS[style] || DEFAULT_GROOVE;
+        const groove = blockGroove(style);
         const sustainMul = (decay / 100) * 1.0 + 0.5;
 
         const splitV = (notes) => {
@@ -1797,7 +1813,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
     const previewBpm = progression.bpm || bpm;
     const beatDur = 60 / previewBpm;
     const style = (progression.style || "").toLowerCase();
-    const groove = GROOVE_PATTERNS[style] || DEFAULT_GROOVE;
+    const groove = blockGroove(style);
     for (let i = 0; i < progression.chords.length; i++) {
       const c = progression.chords[i];
       setHighlightedNotes(new Set(c.notes));
