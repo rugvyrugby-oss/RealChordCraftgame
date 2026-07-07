@@ -68,12 +68,18 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - HARMONIC ARC (mandatory chord order — this is not optional):
   Chord 1 = HOME. A tonic-family chord that establishes the key. Allowed: I / Imaj7 / i / im7 / vi (as relative minor tonic) / im9. function MUST be "tonic". If the piece is in a minor key, chord 1 is i / im7 / im9. If major, chord 1 is I / Imaj7 / Imaj9. Never open on ii, iii, IV, V, or vii°.
   Chord 2 = MOVE. Leaves home but stays in the key. Good choices: IV/iv, ii, iii, vi, bVI, bVII, or a colored variant of any of these. Do not repeat chord 1's root.
-  Chord 3 = BUILD. Creates pull toward chord 4. Good choices: pre-dominant (ii, IV, iv, bVI), a secondary dominant (V7/x), or a modal cadence chord (bVII, bII). function MUST be "subdominant" or "dominant" — NEVER "tonic". Root MUST differ from chord 1's root by at least a whole step (a Bm progression's chord 3 CANNOT be Bm/Bm7/Bmaj7/etc. — that collapses the arc into a 2-chord loop).
-  Chord 4 = RETURN. Its job is to lead back to chord 1 when the loop repeats. Pick one of these landings and commit:
-    (a) DOMINANT: V, V7, V9, V13, or a tritone sub (bII7) — resolves down a 5th into chord 1.
-    (b) PLAGAL / MODAL: IV, iv, bVII, bVI → chord 1 by step or common-tone.
-    (c) DECEPTIVE-RETURN: chord 4 shares ≥ 2 pitch classes with chord 1 so the loop feels seamless rather than cadential.
-  Before finalizing, mentally play chord 4 → chord 1 twice. If it doesn't land, revoice or reselect chord 4. Do NOT hand back a progression whose loop point sounds like a dead stop.
+  Chord 3 = BUILD. Its ONLY job is to create tension that leads into chord 4. Allowed choices, ranked:
+    (i) PRE-DOMINANT: ii, IV, iv, bVI — sets up chord 4 as the return.
+    (ii) SECONDARY DOMINANT: V7/ii, V7/IV, V7/vi, etc. — very effective build.
+    (iii) NEAPOLITAN: bII — dark, strong lift into chord 4.
+  Do NOT use bVII or V as chord 3 — those are RETURN chords and belong in the chord 4 slot. Do NOT use chord 1's tonic function. function MUST be "subdominant" or "dominant", NEVER "tonic". Root MUST differ from chord 1's root by at least a whole step.
+  Chord 4 = RETURN. Its ONLY job is to land STRONGLY on chord 1 when the loop repeats. Allowed choices, ranked by strength:
+    (a) STRONGEST — DOMINANT: V, V7, V9, V13, or bII7 (tritone sub). Resolves down a 5th into chord 1. Prefer this in major keys.
+    (b) STRONG — MODAL bVII: for minor / Mixolydian / Dorian pieces the bVII → i cadence is often more natural than V → i. Prefer this when the vibe is minor and modal.
+    (c) ACCEPTABLE — bVI → i: modal, dark. Works when the piece is Aeolian.
+    (d) WEAK — PLAGAL IV / iv: use ONLY if the vibe is a ballad or specifically calls for a soft "amen" cadence. Not the default choice.
+    (e) DECEPTIVE-RETURN: shares ≥ 2 pitch classes with chord 1 — subtle, only for ambient / cinematic vibes.
+  Before finalizing, mentally play chord 4 → chord 1 twice. If it feels weak or doesn't land, upgrade to a stronger option in the ranking above. Do NOT hand back a progression whose loop point sounds like a dead stop.
 - DISTINCT CHORDS: the 4 chord "name" values must all be different from each other. No two chords in the same progression may share a root — Bm and Bm7 count as the same chord, not two. If your candidate progression has any duplicate root, reselect one of the chords before returning.
 - VOICE LEADING ON THE LOOP: the smooth-top-voice rule applies between chord 4 and chord 1 as well. Chord 4's top notes must connect to chord 1's top notes by common tone or step, same as any other adjacent pair. This is the difference between a progression that loops forever and one that jars every 4 bars.
 - VARIETY RULES:
@@ -1150,8 +1156,8 @@ HARD REQUIREMENTS (a variation that breaks any of these is unusable — do not r
 2. HARMONIC ARC — every variation follows the same 4-chord order:
    Chord 1 = HOME (tonic-family: I / Imaj7 / Imaj9 in major, or i / im7 / im9 in minor). function="tonic". Never open on ii, iii, IV, V, or vii°.
    Chord 2 = MOVE (leaves home, stays diatonic-ish: IV, ii, iii, vi, bVII, bVI, or colored variants).
-   Chord 3 = BUILD (creates pull: pre-dominant ii/IV, secondary dominant V7/x, or bVII/bII). function MUST be "subdominant" or "dominant", NEVER "tonic". Root MUST differ from chord 1's root — no reusing the home chord's root here.
-   Chord 4 = RETURN — must lead back to chord 1 when the loop repeats. Choose one of: (a) V/V7/V9/V13 or tritone sub bII7 resolving down a 5th, (b) plagal/modal IV, iv, bVII, bVI landing on chord 1 by step or common tone, (c) chord sharing ≥ 2 pitch classes with chord 1. Mentally play chord 4 → chord 1 twice — if it doesn't land, revoice or reselect.
+   Chord 3 = BUILD (pre-dominant only: ii, IV, iv, bVI, secondary dominant V7/x, or Neapolitan bII). DO NOT put bVII or V here — those are return chords and belong at chord 4. function MUST be "subdominant" or "dominant", NEVER "tonic". Root MUST differ from chord 1's root.
+   Chord 4 = RETURN — strong landing on chord 1. Ranked: (a) DOMINANT V/V7/V9 or bII7 tritone sub — strongest, prefer in major. (b) bVII → i — the natural cadence for minor / Mixolydian / Dorian. (c) bVI → i — modal, for Aeolian vibes. (d) plagal IV/iv only for ballad/amen feels — avoid otherwise. (e) common-tone deceptive only for ambient/cinematic. Mentally play chord 4 → chord 1 twice — if it feels weak, upgrade in the ranking.
 
 3. DISTINCT CHORDS in every variation. All 4 chord names within a variation must be different, and no two chords in the same variation may share a root (Bm and Bm7 count as the same). Reselect if you find a duplicate.
 
