@@ -16,11 +16,11 @@ root.render(
       <footer style={{ textAlign: "center", padding: "16px", marginTop: 8 }}>
         <Link
           to="/terms"
-          style={{ color: "#475569", fontSize: 12, fontFamily: "Georgia,serif", textDecoration: "underline" }}
+          style={{ color: "#475569", fontSize: 12, fontFamily: "'Space Grotesk',sans-serif", textDecoration: "underline" }}
         >
           Terms of Service
         </Link>
-        <a href="/Privacy.html" style={{ color: "#475569", fontSize: 12, fontFamily: "Georgia,serif", textDecoration: "underline", marginLeft: 16 }}>Privacy Policy</a>
+        <a href="/Privacy.html" style={{ color: "#475569", fontSize: 12, fontFamily: "'Space Grotesk',sans-serif", textDecoration: "underline", marginLeft: 16 }}>Privacy Policy</a>
       </footer>
     </BrowserRouter>
   </React.StrictMode>

@@ -420,7 +420,7 @@ If the user's text vibe seems to clash with the tempo (e.g. "chill lofi" at 140 
 
 const functionColors = {
   tonic: { hex: "#7dd3c0", rgb: "125,211,192" },
-  subdominant: { hex: "1DB954", rgb: "167,139,250" },
+  subdominant: { hex: "#a78bfa", rgb: "167,139,250" },
   dominant: { hex: "#f59e0b", rgb: "245,158,11" },
   other: { hex: "#94a3b8", rgb: "148,163,184" },
 };
@@ -456,10 +456,10 @@ const BLACK_POSITIONS = {
 };
 
 const SUGGESTIONS = [
-  "lofi 80 bpm c minor chord progession",
+  "lofi 80 bpm c minor chord progression",
   "big room edm drop 128",
   "90s rnb slow jam",
-  " dark cinematic g minor",
+  "dark cinematic g minor",
   "chill study beat 75 bpm",
 ];
 
@@ -504,14 +504,14 @@ const THEMES = {
     ambient:
       "radial-gradient(ellipse 60% 40% at 15% 10%, rgba(50,15,100,0.04) 0%, transparent 50%), radial-gradient(ellipse 45% 35% at 85% 85%, rgba(8,50,75,0.035) 0%, transparent 50%)",
     accent: "#6366f1",
-    accent2: "1DB954",
+    accent2: "#a78bfa",
     accentSoft: "rgba(99,102,241,0.15)",
     text: "#e2e8f0",
     textBright: "#f1f5f9",
     textDim: "#64748b",
     panel: "rgba(255,255,255,0.03)",
     panelBorder: "rgba(255,255,255,0.08)",
-    note: "71717a",
+    note: "#71717a",
   },
   velvet: {
     name: "Velvet",
@@ -1898,7 +1898,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             <div style={{ textAlign: "center", marginBottom: 24 }}>
               <div style={{ fontSize: 48, marginBottom: 12 }}>🎹</div>
               <div style={S.kicker}>Welcome to</div>
-              <h2 style={S.modalTitle}></h2>
+              <h2 style={S.modalTitle}>ChordCraft</h2>
               <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6 }}>
                 Describe any feeling — get a real piano progression instantly.
                 Free forever.
@@ -1912,7 +1912,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 ✓ Real grand piano playback
                 <br />
                 ✓ Loop + share + MIDI export
-                <br />✓ 10 generations per day
+                <br />✓ {FREE_DAILY_LIMIT} generations per day
               </div>
             </div>
             <div
@@ -1923,8 +1923,8 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 borderColor: "rgba(99,102,241,0.3)",
               }}
             >
-              <div style={{ ...S.featureLabel, color: "1DB954" }}>
-                 PRO — from $12/mo or $100 lifetime
+              <div style={{ ...S.featureLabel, color: "#a78bfa" }}>
+                PRO — from $10/mo or $100 lifetime
               </div>
               <div style={S.featureList}>
                 ✦ 8 & 16-bar progressions
@@ -1935,8 +1935,8 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 <br />
                 ✦ Save & revisit your projects
                 <br />
-                ✦ Export individual stems (chords, bass, melody) (this feature will be releasing soon)
-                <br />✦ Studio-quality WAV (24-bit, no watermark) ( feature will be releasing soon
+                ✦ Export individual stems — chords, bass, melody (coming soon)
+                <br />✦ Studio-quality 24-bit WAV, no watermark (coming soon)
               </div>
             </div>
             <EmailCapture source="welcome" accent="#6366f1" />
@@ -1965,7 +1965,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             </button>
             <div style={{ textAlign: "center", marginBottom: 20 }}>
               <div style={{ fontSize: 40, marginBottom: 8 }}>✨</div>
-              <div style={{ ...S.kicker, color: "1DB954" }}>
+              <div style={{ ...S.kicker, color: "#a78bfa" }}>
                 Upgrade to Pro
               </div>
               <h3 style={S.modalTitle}>{proHeadline}</h3>
@@ -1986,7 +1986,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               <div
                 style={{
                   ...S.featureLabel,
-                  color: "1DB954",
+                  color: "#a78bfa",
                   marginBottom: 10,
                 }}
               >
@@ -1997,13 +1997,11 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 <br />
                 ✦ 8-bar & 16-bar progressions
                 <br />
-                ✦ 100 daily generations
-                <br /> 
+                ✦ {PRO_DAILY_LIMIT} daily generations
+                <br />
                 ✦ Save & revisit your projects
                 <br />
-                ✦ Export individual stems (chords, bass, melody) (coming soon)
-                <br />
-               
+                ✦ Export individual stems — chords, bass, melody (coming soon)
                 <br />✦ 24-bit studio WAV exports (coming soon)
               </div>
             </div>
@@ -2012,7 +2010,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             <div
               style={{
                 ...S.featureLabel,
-                color: "1DB954",
+                color: "#a78bfa",
                 marginBottom: 12,
                 textAlign: "center",
               }}
@@ -2025,7 +2023,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                   key={plan.id} style={{
                     ...S.priceCard,
                     border: plan.highlighted
-                      ? "2px solid 1DB954"
+                      ? "2px solid #a78bfa"
                       : "1px solid rgba(255,255,255,0.08)",
                     background: plan.highlighted
                       ? "linear-gradient(180deg, rgba(167,139,250,0.12) 0%, rgba(99,102,241,0.06) 100%)"
@@ -2077,7 +2075,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                     style={{
                       ...S.priceCta,
                       background: plan.highlighted
-                        ? "linear-gradient(135deg, #6366f1 0%, 1DB954 100%)"
+                        ? "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)"
                         : "rgba(99,102,241,0.85)",
                     }}
                     onClick={() => {
@@ -2113,7 +2111,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
 
             <EmailCapture
               source="pro_modal"
-              accent="linear-gradient(135deg, #6366f1 0%, 1DB954 100%)"
+              accent="linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)"
             />
           </div>
         </div>
@@ -2141,7 +2139,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 Daily limit reached
               </div>
               <h3 style={S.modalTitle}>
-                You've used your 10 free generations today
+                You've used your {FREE_DAILY_LIMIT} free generations today
               </h3>
               <p
                 style={{
@@ -2158,7 +2156,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                   ...S.primaryBtn,
                   width: "100%",
                   background:
-                    "linear-gradient(135deg, #6366f1 0%, 1DB954 100%)",
+                    "linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)",
                 }}
                 onClick={() => {
                   setShowLimit(false);
@@ -2168,7 +2166,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                   );
                 }}
               >
-                 Get notified about Pro
+                Get notified about Pro
               </button>
             </div>
           </div>
@@ -2402,21 +2400,18 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               )
             }
           >
-             Pro
+            ✨ Pro
           </button>
         </div>
 
-        <div style={S.engLabel}> CreateyourCords </div>
+        <div style={S.engLabel}>ChordCraft</div>
         <h1 style={S.h1}>
           Describe a vibe.
           <br />
-          <span style={{ color: "#818cf8", fontStyle: "Monosphere" }}>
-            Hear the chords.
-          </span>
+          <span style={{ color: "#818cf8" }}>Hear the chords.</span>
         </h1>
         <p style={S.subtitle}>
-        type a vibe. get chords you can drop into your beat..
-          
+          Type a vibe. Get chords you can drop straight into your beat.
         </p>
         {sampleStatus && (
           <div
@@ -2504,10 +2499,10 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             {/* Example banner — shown until the user generates their own */}
             {isExample && (
               <div style={S.exampleBanner}>
-                <span style={{ fontSize: 14 }}> </span>
+                <span style={{ fontSize: 14 }}>🎧</span>
                 <span>
                   This is an{" "}
-                  <strong style={{ color: theme.accent2 }}>example</strong>. 
+                  <strong style={{ color: theme.accent2 }}>example</strong> —
                   hit{" "}
                   <strong style={{ color: theme.textBright }}>▶ Play</strong> to
                   hear it, or describe your own vibe above.
@@ -2752,7 +2747,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             {/* Vibe Controls */}
             <div style={S.vibeControls}>
               <div style={S.vcLabel}>
-                🎛 Adjust before playing.
+                🎛 Sound controls
               </div>
               <SliderRow
                 label="TEMPO"
@@ -2914,7 +2909,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                     color: theme.accent2,
                   }}
                 >
-                   Variations...
+                  Variations
                 </div>
                 <button
                   onClick={fetchVariations}
@@ -3450,7 +3445,7 @@ const S = {
   },
   grooveBadge: {
     fontSize: 11,
-    color: "1DB954",
+    color: "#a78bfa",
     fontFamily: "monospace",
     letterSpacing: 1,
     background: "rgba(167,139,250,0.12)",
@@ -3599,7 +3594,7 @@ const S = {
     padding: "8px 16px",
     fontSize: 12,
     cursor: "pointer",
-    fontFamily: "Georgia,serif",
+    fontFamily: "'Space Grotesk',sans-serif",
     whiteSpace: "nowrap",
   },
   rejectedPill: {
@@ -3812,7 +3807,7 @@ const S = {
     top: -10,
     left: "50%",
     transform: "translateX(-50%)",
-    background: "1DB954",
+    background: "#a78bfa",
     color: "#0a0a0f",
     fontSize: 9,
     fontWeight: 700,
@@ -3839,7 +3834,7 @@ const S = {
   },
   priceNote: {
     fontSize: 11,
-    color: "1DB954",
+    color: "#a78bfa",
     marginBottom: 14,
     lineHeight: 1.4,
     minHeight: 28,
@@ -3873,42 +3868,42 @@ body {
   overflow-x: hidden;
 }
 
-@keyframes floatNote1 {
-  @keyframes floatNote1 { 0%{transform:translateY(0) rotate(-10deg);opacity:0} 25%{opacity:0.32} 50%{transform:translateY(-15px) rotate(0deg);opacity:0.45} 75%{opacity:0.32} 100%{transform:translateY(-30px) rotate(8deg);opacity:0} }
-  @keyframes floatNote2 { 0%{transform:translateY(0) rotate(15deg);opacity:0} 30%{opacity:0.28} 50%{transform:translateY(-10px) rotate(5deg);opacity:0.4} 70%{opacity:0.28} 100%{transform:translateY(-20px) rotate(-5deg);opacity:0} }
-  @keyframes floatNote3 { 0%{transform:translateY(0) rotate(-5deg);opacity:0} 35%{opacity:0.34} 50%{transform:translateY(-12px) rotate(3deg);opacity:0.5} 65%{opacity:0.34} 100%{transform:translateY(-25px) rotate(12deg);opacity:0} }
-  @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
-  @keyframes activeGlow { 0%,100%{box-shadow:0 0 12px rgba(99,102,241,0.4)} 50%{box-shadow:0 0 28px rgba(99,102,241,0.8)} }
-  .note-spin { animation: pulse 1.5s ease-in-out infinite; }
-  .fade-in { animation: fadeIn .4s ease; }
-  .suggestion { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:20px; color:#94a3b8; padding:6px 14px; font-size:12px; cursor:pointer; font-family:Georgia,serif; transition:all .15s; }
-  .suggestion:hover { background:rgba(99,102,241,.15); color:#c7d2fe; }
-  .chord-card { border:1px solid; border-radius:12px; padding:20px 16px; text-align:center; transition:all .2s; cursor:pointer; }
-  .chord-card:hover { background:rgba(255,255,255,.08) !important; transform:translateY(-2px); }
-  .chord-card.active { transform:translateY(-4px); animation:activeGlow .8s ease-in-out infinite; }
-  .sound-btn { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:20px; color:#94a3b8; padding:5px 14px; font-size:12px; cursor:pointer; font-family:Georgia,serif; transition:all .15s; }
-  .sound-btn.active { background:rgba(99,102,241,.3); border-color:#6366f1; color:#c7d2fe; }
-  .sound-btn:hover { background:rgba(99,102,241,.15); color:#c7d2fe; }
-  .sound-btn.pro-locked { opacity:0.55; }
-  .sound-btn.pro-locked:hover { background:rgba(167,139,250,0.12); color:1DB954; opacity:0.9; }
-  .btn { border:none; border-radius:8px; font-size:14px; cursor:pointer; font-family:Georgia,serif; transition:all .2s; padding:12px 20px; }
-  .btn-primary { background:rgba(99,102,241,.9); color:#fff; }
-  .btn-primary:hover { background:#6366f1; }
-  .btn-secondary { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:#94a3b8; }
-  .btn-secondary:hover { background:rgba(255,255,255,.1); color:#f1f5f9; }
-  .btn-loop { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:#94a3b8; }
-  .btn-loop.looping { background:rgba(16,185,129,.2); border:1px solid #10b981; color:#6ee7b7; }
-  .btn-share { background:rgba(129,140,248,.15); border:1px solid rgba(129,140,248,.4); color:#c7d2fe; }
-  .btn-share:hover { background:rgba(129,140,248,.25); color:#fff; }
-  .btn-record { background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3); color:#fca5a5; }
-  .btn-record:hover { background:rgba(239,68,68,.2); }
-  .history-item { background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.05); border-radius:8px; padding:12px 16px; color:#64748b; font-size:13px; cursor:pointer; text-align:left; display:flex; justify-content:space-between; font-family:Georgia,serif; transition:all .15s; width:100%; }
-  .history-item:hover { background:rgba(255,255,255,.05); }
-  textarea::placeholder { color:#475569; }
-  @media(max-width:540px){
-    .chord-grid-responsive { grid-template-columns:repeat(2,1fr) !important; }
-    .info-grid-responsive { grid-template-columns:1fr !important; }
-    .pricing-grid-responsive { grid-template-columns:1fr !important;} 
-    }
-  `;
+@keyframes floatNote1 { 0%{transform:translateY(0) rotate(-10deg);opacity:0} 25%{opacity:0.32} 50%{transform:translateY(-15px) rotate(0deg);opacity:0.45} 75%{opacity:0.32} 100%{transform:translateY(-30px) rotate(8deg);opacity:0} }
+@keyframes floatNote2 { 0%{transform:translateY(0) rotate(15deg);opacity:0} 30%{opacity:0.28} 50%{transform:translateY(-10px) rotate(5deg);opacity:0.4} 70%{opacity:0.28} 100%{transform:translateY(-20px) rotate(-5deg);opacity:0} }
+@keyframes floatNote3 { 0%{transform:translateY(0) rotate(-5deg);opacity:0} 35%{opacity:0.34} 50%{transform:translateY(-12px) rotate(3deg);opacity:0.5} 65%{opacity:0.34} 100%{transform:translateY(-25px) rotate(12deg);opacity:0} }
+@keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+@keyframes activeGlow { 0%,100%{box-shadow:0 0 12px rgba(99,102,241,0.4)} 50%{box-shadow:0 0 28px rgba(99,102,241,0.8)} }
+.note-spin { animation: pulse 1.5s ease-in-out infinite; }
+.fade-in { animation: fadeIn .4s ease; }
+.suggestion { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:20px; color:#94a3b8; padding:6px 14px; font-size:12px; cursor:pointer; font-family:'Space Grotesk',sans-serif; transition:all .15s; }
+.suggestion:hover { background:rgba(99,102,241,.15); color:#c7d2fe; }
+.chord-card { border:1px solid; border-radius:12px; padding:20px 16px; text-align:center; transition:all .2s; cursor:pointer; }
+.chord-card:hover { background:rgba(255,255,255,.08) !important; transform:translateY(-2px); }
+.chord-card.active { transform:translateY(-4px); animation:activeGlow .8s ease-in-out infinite; }
+.sound-btn { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:20px; color:#94a3b8; padding:5px 14px; font-size:12px; cursor:pointer; font-family:'Space Grotesk',sans-serif; transition:all .15s; }
+.sound-btn.active { background:rgba(99,102,241,.3); border-color:#6366f1; color:#c7d2fe; }
+.sound-btn:hover { background:rgba(99,102,241,.15); color:#c7d2fe; }
+.sound-btn.pro-locked { opacity:0.55; }
+.sound-btn.pro-locked:hover { background:rgba(167,139,250,0.12); color:#a78bfa; opacity:0.9; }
+.btn { border:none; border-radius:8px; font-size:14px; cursor:pointer; font-family:'Space Grotesk',sans-serif; transition:all .2s; padding:12px 20px; }
+.btn-primary { background:rgba(99,102,241,.9); color:#fff; }
+.btn-primary:hover { background:#6366f1; }
+.btn-secondary { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:#94a3b8; }
+.btn-secondary:hover { background:rgba(255,255,255,.1); color:#f1f5f9; }
+.btn-loop { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:#94a3b8; }
+.btn-loop.looping { background:rgba(16,185,129,.2); border:1px solid #10b981; color:#6ee7b7; }
+.btn-share { background:rgba(129,140,248,.15); border:1px solid rgba(129,140,248,.4); color:#c7d2fe; }
+.btn-share:hover { background:rgba(129,140,248,.25); color:#fff; }
+.btn-record { background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3); color:#fca5a5; }
+.btn-record:hover { background:rgba(239,68,68,.2); }
+.history-item { background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.05); border-radius:8px; padding:12px 16px; color:#64748b; font-size:13px; cursor:pointer; text-align:left; display:flex; justify-content:space-between; font-family:'Space Grotesk',sans-serif; transition:all .15s; width:100%; }
+.history-item:hover { background:rgba(255,255,255,.05); }
+textarea::placeholder { color:#475569; }
+@media(max-width:540px){
+  .chord-grid-responsive { grid-template-columns:repeat(2,1fr) !important; }
+  .info-grid-responsive { grid-template-columns:1fr !important; }
+  .wyg-grid-responsive { grid-template-columns:1fr !important; }
+  .pricing-grid-responsive { grid-template-columns:1fr !important; }
+}
+`;
