@@ -278,9 +278,9 @@ const PROGRESSION_SKELETONS = {
     ["i", "iv", "bVI", "bVII"],
     ["i", "bIII", "iv", "V"],
     ["i", "iv", "ii", "V"],
-    ["i", "bII", "iv", "V"],
+    ["i", "v", "bVI", "bVII"],
     ["i", "IV", "bIII", "bVII"],
-    ["i", "iv", "bVI", "bII"],
+    ["i", "bVI", "bIII", "bVII"],
   ],
   major: [
     ["I", "IV", "ii", "V"],
@@ -288,7 +288,7 @@ const PROGRESSION_SKELETONS = {
     ["I", "bVII", "IV", "V"],
     ["I", "iii", "IV", "V"],
     ["I", "ii", "IV", "V"],
-    ["I", "IV", "ii", "bII"],
+    ["I", "IV", "vi", "V"],
     ["I", "bVI", "bVII", "V"],
     ["I", "iii", "ii", "V"],
   ],
@@ -365,7 +365,24 @@ const validateProgression = (p, skeleton, expectedRoots) => {
 const MINOR_HINT_RE = /\b(sad|dark|melancholy|melancholic|moody|somber|dramatic|cinematic|lofi|trap|rainy|night|midnight|noir|broken)\b/i;
 const MAJOR_HINT_RE = /\b(happy|bright|uplifting|joyful|sunny|summer|pop|beach|celebrate|hopeful)\b/i;
 
-let lastSkeletonUsed = "";
+// Remember the last few skeletons in localStorage so variety survives page
+// reloads — an in-memory variable resets every refresh, which let the same
+// structure come up twice in a row.
+const SKELETON_MEMORY_KEY = "chordcraft_recent_skeletons";
+const getRecentSkeletons = () => {
+  try {
+    return JSON.parse(localStorage.getItem(SKELETON_MEMORY_KEY) || "[]");
+  } catch {
+    return [];
+  }
+};
+const rememberSkeleton = (id) => {
+  try {
+    const recent = [id, ...getRecentSkeletons().filter((s) => s !== id)].slice(0, 3);
+    localStorage.setItem(SKELETON_MEMORY_KEY, JSON.stringify(recent));
+  } catch {}
+};
+
 const pickForcedContext = (userPrompt, recentKeys) => {
   const wantMinor = MINOR_HINT_RE.test(userPrompt);
   const wantMajor = MAJOR_HINT_RE.test(userPrompt);
@@ -379,9 +396,11 @@ const pickForcedContext = (userPrompt, recentKeys) => {
   const key = keyList[Math.floor(Math.random() * keyList.length)];
   const tonality = pool === KEY_POOL_MINOR ? "minor" : "major";
   const skels = PROGRESSION_SKELETONS[tonality];
-  const freshSkels = skels.filter((s) => s.join("-") !== lastSkeletonUsed);
-  const skeleton = freshSkels[Math.floor(Math.random() * freshSkels.length)];
-  lastSkeletonUsed = skeleton.join("-");
+  const recentSkels = getRecentSkeletons();
+  const freshSkels = skels.filter((s) => !recentSkels.includes(s.join("-")));
+  const pickFrom = freshSkels.length ? freshSkels : skels;
+  const skeleton = pickFrom[Math.floor(Math.random() * pickFrom.length)];
+  rememberSkeleton(skeleton.join("-"));
   return { key, tonality, skeleton };
 };
 
