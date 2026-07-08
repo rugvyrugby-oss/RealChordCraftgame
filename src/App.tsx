@@ -77,6 +77,7 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - BPM is fixed by the user request; the key is fixed by the REQUIRED SKELETON block. Do not vary either.
 - For lofi specifically: try minor keys (Cm, Dm, Bm, F#m), not just major. Minor lofi hits harder emotionally.
 - A "chill lofi" prompt should NOT produce I-IV-V in any key. Use ii-V, bVII, bVI, or modal approaches instead.
+- NOTE SPELLING: spell every note and chord root according to the key signature — flats in flat keys (Ab9 with Ab-C-Eb-Gb-Bb in C minor), sharps in sharp keys. NEVER use B#, E#, Cb, Fb, or double accidentals. List each chord's notes from lowest to highest.
 - NEVER use altered tensions (#11, b9, #9, b13, #5) unless the user explicitly asks for jazz. They sound like wrong notes to most listeners. Extensions stop at 7, 9, 11, 13 in their plain form.
 - A simple B9 is often better than a forced Bmaj7#11.
 - "rainy tokyo" / "tokyo night" / "city rain" / "neon streets" => MELANCHOLIC + DREAMY. Minor key with major 7th color, BPM 70-85, lofi or ambient style. Use minor 9ths, major 7ths, sus chords. Spacious, wet, reflective. Think city lights through rain. `;
@@ -356,6 +357,54 @@ const validateProgression = (p, skeleton, expectedRoots) => {
     }
   });
   return problems;
+};
+
+// ── Note-spelling normalization ─────────────────────────────────────────────
+// The model sometimes returns enharmonically "correct" but musically wrong
+// spellings — G#9 with B# in C minor instead of Ab9 with C. Rather than trust
+// prompt rules, we respell every returned note and chord root into the key's
+// preferred accidentals (flats in flat keys, sharps in sharp keys), collapse
+// phantom names like B#4 → C5, and sort each chord's notes low-to-high (the
+// playback engine treats the first note as the bass and the last as the
+// melody voice).
+const LETTER_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+const ACC_OFFSET = { "#": 1, "##": 2, b: -1, bb: -2 };
+const parseNoteMidi = (n) => {
+  const m = /^([A-G])(bb|##|b|#)?(-?\d)$/.exec((n || "").trim());
+  if (!m) return null;
+  const acc = m[2] ? ACC_OFFSET[m[2]] : 0;
+  return LETTER_PC[m[1]] + acc + (parseInt(m[3], 10) + 1) * 12;
+};
+const midiToName = (midi, useFlats) =>
+  (useFlats ? FLAT_NAMES : SHARP_NAMES)[((midi % 12) + 12) % 12] +
+  (Math.floor(midi / 12) - 1);
+const keyUsesFlats = (key) => !SHARP_KEYS.has(key || "");
+
+const normalizeChordSpelling = (c, useFlats) => {
+  if (!c) return c;
+  if (Array.isArray(c.notes)) {
+    const midis = c.notes
+      .map(parseNoteMidi)
+      .filter((m) => m !== null)
+      .sort((a, b) => a - b);
+    if (midis.length) c.notes = midis.map((m) => midiToName(m, useFlats));
+  }
+  if (typeof c.name === "string") {
+    const nm = /^([A-G])(bb|##|b|#)?(.*)$/.exec(c.name.trim());
+    if (nm) {
+      const acc = nm[2] ? ACC_OFFSET[nm[2]] : 0;
+      const pc = (((LETTER_PC[nm[1]] + acc) % 12) + 12) % 12;
+      c.name = (useFlats ? FLAT_NAMES : SHARP_NAMES)[pc] + (nm[3] || "");
+    }
+  }
+  return c;
+};
+
+const normalizeProgression = (p) => {
+  if (!p || !Array.isArray(p.chords)) return p;
+  const useFlats = keyUsesFlats(p.key);
+  p.chords.forEach((c) => normalizeChordSpelling(c, useFlats));
+  return p;
 };
 
 // Prompts that suggest minor tonality vs major. Cheap keyword lookahead — if
@@ -679,6 +728,181 @@ function Icon({ name, size = 14, style }) {
   );
 }
 
+// ── Piano roll sub-component ─────────────────────────────────────────────────
+// Timeline view of the whole progression: pitch on the vertical axis, time on
+// the horizontal. Every note of every chord is drawn as a bar (colored by the
+// chord's harmonic function, same coding as the chord cards), and a playhead
+// sweeps across during playback. The playhead is driven by timingRef — a ref
+// runProgression stamps at the start of each chord — and writes straight to
+// the DOM node from requestAnimationFrame so it never forces React re-renders.
+const BLACK_KEY_PCS = new Set([1, 3, 6, 8, 10]);
+
+function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
+  const playheadRef = useRef(null);
+
+  const totalDur = chords.reduce((a, c) => a + (c.duration || 1), 0) || 1;
+  const notes = [];
+  let lo = 127,
+    hi = 0,
+    cursor = 0;
+  const chordStarts = [];
+  chords.forEach((c, ci) => {
+    chordStarts.push(cursor);
+    const dur = c.duration || 1;
+    (c.notes || []).forEach((n) => {
+      const midi = parseNoteMidi(n);
+      if (midi === null) return;
+      lo = Math.min(lo, midi);
+      hi = Math.max(hi, midi);
+      notes.push({ midi, start: cursor, dur, chord: ci });
+    });
+    cursor += dur;
+  });
+  if (!notes.length) return null;
+  lo -= 2;
+  hi += 2;
+
+  const W = 720;
+  const LABEL_W = 34;
+  const HEADER_H = 18;
+  const rowH = Math.max(6, Math.min(10, Math.floor(170 / (hi - lo + 1))));
+  const H = (hi - lo + 1) * rowH;
+  const innerW = W - LABEL_W;
+  const xOf = (beats) => LABEL_W + (beats / totalDur) * innerW;
+  const yOf = (midi) => (hi - midi) * rowH;
+
+  useEffect(() => {
+    const line = playheadRef.current;
+    if (!line) return;
+    if (!isPlaying) {
+      line.setAttribute("x1", -10);
+      line.setAttribute("x2", -10);
+      return;
+    }
+    let raf = 0;
+    const tick = () => {
+      const tm = timingRef.current;
+      if (tm && chords[tm.index]) {
+        const frac = Math.min(
+          1,
+          (performance.now() - tm.startedAt) / tm.durMs
+        );
+        const beats =
+          chordStarts[tm.index] + frac * (chords[tm.index].duration || 1);
+        const x = xOf(beats);
+        line.setAttribute("x1", x);
+        line.setAttribute("x2", x);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [isPlaying, chords]);
+
+  const rows = [];
+  for (let m = lo; m <= hi; m++) rows.push(m);
+
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H + HEADER_H}`}
+      width="100%"
+      style={{ display: "block" }}
+      aria-label="Piano roll of the progression"
+    >
+      {/* Chord name header */}
+      {chords.map((c, ci) => (
+        <text
+          key={`h${ci}`}
+          x={xOf(chordStarts[ci]) + 5}
+          y={12}
+          fontSize="10"
+          fontFamily="monospace"
+          letterSpacing="1"
+          fill={activeChord === ci ? theme.textBright : theme.textDim}
+        >
+          {c.name}
+        </text>
+      ))}
+      <g transform={`translate(0,${HEADER_H})`}>
+        {/* Row shading for black-key pitches + octave labels */}
+        {rows.map((m) => (
+          <g key={m}>
+            {BLACK_KEY_PCS.has(m % 12) && (
+              <rect
+                x={LABEL_W}
+                y={yOf(m)}
+                width={innerW}
+                height={rowH}
+                fill="rgba(255,255,255,0.025)"
+              />
+            )}
+            {m % 12 === 0 && (
+              <>
+                <line
+                  x1={LABEL_W}
+                  x2={W}
+                  y1={yOf(m) + rowH}
+                  y2={yOf(m) + rowH}
+                  stroke="rgba(255,255,255,0.07)"
+                />
+                <text
+                  x={4}
+                  y={yOf(m) + rowH - 1}
+                  fontSize="9"
+                  fontFamily="monospace"
+                  fill={theme.textDim}
+                >
+                  C{m / 12 - 1}
+                </text>
+              </>
+            )}
+          </g>
+        ))}
+        {/* Chord boundary gridlines */}
+        {chordStarts.map((s, ci) => (
+          <line
+            key={`g${ci}`}
+            x1={xOf(s)}
+            x2={xOf(s)}
+            y1={0}
+            y2={H}
+            stroke="rgba(255,255,255,0.07)"
+          />
+        ))}
+        {/* Note bars */}
+        {notes.map((n, i) => {
+          const col =
+            (functionColors[chords[n.chord].function] || functionColors.other)
+              .hex;
+          const active = activeChord === n.chord;
+          return (
+            <rect
+              key={i}
+              x={xOf(n.start) + 1.5}
+              y={yOf(n.midi) + 1}
+              width={xOf(n.start + n.dur) - xOf(n.start) - 3}
+              height={rowH - 2}
+              rx={2}
+              fill={col}
+              opacity={active ? 0.95 : activeChord === -1 ? 0.55 : 0.28}
+            />
+          );
+        })}
+        {/* Playhead */}
+        <line
+          ref={playheadRef}
+          x1={-10}
+          x2={-10}
+          y1={0}
+          y2={H}
+          stroke={theme.accent2}
+          strokeWidth="1.5"
+        />
+      </g>
+    </svg>
+  );
+}
+
 export default function ChordApp() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -753,6 +977,11 @@ export default function ChordApp() {
   const reverbRef = useRef(null);
   const toneStartedRef = useRef(false);
   const stopLoopRef = useRef(false);
+  // Piano-roll playhead timing: stamped at the start of every chord so the
+  // roll can interpolate the playhead position without owning any state.
+  const rollTimingRef = useRef(null);
+  // Vinyl crackle bed for lofi/ambient playback (created lazily, playback-only)
+  const crackleRef = useRef(null);
 
   // ── Setup Tone.js instruments once ────────────────────────────────────────
   useEffect(() => {
@@ -1272,7 +1501,9 @@ Random variation seed: ${Date.now()}`;
       });
       const data = await res.json();
       const text = (data.content || []).map((b) => b.text || "").join("");
-      return JSON.parse(text.replace(/```json|```/g, "").trim());
+      return normalizeProgression(
+        JSON.parse(text.replace(/```json|```/g, "").trim())
+      );
     };
 
     try {
@@ -1373,8 +1604,8 @@ The user's current progression (do NOT reproduce it — these are alternatives):
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
       if (Array.isArray(parsed)) {
         // Force each variation onto the user's chosen tempo so the slider
-        // stays authoritative.
-        parsed.forEach((v) => { if (v) v.bpm = bpm; });
+        // stays authoritative, and respell notes into the key's accidentals.
+        parsed.forEach((v) => { if (v) { v.bpm = bpm; normalizeProgression(v); } });
         // Drop variations that ignored their assigned skeleton; if the model
         // botched all of them, show everything rather than nothing.
         const valid = varRoots
@@ -1450,7 +1681,11 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
       const data = await res.json();
       const text = (data.content || []).map((b) => b.text || "").join("");
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-      if (Array.isArray(parsed)) setMutations(parsed);
+      if (Array.isArray(parsed)) {
+        const useFlats = keyUsesFlats(result.key);
+        parsed.forEach((c) => normalizeChordSpelling(c, useFlats));
+        setMutations(parsed);
+      }
     } catch (e) {
       console.warn("Mutation fetch failed:", e);
     }
@@ -1466,6 +1701,68 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
     setMutations([]);
   };
 
+  // ── Vinyl crackle (lofi/ambient playback only) ───────────────────────────
+  // A whisper of high-passed pink noise plus sparse random pops. Kept very
+  // quiet — it should be felt, not noticed. Never runs for previews or in
+  // the WAV export, so exported audio stays clean.
+  const startCrackle = useCallback(() => {
+    const Tone = window.Tone;
+    if (!Tone || crackleRef.current) return;
+    try {
+      const gain = new Tone.Gain(0).toDestination();
+      const hp = new Tone.Filter(2200, "highpass").connect(gain);
+      const noise = new Tone.Noise("pink");
+      noise.volume.value = -34;
+      noise.connect(hp);
+      noise.start();
+      gain.gain.rampTo(0.5, 0.4);
+      const pop = new Tone.NoiseSynth({
+        noise: { type: "white" },
+        envelope: { attack: 0.001, decay: 0.03, sustain: 0, release: 0.01 },
+      }).connect(gain);
+      pop.volume.value = -18;
+      let cancelled = false;
+      let timer = null;
+      const schedulePop = () => {
+        if (cancelled) return;
+        timer = setTimeout(() => {
+          try {
+            pop.triggerAttackRelease(0.02);
+          } catch {}
+          schedulePop();
+        }, 150 + Math.random() * 1200);
+      };
+      schedulePop();
+      crackleRef.current = {
+        gain,
+        noise,
+        pop,
+        hp,
+        stop: () => {
+          cancelled = true;
+          if (timer) clearTimeout(timer);
+        },
+      };
+    } catch {}
+  }, []);
+
+  const stopCrackle = useCallback(() => {
+    const c = crackleRef.current;
+    if (!c) return;
+    crackleRef.current = null;
+    try {
+      c.stop();
+      c.gain.gain.rampTo(0, 0.3);
+    } catch {}
+    setTimeout(() => {
+      [c.noise, c.pop, c.hp, c.gain].forEach((n) => {
+        try {
+          n.dispose();
+        } catch {}
+      });
+    }, 500);
+  }, []);
+
   // ── Playback ──────────────────────────────────────────────────────────────
   const runProgression = async (loop) => {
     await ensureAudio();
@@ -1475,6 +1772,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
     // Full chord on every strike; style only shapes swing/humanize feel
     const style = (result.style || "").toLowerCase();
     const groove = blockGroove(style);
+    if (style === "lofi" || style === "ambient") startCrackle();
 
     do {
       for (let i = 0; i < result.chords.length; i++) {
@@ -1483,12 +1781,19 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
         setActiveChord(i);
         setHighlightedNotes(new Set(chord.notes));
         const chordDurSec = beatDur * (chord.duration || 1);
+        rollTimingRef.current = {
+          index: i,
+          startedAt: performance.now(),
+          durMs: chordDurSec * 1000,
+        };
         // The groove engine schedules all the hits/rolls/dynamics itself
         performChord(chord.notes, chordDurSec, activeTone, groove);
         await new Promise((r) => setTimeout(r, chordDurSec * 1000));
       }
     } while (loop && !stopLoopRef.current);
 
+    stopCrackle();
+    rollTimingRef.current = null;
     setActiveChord(-1);
     setHighlightedNotes(new Set());
     setIsPlaying(false);
@@ -2583,7 +2888,18 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               )}
             </div>
 
-            {/* Piano canvas */}
+            {/* Piano roll — the whole progression on a timeline */}
+            <div style={S.pianoWrap}>
+              <PianoRoll
+                chords={result.chords}
+                activeChord={activeChord}
+                isPlaying={isPlaying}
+                timingRef={rollTimingRef}
+                theme={theme}
+              />
+            </div>
+
+            {/* Piano keyboard — live keys as they sound */}
             <div style={S.pianoWrap}>
               <canvas
                 ref={canvasRef}
