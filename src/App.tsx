@@ -61,7 +61,7 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - VOICE LEADING IS CRITICAL: each chord's upper notes (the color tones above the bass) must connect smoothly to the next chord's upper notes. Keep common tones in the SAME octave/position between adjacent chords, and move other voices by the smallest possible step. The top notes across all 4 chords should form a smooth melodic line, not jump around. Before finalizing, check: does the top voice move mostly by step or common tone? If it leaps around, revoice it.
 - The exact target BPM is dictated by the user for every request via the "Tempo target" block in the user message. Set "bpm" to that exact number, and use the accompanying tempo guidance to shape voicing density, chord duration, style choice, and top-voice motion. Do NOT invent a BPM from the style — style follows tempo here, not the other way round.
 - Always 4 chords. Make them genuinely interesting, the kind a real producer would use, not a beginner. NEVER use I-vi-IV-V or I-V-vi-IV — these are overused and boring. Use unexpected chord relationships, modal interchange, secondary dominants, or borrowed chords.
-- For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7b9 builds back up." Casual lowercase fine.
+- For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7 builds back up." Casual lowercase fine.
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".
 - SOUND QUALITY: every voicing must sound full and intentional, like a real producer played it. STRICT VOICING RULES: (1) Root note ONLY in C2-G2 range — this is your bass note, nothing else goes this low. (2) Leave a gap — no notes in C3-B3 range. (3) Stack the color tones (3rd, 7th, 9th, 11th) in C4-C5 range only. (4) Max 5 notes per chord. (5) ONLY use notes that actually belong to the chord — no wrong notes ever. Example Am9: A2 [gap] C4 E4 G4 B4. Example Dm9: D2 [gap] F4 A4 C5 E5. Example G13: G2 [gap] F4 A4 B4 E5. If you can't fit the voicing cleanly, simplify the chord — a clean Am7 beats a muddy Am11.
@@ -77,7 +77,7 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - BPM is fixed by the user request; the key is fixed by the REQUIRED SKELETON block. Do not vary either.
 - For lofi specifically: try minor keys (Cm, Dm, Bm, F#m), not just major. Minor lofi hits harder emotionally.
 - A "chill lofi" prompt should NOT produce I-IV-V in any key. Use ii-V, bVII, bVI, or modal approaches instead.
-- Do not add #11, b9, #9, b13 or altered tensions unless they clearly improve the requested style.
+- NEVER use altered tensions (#11, b9, #9, b13, #5) unless the user explicitly asks for jazz. They sound like wrong notes to most listeners. Extensions stop at 7, 9, 11, 13 in their plain form.
 - A simple B9 is often better than a forced Bmaj7#11.
 - "rainy tokyo" / "tokyo night" / "city rain" / "neon streets" => MELANCHOLIC + DREAMY. Minor key with major 7th color, BPM 70-85, lofi or ambient style. Use minor 9ths, major 7ths, sus chords. Spacious, wet, reflective. Think city lights through rain. `;
 const GROOVE_PATTERNS = {
@@ -304,7 +304,7 @@ const RN_QUALITY = {
     iv: "m7 / m9 / m11",
     IV: "7 or 9 (dorian color)",
     v: "m7",
-    V: "7 / 7b9 / 13",
+    V: "7 or 9 — NO altered tensions (no b9, #9, b13); keep the dominant clean",
     bVI: "maj7 / maj9",
     bVII: "7 / 9",
     ii: "m7b5 (half-diminished) or m7",
