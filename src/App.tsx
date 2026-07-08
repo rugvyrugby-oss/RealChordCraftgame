@@ -47,7 +47,7 @@ const PRICING_PLANS = [
     period: "once",
     cta: "Get Lifetime",
     note: "Pay once. Yours forever.",
-    badge: "🔥 Limited",
+    badge: "Limited",
     checkoutUrl: null, // e.g. "https://buy.stripe.com/your-lifetime-link"
   },
 ];
@@ -641,6 +641,44 @@ const EXAMPLE_PROGRESSION = {
   ],
 };
 
+// ── Inline SVG icons (feather-style, stroke follows text color) ─────────────
+// Replaces the emoji that used to live in buttons/labels — emoji render
+// differently on every OS and made the UI look unpolished.
+const ICONS = {
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+  lock: '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  copy: '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  headphones: '<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+  shuffle: '<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>',
+  sliders: '<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+  link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+  save: '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+  music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  refresh: '<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
+  play: '<polygon points="5 3 19 12 5 21"/>',
+};
+
+function Icon({ name, size = 14, style }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      style={{ verticalAlign: "-2px", flexShrink: 0, ...style }}
+      dangerouslySetInnerHTML={{ __html: ICONS[name] || "" }}
+    />
+  );
+}
+
 export default function ChordApp() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -667,7 +705,7 @@ export default function ChordApp() {
   const [arpeggiate, setArpeggiate] = useState(0); // 0 = block chords, 100 = full arpeggio
   const [highlightedNotes, setHighlightedNotes] = useState(new Set());
   const [sampleStatus, setSampleStatus] = useState(
-    "⏳ Loading real piano samples..."
+    "Loading real piano samples…"
   );
   const [samplesReady, setSamplesReady] = useState(false);
 
@@ -720,7 +758,7 @@ export default function ChordApp() {
   useEffect(() => {
     const Tone = window.Tone;
     if (!Tone) {
-      setSampleStatus("⚠ Audio library failed to load — check connection");
+      setSampleStatus("Audio library failed to load — check your connection");
       return;
     }
 
@@ -769,7 +807,7 @@ export default function ChordApp() {
       onload: () => {
         setTimeout(() => {
           setSamplesReady(true);
-          setSampleStatus("🎹 Piano samples ready");
+          setSampleStatus("Piano samples ready");
           setTimeout(() => setSampleStatus(""), 2500);
         }, 100);
       },
@@ -1764,7 +1802,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
   const shareToPlatform = (platform) => {
     const url = encodeURIComponent(shareUrl);
     const title = encodeURIComponent(
-      `🎹 Check out this chord progression I made: "${result?.title}"`
+      `Check out this chord progression I made: "${result?.title}"`
     );
     let shareURL = "";
     if (platform === "twitter")
@@ -1896,7 +1934,9 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               ×
             </button>
             <div style={{ textAlign: "center", marginBottom: 24 }}>
-              <div style={{ fontSize: 48, marginBottom: 12 }}>🎹</div>
+              <div style={{ marginBottom: 12 }}>
+                <Icon name="music" size={44} style={{ color: "#818cf8" }} />
+              </div>
               <div style={S.kicker}>Welcome to</div>
               <h2 style={S.modalTitle}>ChordCraft</h2>
               <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6 }}>
@@ -1964,7 +2004,9 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               ×
             </button>
             <div style={{ textAlign: "center", marginBottom: 20 }}>
-              <div style={{ fontSize: 40, marginBottom: 8 }}>✨</div>
+              <div style={{ marginBottom: 8 }}>
+                <Icon name="zap" size={34} style={{ color: "#a78bfa" }} />
+              </div>
               <div style={{ ...S.kicker, color: "#a78bfa" }}>
                 Upgrade to Pro
               </div>
@@ -2134,7 +2176,9 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               ×
             </button>
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 40, marginBottom: 10 }}>⏳</div>
+              <div style={{ marginBottom: 10 }}>
+                <Icon name="clock" size={34} style={{ color: "#f59e0b" }} />
+              </div>
               <div style={{ ...S.kicker, color: "#f59e0b" }}>
                 Daily limit reached
               </div>
@@ -2198,7 +2242,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               style={{ ...S.primaryBtn, width: "100%", marginBottom: 12 }}
               onClick={copyShareUrl}
             >
-              📋 Copy Link
+              <Icon name="copy" size={13} /> Copy Link
             </button>
             <div
               style={{
@@ -2258,7 +2302,9 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             <button style={S.modalClose} onClick={() => setShowSettings(false)}>
               ×
             </button>
-            <div style={{ ...S.kicker, color: theme.accent }}>⚙ Settings</div>
+            <div style={{ ...S.kicker, color: theme.accent }}>
+              <Icon name="gear" size={11} /> Settings
+            </div>
             <h3 style={{ ...S.modalTitle, marginBottom: 24 }}>
               Customize your engine
             </h3>
@@ -2376,7 +2422,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
           title="Settings"
           aria-label="Settings"
         >
-          ⚙
+          <Icon name="gear" size={16} />
         </button>
 
         {/* Top bar */}
@@ -2400,7 +2446,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               )
             }
           >
-            ✨ Pro
+            <Icon name="zap" size={13} /> Pro
           </button>
         </div>
 
@@ -2499,7 +2545,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             {/* Example banner — shown until the user generates their own */}
             {isExample && (
               <div style={S.exampleBanner}>
-                <span style={{ fontSize: 14 }}>🎧</span>
+                <Icon name="headphones" size={15} style={{ color: theme.accent2 }} />
                 <span>
                   This is an{" "}
                   <strong style={{ color: theme.accent2 }}>example</strong> —
@@ -2579,7 +2625,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                       title="Try alternatives for this chord"
                       style={S.chordActionBtn}
                     >
-                      🎲
+                      <Icon name="shuffle" size={10} />
                     </button>
                     <button
                       onClick={(e) => {
@@ -2669,7 +2715,8 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                       color: theme.accent2,
                     }}
                   >
-                    🎲 Alternatives for chord #{mutatingSlot + 1}
+                    <Icon name="shuffle" size={11} /> Alternatives for chord #
+                    {mutatingSlot + 1}
                   </div>
                   <button
                     onClick={() => {
@@ -2747,7 +2794,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
             {/* Vibe Controls */}
             <div style={S.vibeControls}>
               <div style={S.vcLabel}>
-                🎛 Sound controls
+                <Icon name="sliders" size={11} /> Sound controls
               </div>
               <SliderRow
                 label="TEMPO"
@@ -2790,12 +2837,12 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                     }
                     onClick={() => setActiveTone("piano")}
                   >
-                    🎹 Piano
+                    Piano
                   </button>
                   {[
-                    { id: "rhodes", label: "🎸 Rhodes" },
-                    { id: "pad", label: "🌊 Pad" },
-                    { id: "pluck", label: "✨ Pluck" },
+                    { id: "rhodes", label: "Rhodes" },
+                    { id: "pad", label: "Pad" },
+                    { id: "pluck", label: "Pluck" },
                   ].map((t) => (
                     <button
                       key={t.id}
@@ -2815,7 +2862,10 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                             )
                       }
                     >
-                      {t.label} <span style={{ opacity: 0.6 }}>🔒</span>
+                      {t.label}{" "}
+                      {!isPro && (
+                        <Icon name="lock" size={10} style={{ opacity: 0.6 }} />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -2841,16 +2891,16 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 {looping ? "⏹ Stop Loop" : "⟳ Loop"}
               </button>
               <button className="btn btn-share" onClick={openShare}>
-                🔗 Share
+                <Icon name="link" size={13} /> Share
               </button>
               <button className="btn btn-save" onClick={saveProject}>
-                💾 Save
+                <Icon name="save" size={13} /> Save
               </button>
               <button className="btn btn-record" onClick={exportAudio}>
-                ⏺ Export Audio
+                <Icon name="download" size={13} /> Export Audio
               </button>
               <button className="btn btn-secondary" onClick={exportMidi}>
-                🎵 Export MIDI
+                <Icon name="music" size={13} /> Export MIDI
               </button>
             </div>
 
@@ -2919,11 +2969,17 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                     opacity: loadingVariations ? 0.5 : 1,
                   }}
                 >
-                  {loadingVariations
-                    ? "Generating..."
-                    : variations.length
-                    ? "🔄 More variations"
-                    : "🎨 Show 4 variations"}
+                  {loadingVariations ? (
+                    "Generating…"
+                  ) : variations.length ? (
+                    <>
+                      <Icon name="refresh" size={12} /> More variations
+                    </>
+                  ) : (
+                    <>
+                      <Icon name="shuffle" size={12} /> Show 4 variations
+                    </>
+                  )}
                 </button>
               </div>
 
@@ -3023,11 +3079,11 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 >
                   Tap{" "}
                   <strong style={{ color: theme.accent2 }}>
-                    🎨 Show 4 variations
+                    Show 4 variations
                   </strong>{" "}
-                  to get fresh takes on this vibe. Or use 🎲 on a chord to swap
-                  it for something unexpected. Hit ✕ on chords you don't want to
-                  see again.
+                  to get fresh takes on this vibe, use the shuffle button on a
+                  chord to swap it for something unexpected, and hit ✕ on
+                  chords you don't want to see again.
                 </div>
               )}
             </div>
@@ -3072,12 +3128,14 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
           </div>
           <div style={S.wygGrid} className="info-grid-responsive wyg-grid-responsive">
             {[
-              { icon: "🎚️", title: "Emotion-Based Chords", body: "Describe a vibe and get chords that match the mood." },
-              { icon: "▶", title: "Real Playback", body: "Hear the progression instantly before using it." },
-              { icon: "📤", title: "Export Ready", body: "Export MIDI/audio so you can drop it into your beat." },
+              { icon: "sliders", title: "Emotion-Based Chords", body: "Describe a vibe and get chords that match the mood." },
+              { icon: "play", title: "Real Playback", body: "Hear the progression instantly before using it." },
+              { icon: "download", title: "Export Ready", body: "Export MIDI/audio so you can drop it into your beat." },
             ].map((card) => (
               <div key={card.title} style={{ ...S.wygCard, borderColor: theme.panelBorder }}>
-                <div style={{ ...S.wygIcon, color: theme.accent }}>{card.icon}</div>
+                <div style={{ ...S.wygIcon, color: theme.accent }}>
+                  <Icon name={card.icon} size={22} />
+                </div>
                 <div style={{ ...S.wygCardTitle, color: theme.textBright }}>{card.title}</div>
                 <div style={S.wygCardBody}>{card.body}</div>
               </div>
@@ -3546,6 +3604,15 @@ const S = {
     marginBottom: 16,
     opacity: 0.9,
   },
+  wygCard: {
+    background: "rgba(255,255,255,.03)",
+    border: "1px solid",
+    borderRadius: 12,
+    padding: "22px 20px",
+  },
+  wygIcon: {
+    marginBottom: 14,
+  },
   wygCardTitle: {
     fontSize: 18,
     fontWeight: 600,
@@ -3895,6 +3962,8 @@ body {
 .btn-loop.looping { background:rgba(16,185,129,.2); border:1px solid #10b981; color:#6ee7b7; }
 .btn-share { background:rgba(129,140,248,.15); border:1px solid rgba(129,140,248,.4); color:#c7d2fe; }
 .btn-share:hover { background:rgba(129,140,248,.25); color:#fff; }
+.btn-save { background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.3); color:#6ee7b7; }
+.btn-save:hover { background:rgba(16,185,129,.2); }
 .btn-record { background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3); color:#fca5a5; }
 .btn-record:hover { background:rgba(239,68,68,.2); }
 .history-item { background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.05); border-radius:8px; padding:12px 16px; color:#64748b; font-size:13px; cursor:pointer; text-align:left; display:flex; justify-content:space-between; font-family:'Space Grotesk',sans-serif; transition:all .15s; width:100%; }
