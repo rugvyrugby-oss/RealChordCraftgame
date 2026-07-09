@@ -759,24 +759,23 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
     cursor += dur;
   });
   if (!notes.length) return null;
-  lo -= 2;
-  hi += 2;
+  lo -= 1;
+  hi += 1;
 
   const W = 720;
-  const LABEL_W = 34;
+  const KEYS_W = 44;
   const HEADER_H = 18;
-  const rowH = Math.max(6, Math.min(10, Math.floor(170 / (hi - lo + 1))));
+  const rowH = Math.max(7, Math.min(13, Math.floor(240 / (hi - lo + 1))));
   const H = (hi - lo + 1) * rowH;
-  const innerW = W - LABEL_W;
-  const xOf = (beats) => LABEL_W + (beats / totalDur) * innerW;
+  const innerW = W - KEYS_W;
+  const xOf = (beats) => KEYS_W + (beats / totalDur) * innerW;
   const yOf = (midi) => (hi - midi) * rowH;
 
   useEffect(() => {
-    const line = playheadRef.current;
-    if (!line) return;
+    const ph = playheadRef.current;
+    if (!ph) return;
     if (!isPlaying) {
-      line.setAttribute("x1", -10);
-      line.setAttribute("x2", -10);
+      ph.setAttribute("transform", "translate(-10,0)");
       return;
     }
     let raf = 0;
@@ -789,9 +788,7 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
         );
         const beats =
           chordStarts[tm.index] + frac * (chords[tm.index].duration || 1);
-        const x = xOf(beats);
-        line.setAttribute("x1", x);
-        line.setAttribute("x2", x);
+        ph.setAttribute("transform", `translate(${xOf(beats)},0)`);
       }
       raf = requestAnimationFrame(tick);
     };
@@ -801,6 +798,14 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
 
   const rows = [];
   for (let m = lo; m <= hi; m++) rows.push(m);
+
+  // DAW-style beat grid: each chord slot subdivides into quarter-bar beats.
+  const beatLines = [];
+  chords.forEach((c, ci) => {
+    const dur = c.duration || 1;
+    for (let k = 1; k < dur * 4; k++)
+      beatLines.push(chordStarts[ci] + k * 0.25);
+  });
 
   return (
     <svg
@@ -824,41 +829,55 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
         </text>
       ))}
       <g transform={`translate(0,${HEADER_H})`}>
-        {/* Row shading for black-key pitches + octave labels */}
+        {/* Note-area backdrop */}
+        <rect
+          x={KEYS_W}
+          y={0}
+          width={innerW}
+          height={H}
+          fill="rgba(255,255,255,0.015)"
+        />
+        {/* Pitch lanes: black-key rows darker, thin separators, octave lines */}
         {rows.map((m) => (
           <g key={m}>
             {BLACK_KEY_PCS.has(m % 12) && (
               <rect
-                x={LABEL_W}
+                x={KEYS_W}
                 y={yOf(m)}
                 width={innerW}
                 height={rowH}
-                fill="rgba(255,255,255,0.025)"
+                fill="rgba(0,0,0,0.28)"
               />
             )}
+            <line
+              x1={KEYS_W}
+              x2={W}
+              y1={yOf(m)}
+              y2={yOf(m)}
+              stroke="rgba(255,255,255,0.03)"
+            />
             {m % 12 === 0 && (
-              <>
-                <line
-                  x1={LABEL_W}
-                  x2={W}
-                  y1={yOf(m) + rowH}
-                  y2={yOf(m) + rowH}
-                  stroke="rgba(255,255,255,0.07)"
-                />
-                <text
-                  x={4}
-                  y={yOf(m) + rowH - 1}
-                  fontSize="9"
-                  fontFamily="monospace"
-                  fill={theme.textDim}
-                >
-                  C{m / 12 - 1}
-                </text>
-              </>
+              <line
+                x1={KEYS_W}
+                x2={W}
+                y1={yOf(m) + rowH}
+                y2={yOf(m) + rowH}
+                stroke="rgba(255,255,255,0.09)"
+              />
             )}
           </g>
         ))}
-        {/* Chord boundary gridlines */}
+        {/* Beat grid + chord boundaries */}
+        {beatLines.map((b, i) => (
+          <line
+            key={`b${i}`}
+            x1={xOf(b)}
+            x2={xOf(b)}
+            y1={0}
+            y2={H}
+            stroke="rgba(255,255,255,0.035)"
+          />
+        ))}
         {chordStarts.map((s, ci) => (
           <line
             key={`g${ci}`}
@@ -866,35 +885,72 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
             x2={xOf(s)}
             y1={0}
             y2={H}
-            stroke="rgba(255,255,255,0.07)"
+            stroke="rgba(255,255,255,0.10)"
           />
         ))}
-        {/* Note bars */}
+        {/* Piano-key gutter */}
+        {rows.map((m) => {
+          const isBlack = BLACK_KEY_PCS.has(m % 12);
+          return (
+            <g key={`k${m}`}>
+              <rect
+                x={0}
+                y={yOf(m)}
+                width={KEYS_W}
+                height={rowH}
+                fill={isBlack ? "#14141c" : "#e7e9ee"}
+                stroke="rgba(0,0,0,0.5)"
+                strokeWidth="0.5"
+              />
+              {m % 12 === 0 && (
+                <text
+                  x={KEYS_W - 4}
+                  y={yOf(m) + rowH - 2}
+                  fontSize={Math.min(9, rowH - 1)}
+                  fontFamily="monospace"
+                  textAnchor="end"
+                  fill="#3a3f4a"
+                >
+                  C{m / 12 - 1}
+                </text>
+              )}
+            </g>
+          );
+        })}
+        {/* Note blocks — solid MIDI-clip style with a border */}
         {notes.map((n, i) => {
           const col =
             (functionColors[chords[n.chord].function] || functionColors.other)
               .hex;
           const active = activeChord === n.chord;
+          const dimmed = activeChord !== -1 && !active;
           return (
             <rect
               key={i}
-              x={xOf(n.start) + 1.5}
-              y={yOf(n.midi) + 1}
-              width={xOf(n.start + n.dur) - xOf(n.start) - 3}
-              height={rowH - 2}
-              rx={2}
+              x={xOf(n.start) + 1}
+              y={yOf(n.midi) + 0.5}
+              width={xOf(n.start + n.dur) - xOf(n.start) - 2}
+              height={rowH - 1}
+              rx={1}
               fill={col}
-              opacity={active ? 0.95 : activeChord === -1 ? 0.55 : 0.28}
+              stroke={active ? "#ffffff" : "rgba(0,0,0,0.45)"}
+              strokeWidth={active ? 1 : 0.75}
+              opacity={dimmed ? 0.35 : active ? 1 : 0.9}
             />
           );
         })}
-        {/* Playhead */}
+      </g>
+      {/* Playhead: marker triangle + line, moved as one group */}
+      <g ref={playheadRef} transform="translate(-10,0)">
+        <polygon
+          points={`-4,${HEADER_H - 7} 4,${HEADER_H - 7} 0,${HEADER_H}`}
+          fill={theme.accent2}
+        />
         <line
-          ref={playheadRef}
-          x1={-10}
-          x2={-10}
-          y1={0}
-          y2={H}
+          x1={0}
+          x2={0}
+          y1={HEADER_H}
+          y2={HEADER_H + H}
           stroke={theme.accent2}
           strokeWidth="1.5"
         />
