@@ -4374,3 +4374,8 @@ textarea::placeholder { color:#475569; }
   .pricing-grid-responsive { grid-template-columns:1fr !important; }
 }
 `;
+if (typeof document !== 'undefined') {
+  const styleTag = document.createElement('style');
+  styleTag.textContent = CSS;
+  document.head.appendChild(styleTag);
+}
