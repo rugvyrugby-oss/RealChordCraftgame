@@ -799,6 +799,17 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
   const rows = [];
   for (let m = lo; m <= hi; m++) rows.push(m);
 
+  // Pitches of the chord that is sounding right now — used to light the
+  // note blocks and the key gutter while it plays.
+  const activeMidis =
+    activeChord >= 0 && chords[activeChord]
+      ? new Set(
+          (chords[activeChord].notes || [])
+            .map(parseNoteMidi)
+            .filter((m) => m !== null)
+        )
+      : null;
+
   // DAW-style beat grid: each chord slot subdivides into quarter-bar beats.
   const beatLines = [];
   chords.forEach((c, ci) => {
@@ -814,6 +825,17 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
       style={{ display: "block" }}
       aria-label="Piano roll of the progression"
     >
+      <defs>
+        <filter id="rollNoteGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow
+            dx="0"
+            dy="0"
+            stdDeviation="2.2"
+            floodColor="#ffffff"
+            floodOpacity="0.55"
+          />
+        </filter>
+      </defs>
       {/* Chord name header */}
       {chords.map((c, ci) => (
         <text
@@ -888,9 +910,10 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
             stroke="rgba(255,255,255,0.10)"
           />
         ))}
-        {/* Piano-key gutter */}
+        {/* Piano-key gutter — sounding pitches light up like pressed keys */}
         {rows.map((m) => {
           const isBlack = BLACK_KEY_PCS.has(m % 12);
+          const keyOn = activeMidis && activeMidis.has(m);
           return (
             <g key={`k${m}`}>
               <rect
@@ -898,9 +921,10 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
                 y={yOf(m)}
                 width={KEYS_W}
                 height={rowH}
-                fill={isBlack ? "#14141c" : "#e7e9ee"}
+                fill={keyOn ? theme.accent : isBlack ? "#14141c" : "#e7e9ee"}
                 stroke="rgba(0,0,0,0.5)"
                 strokeWidth="0.5"
+                data-key-on={keyOn ? "1" : undefined}
               />
               {m % 12 === 0 && (
                 <text
@@ -936,6 +960,8 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
               stroke={active ? "#ffffff" : "rgba(0,0,0,0.55)"}
               strokeWidth={active ? 1.25 : 1}
               opacity={dimmed ? 0.35 : active ? 1 : 0.9}
+              filter={active ? "url(#rollNoteGlow)" : undefined}
+              data-on={active ? "1" : undefined}
             />
           );
         })}
