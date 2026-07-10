@@ -165,8 +165,28 @@ const DEFAULT_GROOVE = GROOVE_PATTERNS.pop;
 // heard that as "the chords never play fully". The humanized micro-spread
 // in performChord supplies the played-by-a-hand feel; the ARPEGGIATE slider
 // supplies note spreading when wanted. Style still shapes swing/humanize.
-const blockGroove = (style) => {
+// Fast dance styles are the exception to the one-sustained-strike rule:
+// house (always) and pop at dance tempo get driving repeated stabs —
+// "dun dun dun dun" — the way EDM/dance-pop keys actually comp. Every
+// stab is still the FULL chord, so the old partial-voicing complaint
+// can't come back.
+const isStabStyle = (style, bpm) =>
+  style === "house" || (style === "pop" && bpm >= 112);
+
+const blockGroove = (style, bpm) => {
   const base = GROOVE_PATTERNS[style] || DEFAULT_GROOVE;
+  if (isStabStyle(style, bpm)) {
+    return {
+      swing: 0,
+      humanize: Math.min(base.humanize || 0.01, 0.01),
+      hits: [
+        { t: 0.0, notes: "all", vel: 0.7, len: 0.17 },
+        { t: 0.25, notes: "all", vel: 0.54, len: 0.17 },
+        { t: 0.5, notes: "all", vel: 0.64, len: 0.17 },
+        { t: 0.75, notes: "all", vel: 0.54, len: 0.17 },
+      ],
+    };
+  }
   return {
     swing: base.swing,
     humanize: base.humanize,
@@ -737,7 +757,7 @@ function Icon({ name, size = 14, style }) {
 // the DOM node from requestAnimationFrame so it never forces React re-renders.
 const BLACK_KEY_PCS = new Set([1, 3, 6, 8, 10]);
 
-function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
+function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme, stabs = 0 }) {
   const playheadRef = useRef(null);
 
   const totalDur = chords.reduce((a, c) => a + (c.duration || 1), 0) || 1;
@@ -941,29 +961,37 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
             </g>
           );
         })}
-        {/* Note blocks — solid MIDI-clip style with a border */}
+        {/* Note blocks — solid MIDI-clip style with a border. For stab
+            grooves (house / fast pop) each note renders as `stabs` short
+            blocks so the roll shows the actual rhythm being played. */}
         {notes.map((n, i) => {
           const col =
             (functionColors[chords[n.chord].function] || functionColors.other)
               .hex;
           const active = activeChord === n.chord;
           const dimmed = activeChord !== -1 && !active;
-          return (
-            <rect
-              key={i}
-              x={xOf(n.start) + 1}
-              y={yOf(n.midi) + 0.5}
-              width={xOf(n.start + n.dur) - xOf(n.start) - 2}
-              height={rowH - 1}
-              rx={1}
-              fill={col}
-              stroke={active ? "#ffffff" : "rgba(0,0,0,0.55)"}
-              strokeWidth={active ? 1.25 : 1}
-              opacity={dimmed ? 0.35 : active ? 1 : 0.9}
-              filter={active ? "url(#rollNoteGlow)" : undefined}
-              data-on={active ? "1" : undefined}
-            />
-          );
+          const segs = stabs > 0 ? stabs : 1;
+          const segDur = n.dur / segs;
+          const segFill = segs > 1 ? 0.68 : 1; // stabs leave a staccato gap
+          return [...Array(segs)].map((_, k) => {
+            const x0 = xOf(n.start + k * segDur);
+            return (
+              <rect
+                key={`${i}-${k}`}
+                x={x0 + 1}
+                y={yOf(n.midi) + 0.5}
+                width={xOf(n.start + (k + segFill) * segDur) - x0 - 2}
+                height={rowH - 1}
+                rx={1}
+                fill={col}
+                stroke={active ? "#ffffff" : "rgba(0,0,0,0.55)"}
+                strokeWidth={active ? 1.25 : 1}
+                opacity={dimmed ? 0.35 : active ? 1 : 0.9}
+                filter={active ? "url(#rollNoteGlow)" : undefined}
+                data-on={active ? "1" : undefined}
+              />
+            );
+          });
         })}
       </g>
       {/* Playhead: marker triangle + line, moved as one group */}
@@ -1193,6 +1221,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
           genre: p.g,
           vibe: p.v,
           theory: p.th,
+          style: p.s,
           chords: p.c.map((c) => ({
             name: c.n,
             duration: c.d,
@@ -1851,9 +1880,10 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
     const beatDur = (60 / bpm) * 2;
     stopLoopRef.current = false;
 
-    // Full chord on every strike; style only shapes swing/humanize feel
+    // Full chord on every strike; style shapes the feel (sustained block
+    // for slow styles, driving stabs for house/fast pop)
     const style = (result.style || "").toLowerCase();
-    const groove = blockGroove(style);
+    const groove = blockGroove(style, bpm);
     if (style === "lofi" || style === "ambient") startCrackle();
 
     do {
@@ -2026,7 +2056,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
 
         // Use the same block-chord engine for export so the WAV matches playback
         const style = (result.style || "").toLowerCase();
-        const groove = blockGroove(style);
+        const groove = blockGroove(style, bpm);
         const sustainMul = (decay / 100) * 1.0 + 0.5;
 
         const splitV = (notes) => {
@@ -2147,6 +2177,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
       g: result.genre,
       v: result.vibe,
       th: result.theory,
+      s: result.style,
       c: result.chords.map((c) => ({
         n: c.name,
         d: c.duration,
@@ -2257,7 +2288,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
     const previewBpm = progression.bpm || bpm;
     const beatDur = 60 / previewBpm;
     const style = (progression.style || "").toLowerCase();
-    const groove = blockGroove(style);
+    const groove = blockGroove(style, previewBpm);
     for (let i = 0; i < progression.chords.length; i++) {
       const c = progression.chords[i];
       setHighlightedNotes(new Set(c.notes));
@@ -2978,6 +3009,9 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 isPlaying={isPlaying}
                 timingRef={rollTimingRef}
                 theme={theme}
+                stabs={
+                  isStabStyle((result.style || "").toLowerCase(), bpm) ? 4 : 0
+                }
               />
             </div>
 
