@@ -765,7 +765,7 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
   const W = 720;
   const KEYS_W = 44;
   const HEADER_H = 18;
-  const rowH = Math.max(7, Math.min(13, Math.floor(240 / (hi - lo + 1))));
+  const rowH = Math.max(10, Math.min(16, Math.floor(320 / (hi - lo + 1))));
   const H = (hi - lo + 1) * rowH;
   const innerW = W - KEYS_W;
   const xOf = (beats) => KEYS_W + (beats / totalDur) * innerW;
@@ -933,8 +933,8 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme }) {
               height={rowH - 1}
               rx={1}
               fill={col}
-              stroke={active ? "#ffffff" : "rgba(0,0,0,0.45)"}
-              strokeWidth={active ? 1 : 0.75}
+              stroke={active ? "#ffffff" : "rgba(0,0,0,0.55)"}
+              strokeWidth={active ? 1.25 : 1}
               opacity={dimmed ? 0.35 : active ? 1 : 0.9}
             />
           );
