@@ -165,26 +165,41 @@ const DEFAULT_GROOVE = GROOVE_PATTERNS.pop;
 // heard that as "the chords never play fully". The humanized micro-spread
 // in performChord supplies the played-by-a-hand feel; the ARPEGGIATE slider
 // supplies note spreading when wanted. Style still shapes swing/humanize.
-// Fast dance styles are the exception to the one-sustained-strike rule:
-// house (always) and pop at dance tempo get driving repeated stabs —
-// "dun dun dun dun" — the way EDM/dance-pop keys actually comp. Every
-// stab is still the FULL chord, so the old partial-voicing complaint
-// can't come back.
-const isStabStyle = (style, bpm) =>
-  style === "house" || (style === "pop" && bpm >= 112);
+// Genre rhythm patterns — the exception to the one-sustained-strike rule.
+// Every hit is the FULL chord (partial voicings are what users heard as
+// "the chords never play"); only the rhythm differs per genre:
+//   house -> four even staccato stabs, the classic club piano
+//   pop   -> anthemic pulse at dance tempo: long downbeat, pushed 8ths
+// Everything else sustains one humanized block per bar. Keyed strictly on
+// the progression's own style so slow genres can never inherit stabs.
+const STAB_PATTERNS = {
+  house: [
+    { t: 0.0, notes: "all", vel: 0.7, len: 0.17 },
+    { t: 0.25, notes: "all", vel: 0.54, len: 0.17 },
+    { t: 0.5, notes: "all", vel: 0.64, len: 0.17 },
+    { t: 0.75, notes: "all", vel: 0.54, len: 0.17 },
+  ],
+  pop: [
+    { t: 0.0, notes: "all", vel: 0.68, len: 0.42 },
+    { t: 0.25, notes: "all", vel: 0.5, len: 0.16 },
+    { t: 0.5, notes: "all", vel: 0.62, len: 0.3 },
+    { t: 0.75, notes: "all", vel: 0.52, len: 0.16 },
+  ],
+};
+const rhythmPattern = (style, bpm) => {
+  if (style === "house") return STAB_PATTERNS.house;
+  if (style === "pop" && bpm >= 112) return STAB_PATTERNS.pop;
+  return null;
+};
 
 const blockGroove = (style, bpm) => {
   const base = GROOVE_PATTERNS[style] || DEFAULT_GROOVE;
-  if (isStabStyle(style, bpm)) {
+  const pattern = rhythmPattern(style, bpm);
+  if (pattern) {
     return {
       swing: 0,
       humanize: Math.min(base.humanize || 0.01, 0.01),
-      hits: [
-        { t: 0.0, notes: "all", vel: 0.7, len: 0.17 },
-        { t: 0.25, notes: "all", vel: 0.54, len: 0.17 },
-        { t: 0.5, notes: "all", vel: 0.64, len: 0.17 },
-        { t: 0.75, notes: "all", vel: 0.54, len: 0.17 },
-      ],
+      hits: pattern,
     };
   }
   return {
@@ -192,6 +207,36 @@ const blockGroove = (style, bpm) => {
     humanize: base.humanize,
     hits: [{ t: 0.0, notes: "all", vel: 0.66, len: 0.95 }],
   };
+};
+
+// Tempo intent read from the prompt itself: an explicit "128 bpm", a bare
+// number in musical range, or a named genre's canonical tempo. Without
+// this, "house chords" generated at whatever the slider last sat on
+// (default 80 BPM) and the house stabs plodded.
+const GENRE_TEMPOS = [
+  [/\b(dnb|drum\s*(and|&|n)\s*bass|jungle)\b/i, 174],
+  [/\btechno\b/i, 130],
+  [/\btrap\b/i, 140],
+  [/\b(house|edm|dance|club|big\s*room|rave|festival)\b/i, 124],
+  [/\b(lo-?fi|chillhop|study)\b/i, 80],
+  [/\b(r&b|rnb|slow\s*jam)\b/i, 90],
+  [/\bsoul\b/i, 92],
+  [/\b(ambient|cinematic|soundtrack)\b/i, 60],
+  [/\bpop\b/i, 118],
+];
+const inferPromptBpm = (text) => {
+  const explicit = /(\d{2,3})\s*bpm/i.exec(text);
+  if (explicit) {
+    const v = +explicit[1];
+    if (v >= 40 && v <= 200) return v;
+  }
+  const bare = /\b(1\d\d|[4-9]\d|200)\b/.exec(text);
+  if (bare) {
+    const v = +bare[1];
+    if (v >= 40 && v <= 200) return v;
+  }
+  for (const [re, t] of GENRE_TEMPOS) if (re.test(text)) return t;
+  return null;
 };
 
 // Translate the user's BPM slider into concrete, musically-actionable
@@ -757,7 +802,7 @@ function Icon({ name, size = 14, style }) {
 // the DOM node from requestAnimationFrame so it never forces React re-renders.
 const BLACK_KEY_PCS = new Set([1, 3, 6, 8, 10]);
 
-function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme, stabs = 0 }) {
+function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme, pattern = null }) {
   const playheadRef = useRef(null);
 
   const totalDur = chords.reduce((a, c) => a + (c.duration || 1), 0) || 1;
@@ -961,26 +1006,27 @@ function PianoRoll({ chords, activeChord, isPlaying, timingRef, theme, stabs = 0
             </g>
           );
         })}
-        {/* Note blocks — solid MIDI-clip style with a border. For stab
-            grooves (house / fast pop) each note renders as `stabs` short
-            blocks so the roll shows the actual rhythm being played. */}
+        {/* Note blocks — solid MIDI-clip style with a border. For rhythm
+            grooves (house / fast pop) each note renders one block per hit,
+            sized by that hit's length, so the roll shows the actual rhythm
+            being played. */}
         {notes.map((n, i) => {
           const col =
             (functionColors[chords[n.chord].function] || functionColors.other)
               .hex;
           const active = activeChord === n.chord;
           const dimmed = activeChord !== -1 && !active;
-          const segs = stabs > 0 ? stabs : 1;
-          const segDur = n.dur / segs;
-          const segFill = segs > 1 ? 0.68 : 1; // stabs leave a staccato gap
-          return [...Array(segs)].map((_, k) => {
-            const x0 = xOf(n.start + k * segDur);
+          const hitsDef =
+            pattern && pattern.length > 1 ? pattern : [{ t: 0, len: 1 }];
+          return hitsDef.map((h, k) => {
+            const x0 = xOf(n.start + h.t * n.dur);
+            const endT = Math.min(1, h.t + Math.max(h.len, 0.12));
             return (
               <rect
                 key={`${i}-${k}`}
                 x={x0 + 1}
                 y={yOf(n.midi) + 0.5}
-                width={xOf(n.start + (k + segFill) * segDur) - x0 - 2}
+                width={xOf(n.start + endT * n.dur) - x0 - 2}
                 height={rowH - 1}
                 rx={1}
                 fill={col}
@@ -1576,6 +1622,12 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
     // only chooses qualities, extensions, and voicings. The response is then
     // validated against those roots and retried once if it doesn't comply —
     // prompt rules alone proved too easy for the model to break.
+    // Let the prompt steer the tempo: an explicit BPM or a genre keyword
+    // updates the slider so "house chords" doesn't generate at a leftover 80.
+    const inferred = inferPromptBpm(prompt);
+    const effBpm = inferred !== null ? inferred : bpm;
+    if (inferred !== null && inferred !== bpm) setBpm(inferred);
+
     const recentKeys = history.slice(0, 3).map((h) => h.result && h.result.key).filter(Boolean);
     if (result && result.key) recentKeys.push(result.key);
     const forced = pickForcedContext(prompt, recentKeys);
@@ -1587,7 +1639,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
       )
       .join("\n");
 
-    const buildMessage = (feedback) => `${prompt}${bpmBlock(bpm)}
+    const buildMessage = (feedback) => `${prompt}${bpmBlock(effBpm)}
 
 REQUIRED SKELETON (non-negotiable — structure is fixed, do not substitute):
 - key MUST be exactly "${forced.key}". Set the "key" field to this string.
@@ -1637,10 +1689,10 @@ Random variation seed: ${Date.now()}`;
           /* keep the first attempt if the retry itself fails */
         }
       }
-      // The user's slider is the source of truth for BPM, and the forced key
-      // is the source of truth for the key label — stamp both onto the result
-      // so display, playback, export, and share all match.
-      parsed.bpm = bpm;
+      // The effective BPM (prompt-inferred, else slider) and the forced key
+      // are the source of truth — stamp both onto the result so display,
+      // playback, export, and share all match.
+      parsed.bpm = effBpm;
       parsed.key = forced.key;
       setResult(parsed);
       setIsExample(false);
@@ -3009,9 +3061,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 isPlaying={isPlaying}
                 timingRef={rollTimingRef}
                 theme={theme}
-                stabs={
-                  isStabStyle((result.style || "").toLowerCase(), bpm) ? 4 : 0
-                }
+                pattern={rhythmPattern((result.style || "").toLowerCase(), bpm)}
               />
             </div>
 
