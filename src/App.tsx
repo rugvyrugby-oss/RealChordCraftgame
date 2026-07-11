@@ -173,17 +173,20 @@ const DEFAULT_GROOVE = GROOVE_PATTERNS.pop;
 // Everything else sustains one humanized block per bar. Keyed strictly on
 // the progression's own style so slow genres can never inherit stabs.
 const STAB_PATTERNS = {
+  // Hit lengths matter more than counts: anything under ~0.25 of the slot
+  // clips into a plink on the piano samples ("notes way too quick").
+  // House: four even stabs, long enough to punch. Pop: three hits —
+  // sustained downbeat, mid-bar answer, one push into the next bar.
   house: [
-    { t: 0.0, notes: "all", vel: 0.7, len: 0.17 },
-    { t: 0.25, notes: "all", vel: 0.54, len: 0.17 },
-    { t: 0.5, notes: "all", vel: 0.64, len: 0.17 },
-    { t: 0.75, notes: "all", vel: 0.54, len: 0.17 },
+    { t: 0.0, notes: "all", vel: 0.68, len: 0.3 },
+    { t: 0.25, notes: "all", vel: 0.55, len: 0.3 },
+    { t: 0.5, notes: "all", vel: 0.64, len: 0.3 },
+    { t: 0.75, notes: "all", vel: 0.55, len: 0.3 },
   ],
   pop: [
-    { t: 0.0, notes: "all", vel: 0.68, len: 0.42 },
-    { t: 0.25, notes: "all", vel: 0.5, len: 0.16 },
-    { t: 0.5, notes: "all", vel: 0.62, len: 0.3 },
-    { t: 0.75, notes: "all", vel: 0.52, len: 0.16 },
+    { t: 0.0, notes: "all", vel: 0.68, len: 0.55 },
+    { t: 0.5, notes: "all", vel: 0.6, len: 0.45 },
+    { t: 0.75, notes: "all", vel: 0.52, len: 0.3 },
   ],
 };
 const rhythmPattern = (style, bpm) => {
