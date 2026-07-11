@@ -183,15 +183,16 @@ const STAB_PATTERNS = {
     { t: 0.5, notes: "all", vel: 0.64, len: 0.3 },
     { t: 0.75, notes: "all", vel: 0.55, len: 0.3 },
   ],
+  // Pop: just the chord on each beat — two roomy hits per bar. Anything
+  // busier read as "way too fast" to listeners.
   pop: [
     { t: 0.0, notes: "all", vel: 0.68, len: 0.55 },
-    { t: 0.5, notes: "all", vel: 0.6, len: 0.45 },
-    { t: 0.75, notes: "all", vel: 0.52, len: 0.3 },
+    { t: 0.5, notes: "all", vel: 0.58, len: 0.5 },
   ],
 };
 const rhythmPattern = (style, bpm) => {
   if (style === "house") return STAB_PATTERNS.house;
-  if (style === "pop" && bpm >= 112) return STAB_PATTERNS.pop;
+  if (style === "pop" && bpm >= 105) return STAB_PATTERNS.pop;
   return null;
 };
 
@@ -225,7 +226,7 @@ const GENRE_TEMPOS = [
   [/\b(r&b|rnb|slow\s*jam)\b/i, 90],
   [/\bsoul\b/i, 92],
   [/\b(ambient|cinematic|soundtrack)\b/i, 60],
-  [/\bpop\b/i, 118],
+  [/\bpop\b/i, 110],
 ];
 const inferPromptBpm = (text) => {
   const explicit = /(\d{2,3})\s*bpm/i.exec(text);
