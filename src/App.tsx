@@ -697,6 +697,24 @@ const THEMES = {
   },
 };
 
+// ── Owner unlock ─────────────────────────────────────────────────────────────
+// The site owner gets Pro for free: open the app once with
+//   https://yoursite/#owner=<passphrase>
+// and that device stays unlocked. Only the SHA-256 hash of the passphrase
+// lives in this source — the phrase itself is stored locally on the owner's
+// device and re-verified against the hash on every load.
+const OWNER_KEY_HASH =
+  "45986754ce909762fb8fce2d00b192d37729ca1329d8784f1f106c48605297c5";
+const hashText = async (text) => {
+  const buf = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(text)
+  );
+  return [...new Uint8Array(buf)]
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+};
+
 // ── localStorage helpers ────────────────────────────────────────────────────
 const todayKey = () => {
   const d = new Date();
@@ -1252,6 +1270,44 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
   //     return () => clearTimeout(t);
   //   }
   // }, []);
+
+  // ── Owner unlock: #owner=<phrase> once, then persistent on this device ────
+  useEffect(() => {
+    const tryUnlock = async (phrase, fromUrl) => {
+      if (!phrase || !window.crypto?.subtle) return;
+      try {
+        const h = await hashText(phrase);
+        if (h !== OWNER_KEY_HASH) return;
+        setIsPro(true);
+        setUsageLeft(PRO_DAILY_LIMIT - getUsage());
+        try {
+          localStorage.setItem("owner_key", phrase);
+        } catch {}
+        if (fromUrl) {
+          // Strip the passphrase from the address bar and history
+          window.history.replaceState(null, "", window.location.pathname);
+        }
+      } catch {}
+    };
+    const checkHash = () => {
+      const m = /[#&]owner=([^&]+)/.exec(window.location.hash);
+      if (m) {
+        tryUnlock(decodeURIComponent(m[1]), true);
+        return true;
+      }
+      return false;
+    };
+    if (!checkHash()) {
+      let stored = null;
+      try {
+        stored = localStorage.getItem("owner_key");
+      } catch {}
+      if (stored) tryUnlock(stored, false);
+    }
+    // Also catch the phrase being pasted into an already-open tab
+    window.addEventListener("hashchange", checkHash);
+    return () => window.removeEventListener("hashchange", checkHash);
+  }, []);
 
   // ── Load shared progression from URL hash ─────────────────────────────────
   useEffect(() => {
@@ -2909,7 +2965,8 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               color: usageLeft <= 3 ? "#f59e0b" : "#64748b",
             }}
           >
-            {usageLeft}/{FREE_DAILY_LIMIT} LEFT TODAY
+            {usageLeft}/{isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT} LEFT TODAY
+            {isPro ? " · PRO" : ""}
           </div>
           <button
             style={S.proBtn}
