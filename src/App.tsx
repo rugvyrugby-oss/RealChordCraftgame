@@ -1101,7 +1101,9 @@ export default function ChordApp() {
   const [loadingMutations, setLoadingMutations] = useState(false);
   const [lastPrompt, setLastPrompt] = useState(""); // remember original prompt for variation API
   const [activeTone, setActiveTone] = useState("piano");
-  const [bpm, setBpm] = useState(80);
+  // 88 default: 80 read as sluggish for generic prompts. Prompt keywords
+  // and the slider still override this — it's only the starting tempo.
+  const [bpm, setBpm] = useState(88);
   const [reverb, setReverb] = useState(15);
   const [decay, setDecay] = useState(50);
   const [arpeggiate, setArpeggiate] = useState(0); // 0 = block chords, 100 = full arpeggio
@@ -1550,7 +1552,9 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
         else hitNotes = voicing.all;
         const isRoll = hit.notes === "roll";
         const noteDur = chordDurSec * hit.len * sustainMul;
-        const chordHum = (Math.random() - 0.5) * hum * 1000;
+        // Slight forward lean (-0.6 bias): human players push a touch ahead
+        // of the beat; perfectly centered drift reads as dragging.
+        const chordHum = (Math.random() - 0.6) * hum * 1000;
         hitNotes.forEach((n, i) => {
           // Humanized block chord: the notes land together to the ear, but
           // like a real hand — bass touches first, the rest fall inside a
@@ -2201,7 +2205,7 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
               // Match performChord's humanized block: chord-level drift plus
               // a ~10ms hand spread (bass first) and voice-balanced velocity.
               const chordDrift =
-                (Math.random() - 0.5) * (groove.humanize || 0.012);
+                (Math.random() - 0.6) * (groove.humanize || 0.012);
               hitNotes.forEach((n, ni) => {
                 const isBass = ni === 0;
                 const isTop = ni === hitNotes.length - 1 && hitNotes.length > 1;
