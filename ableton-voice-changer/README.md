@@ -56,7 +56,27 @@ plugin-delay compensation keeps everything aligned in playback.
 Modes: **Natural** (phase-vocoder), **Robot** (zeroed phases → monotone
 android), **Whisper** (randomized phases → breathy ghost).
 
-## Building
+## Getting the plugin
+
+### Option A: download a prebuilt plugin (no compiler needed)
+
+Every push that touches `ableton-voice-changer/` makes GitHub build the
+plugin automatically for macOS and Windows:
+
+1. On GitHub, open the repo's **Actions** tab → **Build VoxMorph plugin** →
+   click the latest green run.
+2. Under **Artifacts**, download **VoxMorph-macOS** or **VoxMorph-Windows**
+   and unzip it.
+3. Copy the plugin to your plugin folder:
+   - **Windows**: copy the `VoxMorph.vst3` folder to
+     `C:\Program Files\Common Files\VST3\`
+   - **macOS**: copy `VoxMorph.vst3` to `~/Library/Audio/Plug-Ins/VST3/`
+     (and/or `VoxMorph.component` to `~/Library/Audio/Plug-Ins/Components/`).
+     Because the download isn't Apple-notarized, clear the quarantine flag
+     once, in Terminal:
+     `xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/VoxMorph.vst3`
+
+### Option B: build it yourself
 
 You need [CMake ≥ 3.22](https://cmake.org) and a C++17 compiler. The first
 configure downloads [JUCE 8](https://juce.com) automatically (GPLv3 for

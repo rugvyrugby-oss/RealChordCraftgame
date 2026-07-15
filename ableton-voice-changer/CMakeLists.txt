@@ -15,6 +15,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(JUCE)
 
+# CI builds disable the copy step (no DAW on the runner).
+option(VOXMORPH_COPY_PLUGIN "Copy the plugin to the system plugin folder after build" ON)
+
 set(VOXMORPH_FORMATS VST3 Standalone)
 if(APPLE)
     list(APPEND VOXMORPH_FORMATS AU)
@@ -32,7 +35,7 @@ juce_add_plugin(VoxMorph
     NEEDS_MIDI_OUTPUT           FALSE
     IS_MIDI_EFFECT              FALSE
     EDITOR_WANTS_KEYBOARD_FOCUS FALSE
-    COPY_PLUGIN_AFTER_BUILD     TRUE
+    COPY_PLUGIN_AFTER_BUILD     ${VOXMORPH_COPY_PLUGIN}
     MICROPHONE_PERMISSION_ENABLED TRUE
     MICROPHONE_PERMISSION_TEXT  "VoxMorph needs microphone access for standalone use."
     VST3_CATEGORIES             Fx "Pitch Shift"

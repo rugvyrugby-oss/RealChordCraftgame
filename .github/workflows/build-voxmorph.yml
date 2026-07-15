@@ -1,0 +1,56 @@
+name: Build VoxMorph plugin
+
+on:
+  push:
+    paths:
+      - "ableton-voice-changer/**"
+      - ".github/workflows/build-voxmorph.yml"
+  workflow_dispatch:
+
+jobs:
+  test-dsp:
+    name: DSP tests (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run DSP tests
+        working-directory: ableton-voice-changer/tests
+        run: |
+          g++ -O2 -std=c++17 -Wall -Wextra -I../dsp dsp_tests.cpp -o dsp_tests
+          ./dsp_tests
+
+  build:
+    name: Build (${{ matrix.name }})
+    needs: test-dsp
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            name: macOS
+            extra-flags: -DCMAKE_OSX_ARCHITECTURES=arm64;x86_64
+          - os: windows-latest
+            name: Windows
+            extra-flags: ""
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        working-directory: ableton-voice-changer
+        run: >
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          -DVOXMORPH_COPY_PLUGIN=OFF ${{ matrix.extra-flags }}
+
+      - name: Build
+        working-directory: ableton-voice-changer
+        run: cmake --build build --config Release
+
+      - name: Upload plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: VoxMorph-${{ matrix.name }}
+          path: |
+            ableton-voice-changer/build/VoxMorph_artefacts/**/VST3/VoxMorph.vst3
+            ableton-voice-changer/build/VoxMorph_artefacts/**/AU/VoxMorph.component
+          if-no-files-found: error
