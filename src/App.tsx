@@ -7,7 +7,7 @@ import Terms from "./Terms";
 //
 // External libraries — add these to your index.html <head>:
 //   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" crossorigin="anonymous"></script>
-//   <script src="https://cdn.jsdelivr.net/npm/midi-writer-js@3.1.1/build/index.browser.min.js" crossorigin="anonymous"></script>
+//   <script src="https://cdn.jsdelivr.net/npm/midi-writer-js@3.1.1/browser/midiwriter.js" crossorigin="anonymous"></script>
 // Then `window.Tone` and `window.MidiWriter` are available.
 // (Or npm install tone midi-writer-js and import them directly.)
 // ============================================================================
@@ -52,35 +52,9 @@ const PRICING_PLANS = [
   },
 ];
 
-const SYSTEM_PROMPT = `You are a professional music producer and chord progression generator. Respond ONLY with a JSON object, no markdown, no extra text:
-{"title":"night drive","key":"Eb major","bpm":80,"timeSignature":"4/4","style":"lofi","chords":[{"name":"Ebmaj9","duration":1,"notes":["Eb2","G4","Bb4","D5"],"function":"tonic","romanNumeral":"I"},{"name":"Cm11","duration":1,"notes":["C2","Eb4","G4","Bb4","F5"],"function":"submediant","romanNumeral":"vi"},{"name":"Abmaj7","duration":1,"notes":["Ab2","C4","Eb4","G4"],"function":"subdominant","romanNumeral":"IV"},{"name":"Bb13","duration":1,"notes":["Bb2","D4","Ab4","C5","G5"],"function":"dominant","romanNumeral":"V"}],"vibe":"chill late night","genre":"lo-fi hip hop","theory":"Ebmaj9 is home, Cm11 keeps it floating, Bb13 pulls back to the top."}
-CRITICAL RULES FOR PROFESSIONAL SOUND:
-- "style" must be ONE of: lofi, soul, cinematic, house, jazz, rnb, ambient, trap, Middle eastern, pop. Pick the closest match to the user's request.
-- Use RICH voicings, never plain triads. Add 7ths, 9ths, 11ths, 13ths. Spread notes across octaves (root low in C2-C3, color tones up in C4-C5). Example: instead of C-E-G use C3-E4-G4-B4.
-- Put the root or 5th low (C2-G2 range) for warmth, stack color tones higher.
-- VOICE LEADING IS CRITICAL: each chord's upper notes (the color tones above the bass) must connect smoothly to the next chord's upper notes. Keep common tones in the SAME octave/position between adjacent chords, and move other voices by the smallest possible step. The top notes across all 4 chords should form a smooth melodic line, not jump around. Before finalizing, check: does the top voice move mostly by step or common tone? If it leaps around, revoice it.
-- The exact target BPM is dictated by the user for every request via the "Tempo target" block in the user message. Set "bpm" to that exact number, and use the accompanying tempo guidance to shape voicing density, chord duration, style choice, and top-voice motion. Do NOT invent a BPM from the style — style follows tempo here, not the other way round.
-- Always 4 chords. Make them genuinely interesting, the kind a real producer would use, not a beginner. NEVER use I-vi-IV-V or I-V-vi-IV — these are overused and boring. Use unexpected chord relationships, modal interchange, secondary dominants, or borrowed chords.
-- For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7 builds back up." Casual lowercase fine.
-- Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
-- Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".
-- SOUND QUALITY: every voicing must sound full and intentional, like a real producer played it. STRICT VOICING RULES: (1) Root note ONLY in C2-G2 range — this is your bass note, nothing else goes this low. (2) Leave a gap — no notes in C3-B3 range. (3) Stack the color tones (3rd, 7th, 9th, 11th) in C4-C5 range only. (4) Max 5 notes per chord. (5) ONLY use notes that actually belong to the chord — no wrong notes ever. Example Am9: A2 [gap] C4 E4 G4 B4. Example Dm9: D2 [gap] F4 A4 C5 E5. Example G13: G2 [gap] F4 A4 B4 E5. If you can't fit the voicing cleanly, simplify the chord — a clean Am7 beats a muddy Am11.
-- STRUCTURE IS PROVIDED, NOT INVENTED: every user message contains a REQUIRED SKELETON block naming the key, the four roman numerals, and the exact bass root of each chord. Follow it exactly — the "romanNumeral" field must match the skeleton token (you may append the quality: V7, bVImaj7, iim7b5, etc.) and each chord's lowest note must be the given root. Structure is fixed; your creativity goes into chord qualities, extensions, voicings, register, and the text fields. If any other rule in this prompt seems to conflict with the skeleton, THE SKELETON WINS.
-- WHAT EACH SLOT MEANS (use this to shape voicing energy, not to change the chords):
-  Chord 1 = HOME: settled, roomy voicing. function "tonic".
-  Chord 2 = MOVE: leaves home, slightly brighter or darker. function per its numeral.
-  Chord 3 = BUILD: tension chord, tighter voicing. function "subdominant" or "dominant".
-  Chord 4 = RETURN: pulls back to chord 1 across the loop. function "dominant" (or "subdominant" for modal returns like bVII/bVI).
-- VOICE LEADING ON THE LOOP: the smooth-top-voice rule applies between chord 4 and chord 1 as well. Chord 4's top notes must connect to chord 1's top notes by common tone or step, same as any other adjacent pair. This is the difference between a progression that loops forever and one that jars every 4 bars.
-- Every generation should feel like a completely different songwriter wrote it: vary the qualities (m9 vs m11 vs m7), the register of the color tones, which voice is on top, and the rhythm feel — the same skeleton can sound like a hundred different songs.
-- Musicality is more important than complexity.
-- BPM is fixed by the user request; the key is fixed by the REQUIRED SKELETON block. Do not vary either.
-- For lofi specifically: try minor keys (Cm, Dm, Bm, F#m), not just major. Minor lofi hits harder emotionally.
-- A "chill lofi" prompt should NOT produce I-IV-V in any key. Use ii-V, bVII, bVI, or modal approaches instead.
-- NOTE SPELLING: spell every note and chord root according to the key signature — flats in flat keys (Ab9 with Ab-C-Eb-Gb-Bb in C minor), sharps in sharp keys. NEVER use B#, E#, Cb, Fb, or double accidentals. List each chord's notes from lowest to highest.
-- NEVER use altered tensions (#11, b9, #9, b13, #5) unless the user explicitly asks for jazz. They sound like wrong notes to most listeners. Extensions stop at 7, 9, 11, 13 in their plain form.
-- A simple B9 is often better than a forced Bmaj7#11.
-- "rainy tokyo" / "tokyo night" / "city rain" / "neon streets" => MELANCHOLIC + DREAMY. Minor key with major 7th color, BPM 70-85, lofi or ambient style. Use minor 9ths, major 7ths, sus chords. Spacious, wet, reflective. Think city lights through rain. `;
+// The generation system prompt, tempo directives, and per-slot chord-quality
+// guidance live server-side in netlify/functions/generate.js — the client
+// sends only structured parameters (kind, prompt, bpm, key, skeleton).
 const GROOVE_PATTERNS = {
   lofi: {
     swing: 0.12,
@@ -243,83 +217,6 @@ const inferPromptBpm = (text) => {
   return null;
 };
 
-// Translate the user's BPM slider into concrete, musically-actionable
-// instructions the model can act on. This is what makes changing the tempo
-// produce genuinely different progressions rather than the same voicings
-// played faster: at slow tempos the ear has time for 11ths and 13ths, at fast
-// tempos those same tones turn muddy and clash with the drum feel, so the
-// harmony has to thin out. Bands are picked from where real records actually
-// sit — not arbitrary cutoffs.
-const bpmDirective = (bpm) => {
-  if (bpm < 65) {
-    return {
-      band: "very slow / rubato-cinematic",
-      styles: "cinematic, ambient",
-      duration: "hold each chord for 2 bars (set duration: 2 on every chord)",
-      voicing: "wide orchestral spread. Root C2-G2, big hollow gap, cluster of color tones in C4-C6. Use maj7, add9, 11, sus2, m(add9). 4-5 notes.",
-      motion: "top voice is nearly static or moves by step. No leaps.",
-      approach: "prefer PEDAL TONE, MODAL, or DESCENDING BASS. Skip CYCLE OF 4THS — too many key centers for this pace.",
-    };
-  }
-  if (bpm < 78) {
-    return {
-      band: "slow (lofi ballad / slow soul / cinematic)",
-      styles: "lofi, cinematic, soul, ambient",
-      duration: "one chord per bar (duration: 1). Every chord breathes.",
-      voicing: "rich extended jazz voicings — m9, m11, maj7#5, 13. Root low (C2-G2), gap, upper cluster C4-C5. 4-5 notes.",
-      motion: "smooth stepwise top-voice line with held common tones.",
-      approach: "DESCENDING BASS, MODAL, or BORROWED CHORD. Skip CHROMATIC APPROACH — too busy at this pace.",
-    };
-  }
-  if (bpm < 95) {
-    return {
-      band: "chill-mid (lofi hip hop / soul / R&B / slow pop)",
-      styles: "lofi, soul, rnb, jazz",
-      duration: "one chord per bar (duration: 1).",
-      voicing: "colored 7ths and 9ths, occasional 11th. Root low, gap, cluster in C4-C5. 4-5 notes.",
-      motion: "clear singable top-voice melody, tight voice leading.",
-      approach: "any of the 8 approaches fits — pick one you didn't just use.",
-    };
-  }
-  if (bpm < 115) {
-    return {
-      band: "mid-groove (pop / neo-soul / boom-bap)",
-      styles: "pop, soul, rnb",
-      duration: "one chord per bar (duration: 1).",
-      voicing: "mostly 7ths and select 9ths. Drop the 11ths and 13ths — they get busy at this tempo. 4 notes is usually enough. Root low, gap, upper triad C4-C5.",
-      motion: "top voice can carry a real 2-3 note hook across the four chords.",
-      approach: "SECONDARY DOMINANT, DECEPTIVE RESOLUTION, or CYCLE OF 4THS give this tempo its lift.",
-    };
-  }
-  if (bpm < 135) {
-    return {
-      band: "upbeat (house / disco / dance-pop)",
-      styles: "house, pop",
-      duration: "mix rhythms: give 2 of the 4 chords duration 0.5 to create a stab-and-hold feel; leave the other 2 at duration 1.",
-      voicing: "clean and forward. Root in G2-G3 (deeper turns to mud on club systems), gap, tight upper cluster in C4-C5. 3-4 notes max. m7, maj7, 7sus4, add9 only — NO 11ths, NO 13ths, NO altered tensions.",
-      motion: "repeat one top note across chords as a driving anchor (classic house move).",
-      approach: "MODAL (Dorian, Mixolydian, Lydian) or PEDAL TONE. Skip DESCENDING BASS — it drags the bounce.",
-    };
-  }
-  if (bpm < 160) {
-    return {
-      band: "fast (trap / uptempo hip hop / techno)",
-      styles: "trap, house",
-      duration: "vary between duration 0.5 and 1 across the 4 chords for rhythmic bite.",
-      voicing: "sparse and hard-hitting. Root and 5th in G2-G3 (leave the sub range for the 808), gap, m3 + optional b7 up top. 2-3 notes per chord. Minor triads, m7, or bare power tones. NO 9ths, NO 11ths — they blur past this tempo.",
-      motion: "top voice is a rhythmic anchor, not a melody. Repeat notes across chords for tension.",
-      approach: "MODAL (Phrygian or natural minor), PEDAL TONE, or CHROMATIC APPROACH. Half-step drops love this tempo.",
-    };
-  }
-  return {
-    band: "very fast (dnb / hardcore / uptempo techno)",
-    styles: "trap, house, ambient (as a long pad only)",
-    duration: "hold each chord for 2 bars (duration: 2) — supplying atmosphere over a fast drum feel, not stabbing.",
-    voicing: "one dark minor triad plus optional b7. Root in G2-G3, gap, m3 + 5 + optional b7 in C4-C5. 3 notes max. Dark and spacious.",
-    motion: "static or gradual — this is a texture, not a melody.",
-    approach: "PEDAL TONE or MODAL (Phrygian, Aeolian). No secondary dominants, no cycle of 4ths.",
-  };
-};
 
 // Pools the client picks from to force real variety, since the model on its
 // own will settle into a single "safe" answer for a given prompt (e.g. "lofi
@@ -364,33 +261,6 @@ const PROGRESSION_SKELETONS = {
   ],
 };
 
-// Typical chord qualities per roman numeral, passed to the model as
-// guidance (it may choose among them, tempo rules permitting).
-const RN_QUALITY = {
-  minor: {
-    i: "m7 / m9 / m11",
-    bII: "maj7, or a dominant 7 when used as the final tritone-sub return",
-    bIII: "maj7 / maj9",
-    iv: "m7 / m9 / m11",
-    IV: "7 or 9 (dorian color)",
-    v: "m7",
-    V: "7 or 9 — NO altered tensions (no b9, #9, b13); keep the dominant clean",
-    bVI: "maj7 / maj9",
-    bVII: "7 / 9",
-    ii: "m7b5 (half-diminished) or m7",
-  },
-  major: {
-    I: "maj7 / maj9 / 6-9",
-    ii: "m7 / m9",
-    iii: "m7",
-    IV: "maj7 / maj9",
-    V: "7 / 9 / 13",
-    vi: "m7 / m9",
-    bVI: "maj7 (borrowed)",
-    bVII: "7 / 9 (borrowed)",
-    bII: "7 (tritone sub)",
-  },
-};
 
 // Music math for computing the required bass root of each skeleton slot,
 // so we can hand the model concrete note names and verify its response.
@@ -520,20 +390,6 @@ const pickForcedContext = (userPrompt, recentKeys) => {
   const skeleton = pickFrom[Math.floor(Math.random() * pickFrom.length)];
   rememberSkeleton(skeleton.join("-"));
   return { key, tonality, skeleton };
-};
-
-const bpmBlock = (bpm) => {
-  const g = bpmDirective(bpm);
-  return `
-
-Tempo target: ${bpm} BPM — ${g.band}.
-- Set "bpm": ${bpm} exactly. Do not shift it.
-- Style must be one of: ${g.styles}. Pick whichever best fits the user's vibe.
-- Chord duration: ${g.duration}
-- Voicing rules for this tempo: ${g.voicing}
-- Top-voice motion: ${g.motion}
-- Texture flavor for this tempo (the REQUIRED SKELETON controls the actual chords): ${g.approach}
-If the user's text vibe seems to clash with the tempo (e.g. "chill lofi" at 140 BPM, or "hard trap" at 60 BPM), the tempo wins — reinterpret the vibe through this tempo's lens rather than defaulting to the vibe's usual BPM.`;
 };
 
 const functionColors = {
@@ -1652,20 +1508,22 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
     localStorage.setItem(SAVE_KEY, JSON.stringify(updated));
     setSavedProjects(updated);
   };
-  const checkUsage = () => {
-    const used = getUsage();
+  const hasQuota = () =>
+    getUsage() < (isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT);
+  // Count a generation only after it succeeds — a failed request shouldn't
+  // burn one of the daily credits.
+  const recordUsage = () => {
     const limit = isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT;
-    if (used >= limit) return false;
+    const used = getUsage() + 1;
     try {
-      localStorage.setItem(todayKey(), used + 1);
+      localStorage.setItem(todayKey(), used);
     } catch {}
-    setUsageLeft(limit - (used + 1));
-    return true;
+    setUsageLeft(limit - used);
   };
 
   const generate = async () => {
     if (!prompt.trim() || isPlaying || loading) return;
-    if (!checkUsage()) {
+    if (!hasQuota()) {
       setShowLimit(true);
       return;
     }
@@ -1696,37 +1554,32 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
     if (result && result.key) recentKeys.push(result.key);
     const forced = pickForcedContext(prompt, recentKeys);
     const roots = skeletonRoots(forced.key, forced.skeleton);
-    const slotLines = forced.skeleton
-      .map(
-        (tok, i) =>
-          `  Chord ${i + 1}: romanNumeral "${tok}" — root MUST be ${roots[i]} (lowest note ${roots[i]}2). Typical quality: ${RN_QUALITY[forced.tonality][tok]}.`
-      )
-      .join("\n");
 
-    const buildMessage = (feedback) => `${prompt}${bpmBlock(effBpm)}
-
-REQUIRED SKELETON (non-negotiable — structure is fixed, do not substitute):
-- key MUST be exactly "${forced.key}". Set the "key" field to this string.
-- The progression is ${forced.skeleton.join(" → ")} in ${forced.key}, so the four bass roots are ${roots.join(", ")} in that exact order.
-${slotLines}
-- You choose the chord qualities/extensions (guided by the tempo block above) and the voicings. You do NOT choose the roots or their order.
-- This skeleton overrides any structural suggestion elsewhere, including the tempo block's texture flavor.${feedback}
-
-Random variation seed: ${Date.now()}`;
-
-    const callModel = async (content) => {
+    // The server owns the prompt templates and the API key — the client sends
+    // only structured parameters. `feedback` carries validation violations on
+    // the corrective retry.
+    const callModel = async (feedback) => {
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-5",
-          max_tokens: 1000,
-          temperature: 1,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content }],
+          kind: "generate",
+          prompt,
+          bpm: effBpm,
+          key: forced.key,
+          skeleton: forced.skeleton,
+          feedback,
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        const err = new Error(
+          (data && data.error) ||
+            "The music engine is unavailable right now — try again in a moment."
+        );
+        err.isServerError = true;
+        throw err;
+      }
       const text = (data.content || []).map((b) => b.text || "").join("");
       return normalizeProgression(
         JSON.parse(text.replace(/```json|```/g, "").trim())
@@ -1734,16 +1587,12 @@ Random variation seed: ${Date.now()}`;
     };
 
     try {
-      let parsed = await callModel(buildMessage(""));
+      let parsed = await callModel("");
       let problems = validateProgression(parsed, forced.skeleton, roots);
       if (problems.length) {
         // One corrective retry: tell the model exactly what it got wrong.
         try {
-          const retry = await callModel(
-            buildMessage(
-              `\n\nYOUR PREVIOUS ATTEMPT WAS REJECTED for these violations: ${problems.join("; ")}. Regenerate and follow the skeleton EXACTLY this time.`
-            )
-          );
+          const retry = await callModel(problems.join("; "));
           const retryProblems = validateProgression(retry, forced.skeleton, roots);
           if (retryProblems.length < problems.length) {
             parsed = retry;
@@ -1761,9 +1610,14 @@ Random variation seed: ${Date.now()}`;
       setResult(parsed);
       setIsExample(false);
       setLastPrompt(prompt);
+      recordUsage();
       setHistory((h) => [{ prompt, result: parsed }, ...h].slice(0, 5));
     } catch (e) {
-      setError("Couldn't parse that — try a different description.");
+      setError(
+        e.isServerError
+          ? e.message
+          : "Couldn't parse that — try a different description."
+      );
     }
     setLoading(false);
   };
@@ -1778,11 +1632,10 @@ Random variation seed: ${Date.now()}`;
         `${result.vibe || ""} ${result.genre || ""}`.trim() ||
         result.title;
       const currentChords = result.chords.map((c) => c.name).join(" - ");
-      const rejectedNote = rejected.length
-        ? `Avoid these chord names entirely: ${rejected.join(", ")}.`
-        : "";
       // Assign each variation its own vetted skeleton in the current key so
       // the four alternatives are structurally distinct by construction.
+      // The server owns the prompt template — we send the structured parts
+      // and keep the skeletons/roots locally to validate the response.
       const varTonality = /minor/i.test(result.key || "") ? "minor" : "major";
       const varTonic = PITCH_CLASS[(result.key || "").split(" ")[0]];
       const varSkels = [...PROGRESSION_SKELETONS[varTonality]]
@@ -1791,42 +1644,22 @@ Random variation seed: ${Date.now()}`;
       const varRoots = varTonic === undefined
         ? null
         : varSkels.map((s) => skeletonRoots(result.key, s));
-      const skeletonLines = varSkels
-        .map(
-          (s, i) =>
-            `   Variation ${i + 1}: ${s.join(" → ")}${varRoots ? ` — bass roots MUST be ${varRoots[i].join(", ")} in that order` : ""}.`
-        )
-        .join("\n");
-      const variationSystem = `You generate 4 ALTERNATIVE chord progressions for the same vibe. Return ONLY a JSON ARRAY of 4 objects, each in the same shape as before:
-[{"title":"...","key":"...","bpm":...,"timeSignature":"4/4","style":"...","chords":[{"name":"...","duration":1,"notes":["..."],"function":"...","romanNumeral":"..."},...4 chords each...],"vibe":"...","genre":"...","theory":"..."}, ... ×4]
-
-HARD REQUIREMENTS (a variation that breaks any of these is unusable — do not return it):
-
-1. KEY LOCK. Every variation stays in ${result.key}. Same tonal center, same "key" field value. Do NOT drift into a new key.
-
-2. REQUIRED SKELETONS — each variation uses its assigned structure exactly (romanNumeral fields must match these tokens; you may append qualities like 7/9/maj7):
-${skeletonLines}
-   You choose the chord qualities, extensions, and voicings. You do NOT choose the roots or their order.
-
-3. VOICE LEADING inside AND across the loop. Adjacent chords' upper voices must connect by common tone or single step. Chord 4's upper voices must connect back to chord 1's upper voices the same way. Top voice across all 4 chords should be a smooth line, not leaps.
-
-4. TEXTURE VARIETY — beyond the different skeletons, make the four variations differ in feel: different extensions (m9 vs m11 vs plain m7), different top notes, different registers for the color tones.
-
-5. TEMPO. All variations honour the tempo target block below — same voicing density, chord duration, and style rules for the current BPM.
-
-The user's current progression (do NOT reproduce it — these are alternatives): ${currentChords}. ${rejectedNote}`;
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-5",
-          max_tokens: 2500,
-          temperature: 1,
-          system: variationSystem,
-          messages: [{ role: "user", content: `${promptForAI}${bpmBlock(bpm)}` }],
+          kind: "variations",
+          prompt: promptForAI,
+          bpm,
+          key: result.key,
+          currentChords,
+          rejected,
+          skeletons: varSkels,
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
+      if (!res.ok)
+        throw new Error((data && data.error) || `Server error ${res.status}`);
       const text = (data.content || []).map((b) => b.text || "").join("");
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
       if (Array.isArray(parsed)) {
@@ -1874,38 +1707,23 @@ The user's current progression (do NOT reproduce it — these are alternatives):
     setLoadingMutations(true);
     setMutations([]);
     try {
-      const chord = result.chords[slotIdx];
-      const context = result.chords
-        .map((c, i) => (i === slotIdx ? "[?]" : c.name))
-        .join(" - ");
-      const rejectedNote = rejected.length
-        ? `Avoid: ${rejected.join(", ")}.`
-        : "";
-      const mutGuide = bpmDirective(bpm);
-      const slotRole = slotIdx === 0
-        ? "HOME (tonic-family: I/Imaj7/Imaj9 in major, i/im7/im9 in minor). function=\"tonic\". Do NOT return a ii, iii, IV, V, or vii° — that would break the progression's opening."
-        : slotIdx === result.chords.length - 1
-        ? `RETURN — chord 1 of the loop is ${result.chords[0].name}, so your replacement must lead cleanly back into it: either V/V7 resolving down a 5th, a plagal/modal chord (IV, iv, bVII, bVI) landing on it by step or common tone, or a chord sharing ≥ 2 pitch classes with it. Its function should be "dominant" or "subdominant". Never a hanging ii or iii.`
-        : slotIdx === 1
-        ? "MOVE (leaves home but stays in key: IV, ii, iii, vi, bVII, bVI). Do not duplicate chord 1's root."
-        : "BUILD (pre-dominant or dominant tension pulling into chord 4: ii, IV, iv, V7/x, bVII).";
-      const mutationSystem = `You generate 3 ALTERNATIVE single chords for one slot in a progression. Return ONLY a JSON ARRAY of 3 chord objects: [{"name":"...","duration":1,"notes":["..."],"function":"...","romanNumeral":"..."}, ×3]
-Key: ${result.key} (stay in this key — no modulations). Tempo: ${bpm} BPM (${mutGuide.band}). Surrounding chords: ${context} — the [?] slot is what you're replacing. Original chord there was ${chord.name}.
-SLOT ROLE (mandatory): this slot's job in the progression is ${slotRole}
-VOICE LEADING: the replacement must connect to its neighbors by common tone or single step in the upper voices — no leaps. Check both ${slotIdx > 0 ? `chord ${slotIdx} → your chord` : "wraparound: chord 4 → your chord (loop point)"} and ${slotIdx < result.chords.length - 1 ? `your chord → chord ${slotIdx + 2}` : `your chord → chord 1 (loop point: ${result.chords[0].name})`}.
-Give 3 genuinely different musical choices — try modal interchange, secondary dominants, tritone subs, chromatic neighbors, but each must still satisfy the slot role and voice leading above. Voicing for this tempo: ${mutGuide.voicing} Duration: ${mutGuide.duration.includes("2 bars") ? "2" : mutGuide.duration.includes("0.5") ? "match surrounding chords" : "1"}. ${rejectedNote}`;
+      // The server owns the mutation prompt (slot roles, tempo voicing
+      // guidance) — the client sends only the structured slot description.
       const res = await fetch("/.netlify/functions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-5",
-          max_tokens: 800,
-          temperature: 1,
-          system: mutationSystem,
-          messages: [{ role: "user", content: `Replace the [?] chord.` }],
+          kind: "mutation",
+          key: result.key,
+          bpm,
+          chordNames: result.chords.map((c) => c.name),
+          slotIdx,
+          rejected,
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
+      if (!res.ok)
+        throw new Error((data && data.error) || `Server error ${res.status}`);
       const text = (data.content || []).map((b) => b.text || "").join("");
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
       if (Array.isArray(parsed)) {
@@ -2102,7 +1920,9 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
     }
     try {
       await ensureAudio();
-      const beatDur = 60 / bpm;
+      // One duration unit = two beats — must match runProgression's timing,
+      // or the exported WAV plays at double speed vs. what the user heard.
+      const beatDur = (60 / bpm) * 2;
       const loops = 2;
       const totalSec =
         result.chords.reduce((a, c) => a + (c.duration || 1), 0) *
@@ -2254,19 +2074,50 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
       return;
     }
     try {
+      // One duration unit = TWO beats at the app's BPM — the same maths the
+      // playback engine uses (beatDur = (60 / bpm) * 2), so the exported
+      // file at this tempo reproduces exactly what the Play button plays.
+      // midi-writer-js runs at 128 ticks per beat, hence 256 per unit.
+      const TICKS_PER_UNIT = 256;
       const track = new MidiWriter.Track();
       track.setTempo(bpm);
       track.addTrackName(result.title || "Chord Progression");
-      const TICKS_PER_BEAT = 128;
+      const pattern = rhythmPattern((result.style || "").toLowerCase(), bpm);
+      let restTicks = 0; // gap left after a hit, carried into the next event's wait
       result.chords.forEach((chord) => {
-        const ticks = Math.round((chord.duration || 1) * TICKS_PER_BEAT);
-        track.addEvent(
-          new MidiWriter.NoteEvent({
-            pitch: chord.notes,
-            duration: "T" + ticks,
-            velocity: 75,
-          })
-        );
+        const unitTicks = Math.round((chord.duration || 1) * TICKS_PER_UNIT);
+        if (!pattern) {
+          track.addEvent(
+            new MidiWriter.NoteEvent({
+              pitch: chord.notes,
+              duration: "T" + unitTicks,
+              wait: "T" + restTicks,
+              velocity: 75,
+            })
+          );
+          restTicks = 0;
+          return;
+        }
+        // House / fast-pop stabs: one event per hit, mirroring the rhythm
+        // the player performs, clamped so hits never overlap.
+        let cursor = 0;
+        pattern.forEach((hit, k) => {
+          const start = Math.round(hit.t * unitTicks);
+          const nextT = k + 1 < pattern.length ? pattern[k + 1].t : 1;
+          const end = Math.round(Math.min(hit.t + hit.len, nextT, 1) * unitTicks);
+          if (end <= start) return;
+          track.addEvent(
+            new MidiWriter.NoteEvent({
+              pitch: chord.notes,
+              duration: "T" + (end - start),
+              wait: "T" + (restTicks + start - cursor),
+              velocity: Math.round(hit.vel * 100),
+            })
+          );
+          restTicks = 0;
+          cursor = end;
+        });
+        restTicks += unitTicks - cursor;
       });
       const write = new MidiWriter.Writer([track]);
       const a = document.createElement("a");
@@ -2402,7 +2253,8 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
     if (isPlaying || !progression?.chords) return;
     await ensureAudio();
     const previewBpm = progression.bpm || bpm;
-    const beatDur = 60 / previewBpm;
+    // Same unit maths as runProgression, so previews don't play double-time.
+    const beatDur = (60 / previewBpm) * 2;
     const style = (progression.style || "").toLowerCase();
     const groove = blockGroove(style, previewBpm);
     for (let i = 0; i < progression.chords.length; i++) {
@@ -2681,8 +2533,8 @@ Give 3 genuinely different musical choices — try modal interchange, secondary 
                 lineHeight: 1.5,
               }}
             >
-              Secure checkout via Stripe · Cancel anytime · 7-day money-back
-              guarantee
+              Checkout via Stripe when Pro launches · Cancel anytime · 7-day
+              money-back guarantee
             </div>
 
             <EmailCapture

@@ -1,11 +1,11 @@
 {
-  "name": "react-typescript",
+  "name": "chordcraft",
   "version": "1.0.0",
-  "description": "React and TypeScript example starter project",
+  "description": "ChordCraft — describe a vibe, hear the chords. AI chord progressions with real piano playback, MIDI and audio export.",
   "keywords": [
-    "typescript",
-    "react",
-    "starter"
+    "music",
+    "chords",
+    "react"
   ],
   "main": "src/index.tsx",
   "dependencies": {
