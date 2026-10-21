@@ -81,7 +81,7 @@ CRITICAL RULES FOR PROFESSIONAL SOUND:
 - VOICE LEADING IS CRITICAL: each chord's upper notes (the color tones above the bass) must connect smoothly to the next chord's upper notes. Keep common tones in the SAME octave/position between adjacent chords, and move other voices by the smallest possible step. The top notes across all 4 chords should form a smooth melodic line, not jump around. Before finalizing, check: does the top voice move mostly by step or common tone? If it leaps around, revoice it.
 - The exact target BPM is dictated by the user for every request via the "Tempo target" block in the user message. Set "bpm" to that exact number, and use the accompanying tempo guidance to shape voicing density, chord duration, style choice, and top-voice motion. Do NOT invent a BPM from the style — style follows tempo here, not the other way round.
 - Always 4 chords. Make them genuinely interesting, the kind a real producer would use, not a beginner. NEVER use I-vi-IV-V or I-V-vi-IV — these are overused and boring. Use unexpected chord relationships, modal interchange, secondary dominants, or borrowed chords.
-- For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7 builds back up." Casual lowercase fine.
+- For ALL text fields (title, vibe, theory, description, anything textual): write SHORT and PLAIN. Max 2 sentences. Use real producer talk. NEVER use these words: dreamy, shimmer, warmth, characteristic, evocative, establishes, voice leading, chromatic, lush, nostalgic, atmospheric, ethereal, soulful, captivating, melancholic. Say what the chords do simply, like "Cm9 is home, Fm11 drops down a fifth, G7 builds back up." Casual lowercase fine. NEVER use em dashes (—) in any text field; use commas or periods instead.
 - Titles must be 1-3 words, lowercase, no poetic stuff. Examples: "midnight drive", "rainy monday", "late jam". NOT "Whispers of the Heart" or "Ethereal Journey".
 - Vibe field: 3-5 words max, plain. Example: "dark moody jazz" NOT "melancholic and introspective with jazzy tension".
 - SOUND QUALITY: every voicing must sound full and intentional, like a real producer played it. STRICT VOICING RULES: (1) Root note ONLY in C2-G2 range — this is your bass note, nothing else goes this low. (2) Leave a gap — no notes in C3-B3 range. (3) Stack the color tones (3rd, 7th, 9th, 11th) in C4-C5 range only. (4) Max 5 notes per chord. (5) ONLY use notes that actually belong to the chord — no wrong notes ever. Example Am9: A2 [gap] C4 E4 G4 B4. Example Dm9: D2 [gap] F4 A4 C5 E5. Example G13: G2 [gap] F4 A4 B4 E5. If you can't fit the voicing cleanly, simplify the chord — a clean Am7 beats a muddy Am11.
@@ -294,9 +294,11 @@ ${skeletonLines}
 
 3. VOICE LEADING inside AND across the loop. Adjacent chords' upper voices must connect by common tone or single step. Chord 4's upper voices must connect back to chord 1's upper voices the same way. Top voice across all 4 chords should be a smooth line, not leaps.
 
-4. TEXTURE VARIETY — beyond the different skeletons, make the four variations differ in feel: different extensions (m9 vs m11 vs plain m7), different top notes, different registers for the color tones.
+4. TEXT FIELDS: never use em dashes (—) in title, vibe, genre or theory. Use commas or periods instead.
 
-5. TEMPO. All variations honour the tempo target block below — same voicing density, chord duration, and style rules for the current BPM.
+5. TEXTURE VARIETY — beyond the different skeletons, make the four variations differ in feel: different extensions (m9 vs m11 vs plain m7), different top notes, different registers for the color tones.
+
+6. TEMPO. All variations honour the tempo target block below — same voicing density, chord duration, and style rules for the current BPM.
 
 The user's current progression (do NOT reproduce it — these are alternatives): ${currentChords}. ${rejectedNote}`;
   return { system, message: `${prompt}${bpmBlock(bpm)}` };
@@ -338,37 +340,39 @@ const BUILDERS = {
 };
 
 // ── Handler ─────────────────────────────────────────────────────────────────
-const json = (statusCode, obj) => ({
-  statusCode,
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(obj),
-});
+const json = (status, obj) =>
+  new Response(JSON.stringify(obj), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
 
-exports.handler = async (event) => {
+export default async (req, context) => {
   // Same-origin app — no CORS headers on purpose, so other sites can't
   // spend this key from their visitors' browsers.
-  if (event.httpMethod === "OPTIONS") return { statusCode: 204, body: "" };
-  if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
+  if (req.method === "OPTIONS") return new Response(null, { status: 204 });
+  if (req.method !== "POST") return json(405, { error: "Method not allowed" });
 
   if (!process.env.ANTHROPIC_API_KEY) {
     return json(500, {
-      error: "The server is missing its ANTHROPIC_API_KEY — set it in the Netlify site settings.",
+      error: "The server is missing its Anthropic credentials. Check the AI Gateway is enabled for this site.",
     });
   }
 
-  if ((event.body || "").length > 20_000) return json(413, { error: "Request too large" });
+  const raw = await req.text();
+  if (raw.length > 20_000) return json(413, { error: "Request too large" });
 
   const ip =
-    event.headers["x-nf-client-connection-ip"] ||
-    event.headers["client-ip"] ||
+    (context && context.ip) ||
+    req.headers.get("x-nf-client-connection-ip") ||
+    req.headers.get("client-ip") ||
     "unknown";
   if (rateLimited(ip)) {
-    return json(429, { error: "Slow down a little — try again in a minute." });
+    return json(429, { error: "Slow down a little, try again in a minute." });
   }
 
   let body;
   try {
-    body = JSON.parse(event.body);
+    body = JSON.parse(raw);
   } catch {
     return json(400, { error: "Invalid JSON body" });
   }
@@ -376,16 +380,18 @@ exports.handler = async (event) => {
   const build = BUILDERS[body && body.kind];
   if (!build) return json(400, { error: 'Unknown request "kind"' });
 
-  let req;
+  let built;
   try {
-    req = build(body);
+    built = build(body);
   } catch (e) {
     if (e instanceof BadRequest) return json(400, { error: e.message });
     throw e;
   }
 
+  const baseUrl = (process.env.ANTHROPIC_BASE_URL || "https://api.anthropic.com").replace(/\/+$/, "");
+
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch(`${baseUrl}/v1/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -396,8 +402,8 @@ exports.handler = async (event) => {
         model: MODEL,
         max_tokens: MAX_TOKENS[body.kind],
         temperature: 1,
-        system: req.system,
-        messages: [{ role: "user", content: req.message }],
+        system: built.system,
+        messages: [{ role: "user", content: built.message }],
       }),
     });
 
@@ -406,18 +412,17 @@ exports.handler = async (event) => {
       // Surface a real error — never a fake progression dressed up as success.
       console.log("Anthropic error:", res.status, text.substring(0, 300));
       return json(502, {
-        error: "The music engine is unavailable right now — try again in a moment.",
+        error: "The music engine is unavailable right now. Try again in a moment.",
       });
     }
-    return {
-      statusCode: 200,
+    return new Response(text, {
+      status: 200,
       headers: { "Content-Type": "application/json" },
-      body: text,
-    };
+    });
   } catch (e) {
     console.log("Upstream call failed:", e.message);
     return json(502, {
-      error: "Couldn't reach the music engine — try again in a moment.",
+      error: "Couldn't reach the music engine. Try again in a moment.",
     });
   }
 };

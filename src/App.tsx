@@ -53,7 +53,7 @@ const PRICING_PLANS = [
 ];
 
 // The generation system prompt, tempo directives, and per-slot chord-quality
-// guidance live server-side in netlify/functions/generate.js — the client
+// guidance live server-side in netlify/functions/generate.mjs — the client
 // sends only structured parameters (kind, prompt, bpm, key, skeleton).
 const GROOVE_PATTERNS = {
   lofi: {
@@ -191,6 +191,10 @@ const blockGroove = (style, bpm) => {
 // number in musical range, or a named genre's canonical tempo. Without
 // this, "house chords" generated at whatever the slider last sat on
 // (default 80 BPM) and the house stabs plodded.
+// The model occasionally slips em dashes into its text fields despite the
+// prompt; swap them for plain punctuation before anything reaches the UI.
+const stripEmDashes = (text) => text.replace(/\s*—\s*/g, ", ");
+
 const GENRE_TEMPOS = [
   [/\b(dnb|drum\s*(and|&|n)\s*bass|jungle)\b/i, 174],
   [/\btechno\b/i, 130],
@@ -600,7 +604,7 @@ const EXAMPLE_PROGRESSION = {
   vibe: "warm, hazy, and nostalgic",
   genre: "lo-fi hip hop",
   theory:
-    "A classic ii-V-I-vi turnaround dressed in extended jazz voicings. The Dm9 and G13 create gentle tension that resolves into the warm Cmaj7, while the Am11 keeps it from feeling too resolved — perfect for a loop.",
+    "A classic ii-V-I-vi turnaround dressed in extended jazz voicings. The Dm9 and G13 create gentle tension that resolves into the warm Cmaj7, while the Am11 keeps it from feeling too resolved, perfect for a loop.",
   chords: [
     {
       name: "Dm9",
@@ -1023,7 +1027,7 @@ export default function ChordApp() {
   useEffect(() => {
     const Tone = window.Tone;
     if (!Tone) {
-      setSampleStatus("Audio library failed to load — check your connection");
+      setSampleStatus("Audio library failed to load. Check your connection");
       return;
     }
 
@@ -1263,7 +1267,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
   const ensureAudio = useCallback(async () => {
     const Tone = window.Tone;
     if (!Tone) {
-      console.warn("Tone.js not available — audio cannot play.");
+      console.warn("Tone.js not available, audio cannot play.");
       return;
     }
     // Tone.start() MUST run from a user gesture (click) — this unlocks the browser's audio.
@@ -1297,12 +1301,12 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
     if (tone === "piano") {
       const p = samplers.piano;
       if (!p || !p.loaded) {
-        console.info("Piano samples not ready — using Rhodes synth instead.");
+        console.info("Piano samples not ready, using Rhodes synth instead.");
         useTone = "rhodes";
       }
     }
     const s = samplers[useTone] || samplers.rhodes;
-    if (!s) console.warn("No sampler available — instruments not initialized.");
+    if (!s) console.warn("No sampler available, instruments not initialized.");
     return s;
   }, []);
 
@@ -1575,14 +1579,14 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
       if (!res.ok) {
         const err = new Error(
           (data && data.error) ||
-            "The music engine is unavailable right now — try again in a moment."
+            "The music engine is unavailable right now. Try again in a moment."
         );
         err.isServerError = true;
         throw err;
       }
       const text = (data.content || []).map((b) => b.text || "").join("");
       return normalizeProgression(
-        JSON.parse(text.replace(/```json|```/g, "").trim())
+        JSON.parse(stripEmDashes(text.replace(/```json|```/g, "").trim()))
       );
     };
 
@@ -1616,7 +1620,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
       setError(
         e.isServerError
           ? e.message
-          : "Couldn't parse that — try a different description."
+          : "Couldn't parse that. Try a different description."
       );
     }
     setLoading(false);
@@ -1661,7 +1665,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
       if (!res.ok)
         throw new Error((data && data.error) || `Server error ${res.status}`);
       const text = (data.content || []).map((b) => b.text || "").join("");
-      const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+      const parsed = JSON.parse(stripEmDashes(text.replace(/```json|```/g, "").trim()));
       if (Array.isArray(parsed)) {
         // Force each variation onto the user's chosen tempo so the slider
         // stays authoritative, and respell notes into the key's accidentals.
@@ -1725,7 +1729,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
       if (!res.ok)
         throw new Error((data && data.error) || `Server error ${res.status}`);
       const text = (data.content || []).map((b) => b.text || "").join("");
-      const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+      const parsed = JSON.parse(stripEmDashes(text.replace(/```json|```/g, "").trim()));
       if (Array.isArray(parsed)) {
         const useFlats = keyUsesFlats(result.key);
         parsed.forEach((c) => normalizeChordSpelling(c, useFlats));
@@ -1915,7 +1919,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
     const Tone = window.Tone;
     if (!result || !Tone) return;
     if (activeTone === "piano" && !samplesReady) {
-      alert("Piano samples still loading — wait a few seconds and try again.");
+      alert("Piano samples still loading. Wait a few seconds and try again.");
       return;
     }
     try {
@@ -2326,7 +2330,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
               <div style={S.kicker}>Welcome to</div>
               <h2 style={S.modalTitle}>ChordCraft</h2>
               <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.6 }}>
-                Describe any feeling — get a real piano progression instantly.
+                Describe any feeling, get a real piano progression instantly.
                 Free forever.
               </p>
             </div>
@@ -2350,7 +2354,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
               }}
             >
               <div style={{ ...S.featureLabel, color: "#a78bfa" }}>
-                PRO — from $10/mo or $100 lifetime
+                PRO: from $10/mo or $100 lifetime
               </div>
               <div style={S.featureList}>
                 ✦ 8 & 16-bar progressions
@@ -2361,7 +2365,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
                 <br />
                 ✦ Save & revisit your projects
                 <br />
-                ✦ Export individual stems — chords, bass, melody (coming soon)
+                ✦ Export individual stems: chords, bass, melody (coming soon)
                 <br />✦ Studio-quality 24-bit WAV, no watermark (coming soon)
               </div>
             </div>
@@ -2429,7 +2433,7 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
                 <br />
                 ✦ Save & revisit your projects
                 <br />
-                ✦ Export individual stems — chords, bass, melody (coming soon)
+                ✦ Export individual stems: chords, bass, melody (coming soon)
                 <br />✦ 24-bit studio WAV exports (coming soon)
               </div>
             </div>
@@ -2838,10 +2842,10 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
         </div>
 
         <div style={S.engLabel}>ChordCraft</div>
-        <h1 style={S.h1}>
+        <h1 style={{ ...S.h1, color: "#818cf8" }}>
           Describe a vibe.
           <br />
-          <span style={{ color: "#818cf8" }}>Hear the chords.</span>
+          Hear the chords.
         </h1>
         <p style={S.subtitle}>
           Type a vibe. Get chords you can drop straight into your beat.
@@ -2935,8 +2939,8 @@ const rhodes = new Tone.PolySynth(Tone.FMSynth, {
                 <Icon name="headphones" size={15} style={{ color: theme.accent2 }} />
                 <span>
                   This is an{" "}
-                  <strong style={{ color: theme.accent2 }}>example</strong> —
-                  hit{" "}
+                  <strong style={{ color: theme.accent2 }}>example</strong>.
+                  Hit{" "}
                   <strong style={{ color: theme.textBright }}>▶ Play</strong> to
                   hear it, or describe your own vibe above.
                 </span>
