@@ -1,7 +1,7 @@
 {
   "name": "chordcraft",
   "version": "1.0.0",
-  "description": "ChordCraft — describe a vibe, hear the chords. AI chord progressions with real piano playback, MIDI and audio export.",
+  "description": "ChordCraft: describe a vibe, hear the chords. AI chord progressions with real piano playback, MIDI and audio export.",
   "keywords": [
     "music",
     "chords",
